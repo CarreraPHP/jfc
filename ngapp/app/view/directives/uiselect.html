@@ -1,0 +1,16 @@
+<div class="jfc-select form-control">
+  <div class="jfc-select-thumb" 
+    ng-class="type"
+    role="presentation">
+     <input type="text" ng-model="value" readonly></input>
+     <button ng-click="expandList()" class="btn icon icon-dropdown-thumb"></button>
+  </div>
+  <div class="jfc-select-list" ng-class="{'select-list-hidden': !expand}">
+    <ul class="" >
+      <li ng-repeat="item in list">
+        <a ng-click="itemSelect(item)">{{item}}</a>
+      </li>     
+    </ul>
+    <ul ng-transclude></ul>
+  </div>
+</div>
