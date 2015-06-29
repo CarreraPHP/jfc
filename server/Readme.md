@@ -6,4 +6,4 @@
 
 `PAUSE`
 
-To merge files, see tehe comments of merge.rb
+To merge files, see the comments of merge.rb
