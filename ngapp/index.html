@@ -1,0 +1,218 @@
+<!doctype html>
+<html ng-app="JFC" ng-strict-di>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="resources/css/app.css">
+        <link rel="stylesheet" href="resources/css/demo.css">
+        
+        <script src="resources/js/libs/angular.min.js"></script>	
+        <script src="resources/js/libs/angular-resource.min.js"></script>
+        <script src="resources/js/libs/angular-route.min.js"></script> 
+        <script src="resources/js/libs/angular-touch.min.js"></script>    
+        <script src="resources/js/libs/angular-animate.min.js"></script>
+        <script src="resources/js/libs/angular-messages.min.js"></script>  
+        <script src="resources/js/libs/angular-cookies.min.js"></script>  
+        <script src="resources/js/libs/ngStorage.min.js"></script>  
+        
+        <script src="app/services/AUTHProvider.js"></script>
+        <script src="app/services.js"></script>
+
+        <script src="app/controller/HomeController.js"></script>
+        <script src="app/controller/LoginController.js"></script>
+        <script src="app/controller/UISelectController.js"></script>	
+        <script src="app/controller/ApplicationController.js"></script>	
+
+        <script src="app/directives/uiselect.js"></script>
+
+        <script src="app/controller.js"></script>
+        <script src="app/filters.js"></script>
+        <script src="app/directives.js"></script>
+        <script src="app/router.js"></script>
+        <script src="application.js"></script>
+
+        <script src="resources/js/chart3.js"></script>
+        <script src="resources/js/TrackballControls-2d.js"></script>
+        
+    </head>
+    <body ng-controller="ApplicationController">
+
+        <div class="jfc-viewport animate-slide" 		
+             ng-class="{'adjust-view': application.slider.animated}">
+
+            <!-- side bar menu -->
+            <div id="slider" class="jfc-slider animate-slide" ng-class="{'reveal-slider': application.slider.animated}" ng-swipe-left="application.slider.makeSlide()">
+                <!-- LIST -->
+                <div class="jfc-container jfc-list">
+                    <div class="jfc-box align-center">
+                        <h1 class="menu-heading red">Trouble Shoot Wizard</h1>
+                    </div> 
+                    <div class="jfc-view-container menu-container">
+                         <div class="jfc-box menu-item" ng-repeat="item in data.troubleList">
+                                <div class="jfc-container " ng-click="hamburger.toggleAccordion($index)">
+                                        <div class="cell icon align-center icon-{{item.imageName}}"></div>
+                                        <div class="cell align-left align-middle"  ng-click="application.model.toggle()">
+                                            <div class="">{{item.title}}</div>
+                                        </div>
+                                        <div class="cell align-middle align-left icon icon-right-angle"></div>
+                                    </div>
+                            </div>
+                        <div class="jfc-box menu-item" ng-repeat="menu in hamburger.menuList track by $index"
+                             ng-init="outerIndex = $index">
+                            <div class="jfc-container " ng-click="hamburger.toggleAccordion($index)">				
+                                <div class="cell icon icon-marker align-center"></div>
+                                <div class="cell align-left align-middle">{{menu.sectionTitle}}</div>
+                                <div class="cell align-middle icon font-gray jfc-width-10"
+                                     ng-class="{'icon-up-angle': menu.subMenuVisible, 'icon-down-angle': !!!menu.subMenuVisible}"></div>						
+                            </div>
+                            <div class="jfc-container animate-slide hamburger-menu"		 
+                                 ng-class="{'jfc-hide': !menu.subMenuVisible}" 
+                                 ng-repeat="submenu in menu.linkList" 
+                                 ng-click="handleMenuClick('{{submenu.pageInfo.pageType}}', {{outerIndex}})">
+                                <div class="cell icon icon-empty align-center"></div>					
+                                <div class="cell align-left align-middle">
+                                    <span class="jfc-font-medium">{{submenu.title}}</span>
+                                </div>
+                                <div class="cell align-middle icon icon-empty jfc-width-10"></div>					
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="jfc-docked jfc-menu-pillar align-center">			
+                    <div class="cell align-left">					
+                        <div ng-click="application.dosignout.toggle1()" class="jfc-container">							
+                            <span class="cell align-left jfc-font-small icon icon-signout" style="border:0;width:33px;"></span>
+                            <span class="cell align-left">Signout</span>							
+                        </div>				
+                    </div>
+                    <div class="cell  align-right">
+                        <div>Español</div>
+                    </div>
+                </div>
+                <!-- END - side bar menu -->
+            </div>
+
+            <!-- Title Bar -->
+            <div class="jfc-container jfc-toolbar jfc-docked dock-top"
+                 ng-hide="application.preventToolbar">	
+                <div class="cell pull-left">
+                    <button class="btn icon icon-back"
+                            ng-show="!application.showSubPageToolbarBtn" 
+                            ng-click="application.slider.makeSlide()"></button>
+                </div>
+            </div>
+            <!-- END - Title Bar -->
+
+            <div class="jfc-view-container" id="jfc-container" ng-class="{'no-toolbar':application.preventToolbar}">
+                <!-- LEFT Tool Bar -->
+                <div id="csHolder" class="jfc-container jfc-toolbar jfc-docked dock-left"
+                     ng-hide="application.preventToolbar">
+                </div>
+                <!-- END - LEFT Tool Bar -->
+                <div class="jfc-view " ng-view  ></div>
+            </div>
+            <div class="jfc-pillar jfc-docked dock-bottom align-center"
+                 ng-hide="true">
+                <ul id="pillarContainer">
+                    <li ng-click="application.navigation.goTo('Home');" ng-class="{'active':isActive('Home')}">
+                        <span class="icon icon-home pillar-icon align-top"></span>
+                        <span class="pillar-text  jfc-font-small">My Account</span>
+                    </li>
+                    <li ng-click="application.navigation.goTo('Device');" ng-class="{'active':isActive('Device') || isActive('Device/list')  }">
+                        <span class="icon icon-device pillar-icon"></span>
+                        <span class="pillar-text jfc-font-small">My devices</span>
+                    </li>
+                    <li ng-click="application.navigation.goTo('MyProfile');" ng-class="{'active':isActive('MyProfile')}">
+                        <span class="icon icon-profile pillar-icon"></span>
+                        <span class="pillar-text  jfc-font-small">My Profile</span>
+                    </li>
+                    <li ng-click="application.navigation.goTo('Support');" ng-class="{'active':isActive('Support')}">
+                        <span class="icon icon-support pillar-icon "></span>
+                        <span class="pillar-text jfc-font-small">Support</span>
+                    </li>
+                    <li ng-click="application.navigation.goTo('Shop');" ng-class="{'active':isActive('Shop')}">
+                        <span class="icon icon-shop pillar-icon"></span>
+                        <span class="pillar-text  jfc-font-small">Shop Now</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="jfc-slider-overlay" 
+                 ng-click="application.slider.animated = false;" 
+                 ng-class="{'jfc-block': application.slider.animated}"></div>
+            <div id="jfc-load-screen" ng-click="application.slider.animated = false;" ng-show="pageLoading">
+                <div class="jfc-loader-overlay"></div>
+                <div class="jfc-loader">
+                    <div style="background:#FFF;padding-bottom:10px;">
+                        Loading...
+                    </div>
+                    <img src="resources/images/loading.gif">
+                </div>	
+            </div>	
+
+            <!-- modal popup -->
+            <div class="modal"		
+                 ng-show="application.model.visible">
+                <div class="modal-overlay modal-fade">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="jfc-container align-middle">
+                                <div class="cell align-middle bold">My Verizon Mobile</div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            {{application.model.errMsg}}
+                        </div>
+                        <div class="modal-footer">
+
+                            <div class="align-center modal-btn-left">
+                                <div>
+                                    <div class="" ng-click="application.model.toggle()">Okay</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="shadow" ng-click="application.model.toggle()"></div>
+            </div> 
+
+
+
+            <!-- modal popup signout -->
+
+            <div class="modal-logout"		
+                 ng-show="application.dosignout.sout">
+                <div class="modal-overlay modal-fade">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="jfc-container align-middle">
+                                <div class="cell align-center bold">Sign Out</div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            Are you Sure you want to sign out?
+                        </div>
+                        <div class="modal-footer jfc-container">
+                            <div class="jfc-box">
+                                <div class="jfc-container">
+                                    <div class="cell modal-btn-right">
+                                        <div>
+                                            <div class="" ng-click="application.dosignout.toggle1()">Cancel</div>
+                                        </div>
+                                    </div>
+                                    <div class="cell align-middle modal-btn-left">
+                                        <div>
+                                            <div class="" ng-click="application.navigation.signout()">Sign Out</div>
+                                        </div>
+                                    </div>
+                                </div>					
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="shadow" ng-click="application.dosignout.toggle1()">></div>
+            </div>
+        </div>
+    </body>
+</html>
