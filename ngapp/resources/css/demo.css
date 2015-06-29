@@ -1,0 +1,251 @@
+/* 			*{
+				-webkit-font-smoothing:  subpixel-antialiased;
+			} */
+
+			html, body {
+				height: 100%;
+			}
+
+			body {
+				background-color: rgba(0, 0, 0, 0.8);
+				margin: 0;
+				font-family: "Arial", Helvetica, sans-serif;;
+				overflow: hidden;
+/*				background: radial-gradient(circle at 50% 75%, #3F4041, #1F1F1F); */
+				background: url(../images/alpha-bg-2x2.svg), radial-gradient(ellipse at 50% 50%, rgba(207,208,215,0.2) 42%, rgba(0, 0, 0, 0.4) 90%);
+			
+				/* background-blend-mode: multiply; */
+			}
+
+			#container, .container{
+				width:100%;
+				height: 100%;
+				position:relative;
+			}
+                        
+			#container > #scene2d{
+				top: 50%;
+				left: 10%;
+				position: absolute;
+				width:100%;
+				height: 100%;
+			}
+
+			#container > #scene2d > div{
+				position:absolute;
+				-webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+				-moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+				-ms-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+				-o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+				transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+/*				-webkit-animation-delay: 2s;  Chrome, Safari, Opera 
+				animation-delay: 2s;*/
+			}
+
+			a {
+				color: rgba(131,113,106,1);
+			}
+
+			#info {
+				position: absolute;
+				width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				font-weight: bold;
+				text-align: center;
+				z-index: 1;
+			}
+
+			#menu {
+				position: absolute;
+				bottom: 20px;
+				width: 100%;
+				text-align: center;
+			}
+
+			.arrow, .arrow-reverse, .arrow-straight {
+				cursor: default;
+				position: absolute;
+/* 				display:block; */
+				line-height: 11px;
+				font-size: 9px;
+				background-color: rgba(255, 255, 255, 0);
+				color: #222;			
+				overflow: hidden;
+			}
+
+			.arrow.highlight-node, .arrow-reverse.highlight-node, .arrow-straight.highlight-node{
+				z-index:5;
+			}
+
+			.arrow.highlight-node > div, .arrow-reverse.highlight-node > div, .arrow-straight.highlight-node > div{
+				border-color: #ED1C24 !important;
+			}
+
+			.arrow > div:nth-child(1){
+				position:absolute;
+				border-bottom: 3px solid #fff;
+				border-right: 3px solid #fff;
+				bottom: 0px;
+				left: 0px;
+				width: 40%;
+				height: 50%;
+				border-bottom-right-radius: 6px;
+			}
+
+			.arrow > div:nth-child(2){
+				position:absolute;
+				border-top: 3px solid #fff;
+				border-left: 3px solid #fff;
+				top:0;
+				/* bottom: 0px; */
+				right: -3px;
+				width: 60%;
+				height: 50%;
+				border-top-left-radius: 6px;
+			}
+
+			.arrow-reverse > div:nth-child(1){
+				position:absolute;
+				border-top: 3px solid #fff;
+				border-right: 3px solid #fff;
+				top: 0px;
+				left: 0px;
+				width: 60%;
+				height: 50%;
+				border-top-right-radius: 6px;
+			}
+
+			.arrow-reverse > div:nth-child(2){
+				position:absolute;
+				border-bottom: 3px solid #fff;
+				border-left: 3px solid #fff;
+				bottom: 0;
+				right: -2px;
+				width: 40%;
+				height: 60%;
+				border-bottom-left-radius: 6px;
+			}
+
+			.arrow-straight > div:nth-child(2){
+				border-bottom: 3px solid #fff;
+			}
+
+			.arrow-straight > div:nth-child(1){
+				display:none;
+			}
+
+			.card {
+				width: 220px;
+/* 				height: 400px; */
+				box-shadow: 0px 0px 12px rgba(250,250,250,0.125);
+				border-radius: 6px 0px 0px 6px;
+				border: 1px solid rgb(128, 128, 128); /*rgba(163, 161, 166, 1)*/
+				text-align: left;
+				cursor: default;
+				display:table;
+				line-height: 16px;
+				font-size: 12px;
+				font-weight: bold;
+				background-color: rgba(255, 255, 255, 1);
+				color: rgb(72, 85, 99); 
+/* 				rgba(131,113,106,1); */
+				text-shadow: 0 0 10px rgba(160,108,78,0.2);
+				overflow:hidden;
+			}
+
+			.card:hover, .card.highlight-node {
+				box-shadow: 0px 0px 12px rgba(0,0,0,1);
+/* 			 	border: 3px solid rgba(163, 161, 166, 1); */
+			}
+
+			.card .content {
+				height: 70%;
+				/* font-size: 14px; */
+				font-weight: normal;
+				padding: 4%;
+				display: table;
+				text-align: justify;
+				width: 90%;
+			}
+
+			.card .title {
+				border-bottom: 1px solid rgb(128, 128, 128);
+				vertical-align: middle;				
+				display: table;
+				padding: 4%;
+				background-color: rgb(39, 142, 252);
+				color: #222;
+				font: normal bold 16px/1 "Arial";
+				width: 100%;
+			}
+
+			.fa{
+				font: normal normal normal 18px/1 FontAwesome;    
+/* 				color:#FAFAD2; */
+				padding-right: 10px;
+				text-align:right;
+
+			}
+
+			.fa-task:before{
+				content: "\f0ae";
+			}
+
+			.fa-user:before{
+				content: "\f007";
+			}
+
+			.fa-play:before{
+				content: "\f144";
+			}
+
+			.card .options {
+				display: table;
+				width: 100%;
+			}
+
+			.options > div {				
+				display:table;
+				width: 100%;
+			}
+
+			.options > div > div{				
+				vertical-align: middle;
+				display: table-row;
+				padding: 3%;
+				font-weight: normal;
+			}
+
+			.options > div > div > span{
+				border-top: 1px solid rgb(128, 128, 128);
+				padding: 4%;
+				display: table-cell;
+				vertical-align:middle;
+			}
+
+			.options > div > div {
+				background-color: #FAFAD2;				
+			}
+
+			.options > div > div:hover {
+				background-color: rgba(255, 255, 255, 0.25);
+			}
+
+			button {
+				/* color: rgba(127,255,255,0.75); */
+				background: transparent;
+				/* outline: 1px solid rgba(127,255,255,0.75); */
+				border: 0px;
+				padding: 5px 10px;
+				cursor: pointer;
+			}
+			button:hover {
+				background-color: rgba(0,255,255,0.5);
+			}
+			button:active {
+				color: #000000;
+				background-color: rgba(0,255,255,0.75);
+			}
