@@ -1,0 +1,50 @@
+<div id="page-body">
+    <form name="loginform" class="css-form" ng-submit="submitForm()" novalidate> 
+	<div class="jfc-container login_box">
+            <div ng-show="selectedPage =='username' || selectedPage =='password'">
+                <div class="jfc-container align-center">
+                    <div class="jfc-box">
+                        <div class="header-bar">
+                                <div class="beta">Choose</div>
+                        </div>
+                    </div> 
+                </div>
+		<div class="jfc-container">
+                    <div class="jfc-box align-center">
+                            <h1 class="large">Trouble Shoot</h1>
+                    </div> 
+                </div>
+            </div>
+            <div class="jfc-container" ng-show="selectedPage =='username'">
+		<div class="jfc-box" >
+			<div class="cell" >				
+				<label class="align-left">
+					<span class="large">Which project do you want to troubleshoot ?</span>
+					<uiselect  ng-model="selectedProject" list="projectList"></uiselect>
+				</label>
+			</div>
+		</div>
+		<div class="jfc-box" >
+			<div class="cell" >
+				<label class="align-left">
+					<span class="large">Which environment do you want to troubleshoot ?</span>					
+					<uiselect ng-model="selectedEnvironment" list="environmentList"></uiselect>
+				</label>
+			</div>
+		</div>
+		<div class="jfc-box">
+                    <div class="jfc-container before-spacer split-container">
+                        <div class="inner-container">
+                            <div class="cell">
+                                    <button class="btn btn-danger btn-fullwidth" ng-click="handleSubmit()" type="submit">Next</button>
+                            </div>
+                            <div class="cell ">
+                                    <button class="btn btn-gray btn-fullwidth" ng-click="userid='';">Cancel</button>
+                            </div>
+                        </div>
+                    </div>	
+		</div>
+            </div>
+        </div>
+    </form>
+</div>
