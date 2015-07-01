@@ -1,4 +1,4 @@
-angular.module('JFC.directives', [])    
+angular.module('JFC.directives', [])
     .directive('popup',function(){
     	return {
     	    restrict: 'EA',
@@ -15,5 +15,5 @@ angular.module('JFC.directives', [])
     	    }
     	  };
     })
-    .directive('uiselect', uiselect);
+    .directive('uiselect', uiselect)
     .directive('uisearch', uisearch);
