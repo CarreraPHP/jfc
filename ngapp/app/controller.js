@@ -4,6 +4,7 @@ angular.module('JFC.controller', [])
             max: 100
     })
     .controller("ApplicationController", ["$scope", "$http", "$location", "$timeout", "$rootScope","$localStorage","$sessionStorage", ApplicationController])
-    .controller("HomeController", ["$scope", HomeController])	
+    .controller("HomeController", ["$scope", "$route","$http","$localStorage", HomeController])
     .controller("LoginController", ["$scope", "$route","$http","$localStorage", LoginController])
-    .controller("UISelectController", ["$scope", "$attrs", "progressConfig", UISelectController]);
+    .controller("UISelectController", ["$scope", "$attrs", "progressConfig", UISelectController])
+    .controller("UISearchController", ["$scope", "$attrs", "progressConfig", UISearchController]);
