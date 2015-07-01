@@ -1,13 +1,11 @@
-function HomeController($scope){
+function HomeController($scope, $route, $http, $localStorage){
     var camera, renderer;
     var controls;
     var scene = document.querySelector('#container #scene2d');
 
     var objects = [];
     var grid = [];
-
-    var i=1, xArr = [0];
-    for(; i <= 50; i++){xArr.push(i);xArr.push(-i);}
+    var nObjects = [], max_cnt = 0, max_cnt_index = 0, max_height = 0;
 
     function createMockCard(){
         return {
@@ -142,63 +140,52 @@ function HomeController($scope){
     }
 
     function parserChartList(lists, z_index) {
-            for (var z in lists) {
-                    var lt = lists[z];
-                    var ltCard = createCard(lt);
+        var scene = document.querySelector('#container #scene2d');
+        for (var z in lists) {
+                var lt = lists[z];
+                var ltCard = createCard(lt);
 // 					console.log("chart : ", z, lt, lt.options);
-                    if (lt.options.length > 0) {
-                            ltCard.appendChild(parseChartOptions(lt.options));
-                    }
+                if (lt.options.length > 0) {
+                        ltCard.appendChild(parseChartOptions(lt.options));
+                }
 
-                    ltCard.style.left = 0;
-                    ltCard.style.top = 0;
-                    ltCard.style.zIndex = z_index;
+                ltCard.style.left = 0;
+                ltCard.style.top = 0;
+                ltCard.style.zIndex = z_index;
 
-                    objects.push(ltCard);
-
-// 					var ltCardClone = ltCard.cloneNode();
-// 					ltCardClone.innerHTML = ltCard.innerHTML;
-// 					iElem.contentDocument.body.appendChild(ltCardClone);
-
-                    scene.appendChild(ltCard);
-            }
+                objects.push(ltCard);
+                scene.appendChild(ltCard);
+        }
     }
 
-    function createHiddenFrame() {
-            window.iElem = document.createElement('iframe');
-            document.body.appendChild(iElem);
-            window.linkElem = document.createElement('link');
-            linkElem.href = "css/demo.css";
-            linkElem.rel = "stylesheet";
-            iElem.contentDocument.body.appendChild(linkElem);
-            iElem.style.visibility = "hidden";
-            iElem.contentDocument.body.style.position = "relative";
-            iElem.width = "600px";
-            iElem.height = "600px";
+    function beforeParse(){
+        objects = [];
+        grid = [];
+        nObjects = [];
+        max_cnt = 0;
+        max_cnt_index = 0;
+        max_height = 0;
+        scene.innerHTML = "";
     }
-
-// 			createHiddenFrame();
-    parserChartList(chart, 10);
-    setTimeout(domLoad, 250);
 
     function domLoad() {
         document.addEventListener('MoveObject', function (event) {
-//                                    console.log("Move Object custom method...", grid, objects, event.pos.moveY, event.pos.startY, event.pos.endY);
+//            console.log("Move Object custom method...", grid, objects, event.pos.moveY, event.pos.startY, event.pos.endY);
 
             for (_n in grid) {
-//                                        console.log(parseInt(grid[_n].style.left), grid[_n].style.left, parseInt(grid[_n].style.top), grid[_n].style.top);
+//                console.log(parseInt(grid[_n].style.left), grid[_n].style.left, parseInt(grid[_n].style.top), grid[_n].style.top);
                 grid[_n].style.left = (parseInt(grid[_n].style.left) + event.pos.moveX) + "px";
                 grid[_n].style.top  = (parseInt(grid[_n].style.top) - event.pos.moveY) + "px";
             }
-            transform(grid, 125);
+            if(event.pos.transform){
+                transform(grid, 125);    
+            }
         });
 
         init();
         animate();
     }
-
-    var nObjects = [], max_cnt = 0, max_cnt_index = 0, max_height = 0;
-
+    
     function init() {
         for (var y in objects) {
             var x = objects[y],
@@ -240,8 +227,10 @@ function HomeController($scope){
         // Approach 2: starting from last child and span out to the parent.
 
         while (cnObjects.length !== 0) {
-            var cur = cnObjects.shift();
-
+            var cur = cnObjects.shift(),
+                initial_y = 0;
+            
+            // cur is the list of cards in the same level.
             for (var curIndex in cur) {
                 var curMock = createMockCard();
                 cur[curIndex].mockCard = curMock;
@@ -269,7 +258,8 @@ function HomeController($scope){
 
 // 											var cfnSelector = '#' + ((parseInt(curIndex) != cur.length-1) ? (cur[parseInt(curIndex)+1]).id : cur[parseInt(curIndex)].id);
                     var curFrameNode = ((parseInt(curIndex) != cur.length-1) ? (cur[parseInt(curIndex)+1]) : cur[parseInt(curIndex)]);
-
+                    var curFrameNode = (cur[parseInt(curIndex)]);
+                    
                     var _top_diff = 0, //* (max_cnt / 2)
                         _top_incr = 0; // 180
                     if (cur.length > 1) {
@@ -280,37 +270,75 @@ function HomeController($scope){
                             _top_init = 0;
                         }
                         _top_incr = (curIndex - Math.floor(cur.length / 2));
-                        _top_diff = getHeight(curFrameNode);
+                        _top_diff = getHeight(curFrameNode) + 50;
+
+                        console.log(_top_incr, _top_diff, parentObj.mockCard.style.top, curMock.style.top);
+                        
                         if (_top_incr > -1) {
                             _top_incr = _top_incr + _top_init;
-                             _top_diff = getHeight(cur[curIndex]);
+                            top_diff = getHeight(cur[curIndex]) + 20;
+//                              curMock.style.top = (parentObj ?  parentObj.mockCard.style.top : 0) + (_top_incr * _top_diff);
+                        }else{
+                            _top_diff = getHeight(curFrameNode) * 2 + 20;
+//                             curMock.style.top = (_top_incr * _top_diff) - (parentObj ?  parentObj.mockCard.style.top : 0);
                         }
-// 							console.log("curIndex , ", curIndex, (cur.length/2 + 1), (curIndex - (cur.length/2 + 1)), (curIndex - Math.floor(cur.length/2)), _top_incr);
+                        curMock.style.top = initial_y;
+                        initial_y += getHeight(curFrameNode) + 100;
+                        curMock.style.left = (parentObj ? parentObj.mockCard.style.left : 0) + 300;
+                        console.log("curIndex , ", curFrameNode, curMock.style.top, curIndex, (curIndex - Math.floor(cur.length/2)), _top_incr);
+                    }else{
+                        curMock.style.left = (parentObj ? parentObj.mockCard.style.left : 0) + 300;
+                        curMock.style.top =  (parentObj ?  parentObj.mockCard.style.top : 0);
+                    
                     }
-
-
-
-                    curMock.style.left = (parentObj.mockCard.style.left + 300);
-                    curMock.style.top = (parentObj.mockCard.style.top + (_top_incr * _top_diff));
-//                                                  console.log("child - parent position , ", cur[curIndex].position, curMock.position, parentObj.position);
+                    // console.log("child - parent position , ", cur[curIndex].position, curMock.position, parentObj.position);
                 }
-                grid.push(curMock);
+                cur[curIndex].mockCard = curMock;
+//                 grid.push(curMock);
             }
+            
+            if(initial_y > 0){
+//                 var customEvent = new Event('MoveObject');
+//                 customEvent.pos = {
+//                     startX: 0,
+//                     startY: 0,
+//                     endX: 0,
+//                     endY: 0,
+//                     moveX: 0,
+//                     moveY: Math.floor(initial_y / 2),
+//                     isMoving: false,
+//                     dispatchTimer: false,
+//                     transform: false
+//                 };
+//                 document.dispatchEvent(customEvent);
+
+                    for (var curIndex in cur) {
+                        if(cur.length > 1){
+                            cur[curIndex].mockCard.style.top = cur[curIndex].mockCard.style.top - Math.floor(initial_y / 2);
+                        }
+                        grid.push(cur[curIndex].mockCard);                    
+                    }       
+
+                initial_y = 0;
+            }else{
+                grid.push(cur[0].mockCard);
+            }
+
             nObjIndex++;
         }
 
-        transform(grid, 125);
+        // transform(grid, 125);
 
         controls = new TrackballControls( scene, document.querySelector('#container') );
         controls.rotateSpeed = 0.5;
         controls.minDistance = 0;
         controls.maxDistance = 10000;
-// 				controls.addEventListener( 'change', render );
 
         setTimeout(function(){
             drawArrow();
             transform(grid, 125);
-        }, 150);
+            console.log("triggered");
+        }, 650);
 
         window.addEventListener('resize', onWindowResize, false);
 
@@ -370,8 +398,11 @@ function HomeController($scope){
             objects.push(arrowElm);
             scene.appendChild(arrowElm);                                    
             grid.push(mockCard);
-        }
 
+//             console.log(objects, arrowElm, mockCard);
+        }
+        
+        console.log("nObjects", nObjects);
         for (var _i in nObjects) {
             var inObj = nObjects[_i];
             for (var _j in inObj) {
@@ -413,7 +444,7 @@ function HomeController($scope){
                 }
             }
         }
-        transform(grid, 2000);
+        transform(grid, 125);
     }
 
     function transform(targets, duration) {
@@ -436,5 +467,31 @@ function HomeController($scope){
     }
 
     function render() {
+    }
+    
+    $scope.plotChart = function(sChart){
+        beforeParse();
+        setTimeout(parserChartList, 50, sChart, 10);
+//         parserChartList(sChart, 10);
+        //timeout needed for objects array to be sorted...
+       setTimeout(domLoad, 200);
+    }
+
+    $scope.selectedPage = $route.current.params.subpage || "";
+
+    if($scope.selectedPage !== "" && $scope.selectedPage !== "select"){        
+        for(var index in $scope.data.troubleList){
+            var item = $scope.data.troubleList[index];
+            if(item.chart == $scope.selectedPage){
+                break;
+            }
+        }
+        scene.innerHTML = "";
+        setTimeout(function(){
+            $scope.plotChart(window[item.chart]);
+        }, 1000);
+        console.log("item ", item);
+    }else{
+        $scope.application.slider.makeSlide();
     }
 }
