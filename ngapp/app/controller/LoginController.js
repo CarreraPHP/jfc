@@ -3,13 +3,6 @@ function LoginController($scope, $route, $http, $localStorage){
 	$scope.application.title = "";
 	$scope.application.preventToolbar = true;
 
-	$scope.environmentList = [
-		"DEV", "QA", "ALT-PROD", "PROD"
-	];
-	$scope.projectList = [
-		"PROJ 1", "PROJ 2", "PROJ 3", "PROJ 4"
-	];
-
 	var userName = "";
 	$scope.handleSubmit = function(){
 		if( $scope.selectedProject!=undefined){
