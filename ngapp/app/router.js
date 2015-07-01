@@ -4,10 +4,10 @@ angular.module('JFC.router', ['ngRoute'])
 function routerFn($routeProvider, $locationProvider) {
     $routeProvider
             .when('/Home', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
+            .when('/Home/:subpage', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
             .when('/Login', {templateUrl: 'app/view/Login.html', controller: 'LoginController'})
-            .when('/Login/:subpage', {templateUrl: 'app/view/Login.html', controller: 'LoginController'})
             .otherwise({
-                    redirectTo:'/Home'
+                    redirectTo:'/Home/select'
             });
     // configure html5 to get links working on jsfiddle
     $locationProvider.hashPrefix('!').html5Mode(false);
