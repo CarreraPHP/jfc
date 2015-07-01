@@ -18,46 +18,79 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 		}
 		
 	}
-        
+        $scope.environmentList = [
+		"DEV", "QA", "ALT-PROD", "PROD"
+	];
+	$scope.projectList = [
+		"PROJ 1", "PROJ 2", "PROJ 3", "PROJ 4"
+	];
+	$scope.portalList = [
+		"PORTAL 1", "PORTAL 2"
+	];
+	
         $rootScope.data = {
             userName: 'Yogesh Surendran',
             greetingKey: 'Mr. ',
             troubleList: [{
                     imageName: 'question',
-                    title: 'User is getting slow response'
+                    title: 'User is getting slow response',
+                    chart: 'chart2',
+					environment: 'DEV',
+					project: 'PROJ 1',
+					portal: 'PORTAL 1'
             },{
                     imageName: 'question',
-                    title: 'User getting Error response from middle layer (bus,DB,batch etc..)'
+                    title: 'User getting Error response from middle layer (bus,DB,batch etc..)',
+                    chart: 'chart2',
+					environment: 'QA',
+					project: 'PROJ 1',
+					portal: 'PORTAL 1'
             },{
                     imageName: 'question',
-                    title: 'Web Page Not Render in user system'
+                    title: 'Web Page Not Render in user system',
+                    chart: 'chart2',
+					environment: 'ALT-PROD',
+					project: 'PROJ 1',
+					portal: 'PORTAL 1'
             },{
                     imageName: 'question',
-                    title: 'Request is not reaching to application server (eBonding specific)'
+                    title: 'Request is not reaching to application server (eBonding specific)',
+                    chart: 'chart2',
+					environment: 'PROD',
+					project: 'PROJ 1',
+					portal: 'PORTAL 1'
             },{
                     imageName: 'question',
-                    title: 'Helpdesk is reporting multiple end users are unable to sign into '
+                    title: 'Helpdesk is reporting multiple end users are unable to sign into ',
+                    chart: 'chart2',
+					environment: 'QA',
+					project: 'PROJ 3',
+					portal: 'PORTAL 1'
             },{
                     imageName: 'question',
-                    title: 'Production support is reporting high CPU utilization on server VAPSBDFFRGDHGJPKAL37 '
+                    title: 'Production support is reporting high CPU utilization on server VAPSBDFFRGDHGJPKAL37 ',
+                    chart: 'chart',
+					environment: 'QA',
+					project: 'PROJ 2',
+					portal: 'PORTAL 1'
             },{
                     imageName: 'question',
-                    title: 'Helpdesk is reporting Voice Mail Manager, a sub-application has not been working for at least a week'
+                    title: 'Helpdesk is reporting Voice Mail Manager, a sub-application has not been working for at least a week',
+                    chart: 'chart2',
+					environment: 'QA',
+					project: 'PROJ 1',
+					portal: 'PORTAL 1'
             }]
 	};
 
 	$rootScope.application = {
 	    title: "JSON Flow Chart",
-	    setUser: false,
-	    removeUser: false,
-	    getUser: false,
-	    getPassword:false,
-		currentDeviceIndex:0,
+	    setProject: false,
+	    removeProject: false,
+	    getProject: false,
+	    getEnvironment:false,
 		preventToolbar: false,
 		preventTabbar: false,
-		paymentMethod : "",
-		amountToPay:"",
-		dateToPay:"",
 		errorMsg:"",
 		futureMsg:"Thanks for your interest This option will be added as part of next release!",
 		notificationsCount:"",
@@ -99,7 +132,7 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 	    	},
 	    	
 	    	signout: function(){
-	    		$scope.application.removeUser();
+	    		$scope.application.removeProject();
 	    		$scope.application.slider.makeSlide();
 	    		$scope.application.dosignout.sout=false;
 	    		$scope.application.navigation.goTo('Login');
@@ -134,45 +167,16 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 	};
 	
 	$scope.hamburger = {
-		menuList: [],
 		toggleAccordion: function(index){
-			var menuList = $scope.hamburger.menuList;
-// 			console.log("%c arguments", "color:red;font-size:20px;", arguments);			
+			var menuList = $scope.data.troubleList;						
 			for(var j=0; j < menuList.length;j++){
-				if(j !== index){
-					menuList[j].subMenuVisible = false;
-				}else{
-					menuList[index].subMenuVisible = !!!menuList[index].subMenuVisible;
+				if(j === index){					
+					break;					
 				}		
 			}
+			console.log("%c arguments 2", "color:red;font-size:20px;", menuList[j], arguments);
+			$scope.application.navigation.goTo('Home/' + menuList[j].chart);
+			history.go();
 		}
 	}
-
-	$scope.handleMenuClick = function(pageType, prev_menu){
-		$scope.application.slider.makeSlide();
-		$scope.hamburger.toggleAccordion(prev_menu);
-		if(pageType == "payment"){
-			$scope.application.navigation.goTo('Payment');			
-		}
-		else if(pageType == "deviceDetailsList"){
-			$scope.application.navigation.goTo('Device');			
-		}
-		else if(pageType == "profileDetailSuccess"){
-			$scope.application.navigation.goTo('MyProfile');			
-		}
-		else if(pageType == "custSupport"){
-			$scope.application.navigation.goTo('Support');			
-		}
-		else if(pageType == "shop"){
-			$scope.application.navigation.goTo('Shop');			
-		}		
-		else{
-			$scope.application.model.toggle();
-			$scope.application.slider.makeSlide();
-		}					
-	}   
-
-	/*var menuObject = $scope.application.getScreenData("MainTable");
-	$scope.hamburger.menuList = menuObject.tpLelevlMenu.mainTable;
-	*/
 }
