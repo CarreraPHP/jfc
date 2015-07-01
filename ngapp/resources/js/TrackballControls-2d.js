@@ -185,7 +185,8 @@ TrackballControls = function ( object, domElement ) {
 		moveX: 0,
 		moveY: 0,
         isMoving: false,
-		dispatchTimer: false
+		dispatchTimer: false,
+		transform:true
 	};
 
 	function mousedown( event ) {
