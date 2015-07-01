@@ -12,10 +12,12 @@
 				font-family: "Arial", Helvetica, sans-serif;;
 				overflow: hidden;
 /*				background: radial-gradient(circle at 50% 75%, #3F4041, #1F1F1F); */
-				background: url(../images/alpha-bg-2x2.svg), radial-gradient(ellipse at 50% 50%, rgba(207,208,215,0.2) 42%, rgba(0, 0, 0, 0.4) 90%);
+				/* background: url(../images/alpha-bg-2x2.svg), radial-gradient(ellipse at 50% 50%, rgba(207,208,215,0.2) 42%, rgba(0, 0, 0, 0.4) 90%); */
 			
 				/* background-blend-mode: multiply; */
-			}
+			
+				background-color: #fff;
+}
 
 			#container, .container{
 				width:100%;
@@ -71,7 +73,7 @@
 /* 				display:block; */
 				line-height: 11px;
 				font-size: 9px;
-				background-color: rgba(255, 255, 255, 0);
+				background-color: transparent;
 				color: #222;			
 				overflow: hidden;
 			}
@@ -86,8 +88,8 @@
 
 			.arrow > div:nth-child(1){
 				position:absolute;
-				border-bottom: 3px solid #fff;
-				border-right: 3px solid #fff;
+				border-bottom: 3px solid blue;
+				border-right: 3px solid blue;
 				bottom: 0px;
 				left: 0px;
 				width: 40%;
@@ -97,8 +99,8 @@
 
 			.arrow > div:nth-child(2){
 				position:absolute;
-				border-top: 3px solid #fff;
-				border-left: 3px solid #fff;
+				border-top: 3px solid blue;
+				border-left: 3px solid blue;
 				top:0;
 				/* bottom: 0px; */
 				right: -3px;
@@ -109,8 +111,8 @@
 
 			.arrow-reverse > div:nth-child(1){
 				position:absolute;
-				border-top: 3px solid #fff;
-				border-right: 3px solid #fff;
+				border-top: 3px solid blue;
+				border-right: 3px solid blue;
 				top: 0px;
 				left: 0px;
 				width: 60%;
@@ -120,8 +122,8 @@
 
 			.arrow-reverse > div:nth-child(2){
 				position:absolute;
-				border-bottom: 3px solid #fff;
-				border-left: 3px solid #fff;
+				border-bottom: 3px solid blue;
+				border-left: 3px solid blue;
 				bottom: 0;
 				right: -2px;
 				width: 40%;
@@ -130,8 +132,11 @@
 			}
 
 			.arrow-straight > div:nth-child(2){
-				border-bottom: 3px solid #fff;
-			}
+				border-bottom: 3px solid blue;
+				width: 100% !important;
+			
+				bottom: 0;
+}
 
 			.arrow-straight > div:nth-child(1){
 				display:none;
@@ -147,7 +152,7 @@
 				cursor: default;
 				display:table;
 				line-height: 16px;
-				font-size: 12px;
+				font-size: 14px;
 				font-weight: bold;
 				background-color: rgba(255, 255, 255, 1);
 				color: rgb(72, 85, 99); 
@@ -177,13 +182,13 @@
 				display: table;
 				padding: 4%;
 				background-color: rgb(39, 142, 252);
-				color: #222;
+				color: #fff;
 				font: normal bold 16px/1 "Arial";
 				width: 100%;
 			}
 
 			.fa{
-				font: normal normal normal 18px/1 FontAwesome;    
+				font: normal normal normal 21px/1 FontAwesome;    
 /* 				color:#FAFAD2; */
 				padding-right: 10px;
 				text-align:right;
@@ -243,9 +248,11 @@
 				cursor: pointer;
 			}
 			button:hover {
-				background-color: rgba(0,255,255,0.5);
-			}
+				/* background-color: rgba(0,255,255,0.5); */
+			
+				color: #fff;
+}
 			button:active {
 				color: #000000;
-				background-color: rgba(0,255,255,0.75);
+				/* background-color: rgba(0,255,255,0.75); */
 			}
