@@ -1,0 +1,102 @@
+<div id="page-body">
+    <form name="adminform" class="css-form" ng-submit1="submitForm()" novalidate> 
+	<div class="jfc-container login_box">
+            <div class="jfc-container align-center">
+                <div class="jfc-box">
+                    <div class="header-bar menu-heading">
+                            <div class="beta">Playbook</div>
+                    </div>
+                </div> 
+            </div>
+            <div class="jfc-container before-spacer">
+                <div class="jfc-box align-center">
+                        <h1 class="large">Create Chart</h1>
+                </div> 
+            </div>
+            <div class="jfc-container jfc-width-90">
+                <label class="jfc-box" class="align-left align-middle">
+                    <span class="cell large after-spacer before-spacer">
+                        <span class="jfc-block">Chart id prefix</span>
+                    </span>
+                    <span class="cell">
+                        <input class="form-control" type="text" ng-model="editor.idPrefix" />
+                    </span>
+                </label>
+                <label class="jfc-box" class="align-left align-middle">
+                    <span class="cell large after-spacer before-spacer">
+                        <span class="jfc-block">Environment</span>                           
+                    </span>
+                    <span class="cell">                        
+                        <uiselect ng-model="editor.environment" list="environmentList"></uiselect>
+                    </span>
+                </label>
+                <label class="jfc-box" class="align-left align-middle">
+                    <span class="cell large after-spacer before-spacer">
+                        <span class="jfc-block">Portal</span>                        
+                    </span>
+                    <span class="cell">                        
+                        <uiselect ng-model="editor.portal" list="portalList"></uiselect>
+                    </span>
+                </label>
+                <label class="jfc-box" class="align-left align-middle">
+                    <span class="cell large after-spacer before-spacer">
+                        <span class="jfc-block">Project</span>                            
+                    </span>
+                    <span class="cell">                        
+                        <uiselect ng-model="editor.project" list="projectList"></uiselect>
+                    </span>
+                </label>				
+            </div>
+            <div class="jfc-container jfc-toolbar">
+                <div class="jfc-box">
+                    <div class="cell menu-heading">
+                        <div><h2 class="large">List</h2></div>
+                    </div>                    
+                </div> 
+                <div class="jfc-box">
+                    <div class="jfc-container">
+                        <div class="cell align-middle align-left">
+                            <div>
+                                <button class="btn btn-medium" ng-click="printChartJson()">
+                                    <i class="icon icon-add medium"></i>
+                                    <span class="medium">Console-log</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="cell align-middle align-right">
+                            <div>
+                                <button class="btn btn-medium" ng-click="addChartItem()">
+                                    <i class="icon icon-add medium"></i>
+                                    <span class="medium">Chart</span>
+                                </button>
+                                <button class="btn btn-medium" ng-click="addOption()">
+                                    <i class="icon icon-add medium"></i>
+                                    <span class="medium">Option</span>
+                                </button>
+                                <!--<button class="align-middle align-left icon icon-add">Option</button>-->
+                            </div>
+                        </div>                       
+                    </div>                    
+                </div> 
+            </div>
+            <div class="jfc-container jfc-list" ng-show="editor.chartList.length > 0">
+                <div class="jfc-box jfc-list-item" ng-repeat="item in editor.chartList" 
+                    ng-click="selectItem(item)"
+                    ng-class="{'jfc-list-item-selected': (item.id == editor.internal.selected.id)}">
+                    <div class="cell">
+                        <div><span class="jfc-item-title">Generated ID</span>{{item.id}}</div>
+                        <div><span class="jfc-item-title">Item Name</span>{{item.name}}</div>
+                        <div><span class="jfc-item-title">Item Type</span>{{item.type}}</div>
+                        <div class="jfc-dockable jfc-list-options">
+                            <span class="jfc-item-title jfc-docked dock-left">Options</span>
+                            <div class="jfc-list-options" ng-repeat="subitem in item.options">
+                                <div>{{subitem.name}}</div>
+                                <div>{{subitem.charts}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
