@@ -5,8 +5,8 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="resources/css/app.css">
-        <link rel="stylesheet" href="resources/css/demo.css">
+        <link rel="stylesheet" href="resources/css/app.css" media="all">
+        <link rel="stylesheet" href="resources/css/demo.css" media="all">
         
         <script src="resources/js/libs/angular.min.js"></script>	
         <script src="resources/js/libs/angular-resource.min.js"></script>
@@ -22,6 +22,7 @@
 
         <script src="app/controller/HomeController.js"></script>
         <script src="app/controller/LoginController.js"></script>
+        <script src="app/controller/AdminController.js"></script>
         <script src="app/controller/UISelectController.js"></script>
         <script src="app/controller/UISearchController.js"></script>
         <script src="app/controller/ApplicationController.js"></script>	
@@ -34,7 +35,8 @@
         <script src="app/directives.js"></script>
         <script src="app/router.js"></script>
         <script src="application.js"></script>
-
+        
+        <script src="resources/js/chart2.js"></script>
         <script src="resources/js/chart3.js"></script>
         <script src="resources/js/TrackballControls-2d.js"></script>
         
@@ -56,7 +58,7 @@
                 </div>
                 <div class="jfc-container">
                         <div class="jfc-box align-center">
-                                <div class="cell" >gdfgdfgdfgdfgdfgdfg
+                            <div class="cell" >
                                 <label class="align-left before-spacer">
                                     <uisearch ng-model="searchEntry" ng-init="ph = ''" placeholder="Type here to search" list="environmentList"></uisearch>
                                 </label>
@@ -114,6 +116,7 @@
                                         <div class="cell align-middle align-left icon icon-right-angle"></div>
                                     </div>
                             </div>
+                            
                         <div ng-show="filterList.length == 0" class="jfc-box menu-item">
                             <div class="jfc-container " ng-click="hamburger.toggleAccordion($index)">				
                                 <div class="cell icon align-center"></div>
