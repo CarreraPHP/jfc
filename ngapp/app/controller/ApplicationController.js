@@ -2,12 +2,12 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 //     $scope = this;
 	$scope.pageLoading = false;
 	/*
-	$scope.callBackpageLoading=function(){					
+	$scope.callBackpageLoading=function(){
 			$pageLoading(function(){$scope.pageLoading = true;}, 400);
-	}	
+	}
 
 	$scope.callBackpageLoading();
-*/	
+*/
 	$scope.isActive=function(pathMenu){
 		pathMenu = "/"+pathMenu;
 		if($location.path() == pathMenu){
@@ -16,7 +16,7 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 		else{
 			return false;
 		}
-		
+
 	}
         $scope.environmentList = [
 		"DEV", "QA", "ALT-PROD", "PROD"
@@ -27,7 +27,7 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 	$scope.portalList = [
 		"PORTAL 1", "PORTAL 2"
 	];
-	
+
         $rootScope.data = {
             userName: 'Yogesh Surendran',
             greetingKey: 'Mr. ',
@@ -110,10 +110,11 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 				localStorage.clear();
 			}
 		},
-		showSubPageToolbarBtn: false,		
+		showSubPageToolbarBtn: false,
 	    slider:{
 	    	animated:false,
 	    	makeSlide: function(){
+					console.log("slider triggered.....");
 	    		$scope.application.slider.animated = !$scope.application.slider.animated;
 	    	}
 	    },
@@ -130,7 +131,7 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 	    		$location.path("/" + view);
 	    		document.getElementById("jfc-container").scrollTop=0;
 	    	},
-	    	
+
 	    	signout: function(){
 	    		$scope.application.removeProject();
 	    		$scope.application.slider.makeSlide();
@@ -138,11 +139,11 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 	    		$scope.application.navigation.goTo('Login');
 	    	}
 	    },
-		
+
 		setScreenData: function(page, response){
     		$localStorage[page] = response;
     	},
-		
+
     	getScreenData: function(pageType){
 			var dataList = $localStorage.screen.JsonArray;
 			for(var i=0; i<dataList.length; i++){
@@ -152,27 +153,27 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 						console.log("$localStorage", dataList[i]);
 						return dataList[i];
 					}
-				}			
+				}
 			}
     	},
-		
-		
-		
+
+
+
     	setPageLoading: function(val) {
     		//console.log("$scope.pageLoading", $scope.pageLoading);
     		//console.log("page loading.....");
     		$scope.pageLoading = val;
     	}
-    	
+
 	};
-	
+
 	$scope.hamburger = {
 		toggleAccordion: function(index){
-			var menuList = $scope.data.troubleList;						
+			var menuList = $scope.data.troubleList;
 			for(var j=0; j < menuList.length;j++){
-				if(j === index){					
-					break;					
-				}		
+				if(j === index){
+					break;
+				}
 			}
 			console.log("%c arguments 2", "color:red;font-size:20px;", menuList[j], arguments);
 			$scope.application.navigation.goTo('Home/' + menuList[j].chart);

@@ -13,9 +13,9 @@
 				overflow: hidden;
 /*				background: radial-gradient(circle at 50% 75%, #3F4041, #1F1F1F); */
 				/* background: url(../images/alpha-bg-2x2.svg), radial-gradient(ellipse at 50% 50%, rgba(207,208,215,0.2) 42%, rgba(0, 0, 0, 0.4) 90%); */
-			
+
 				/* background-blend-mode: multiply; */
-			
+
 				background-color: #fff;
 }
 
@@ -24,13 +24,14 @@
 				height: 100%;
 				position:relative;
 			}
-                        
+
 			#container > #scene2d{
 				top: 50%;
 				left: 10%;
 				position: absolute;
 				width:100%;
 				height: 100%;
+				z-index:5;
 			}
 
 			#container > #scene2d > div{
@@ -40,7 +41,7 @@
 				-ms-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
 				-o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
 				transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
-/*				-webkit-animation-delay: 2s;  Chrome, Safari, Opera 
+/*				-webkit-animation-delay: 2s;  Chrome, Safari, Opera
 				animation-delay: 2s;*/
 			}
 
@@ -74,7 +75,7 @@
 				line-height: 11px;
 				font-size: 9px;
 				background-color: transparent;
-				color: #222;			
+				color: #222;
 				overflow: hidden;
 			}
 
@@ -134,7 +135,7 @@
 			.arrow-straight > div:nth-child(2){
 				border-bottom: 3px solid blue;
 				width: 100% !important;
-			
+
 				bottom: 0;
 }
 
@@ -155,7 +156,7 @@
 				font-size: 14px;
 				font-weight: bold;
 				background-color: rgba(255, 255, 255, 1);
-				color: rgb(72, 85, 99); 
+				color: rgb(72, 85, 99);
 /* 				rgba(131,113,106,1); */
 				text-shadow: 0 0 10px rgba(160,108,78,0.2);
 				overflow:hidden;
@@ -178,7 +179,7 @@
 
 			.card .title {
 				border-bottom: 1px solid rgb(128, 128, 128);
-				vertical-align: middle;				
+				vertical-align: middle;
 				display: table;
 				padding: 4%;
 				background-color: rgb(39, 142, 252);
@@ -188,7 +189,7 @@
 			}
 
 			.fa{
-				font: normal normal normal 21px/1 FontAwesome;    
+				font: normal normal normal 21px/1 FontAwesome;
 /* 				color:#FAFAD2; */
 				padding-right: 10px;
 				text-align:right;
@@ -212,12 +213,12 @@
 				width: 100%;
 			}
 
-			.options > div {				
+			.options > div {
 				display:table;
 				width: 100%;
 			}
 
-			.options > div > div{				
+			.options > div > div{
 				vertical-align: middle;
 				display: table-row;
 				padding: 3%;
@@ -232,7 +233,7 @@
 			}
 
 			.options > div > div {
-				background-color: #FAFAD2;				
+				background-color: #FAFAD2;
 			}
 
 			.options > div > div:hover {
@@ -249,7 +250,7 @@
 			}
 			button:hover {
 				/* background-color: rgba(0,255,255,0.5); */
-			
+
 				/*color: #fff;*/
 }
 			button:active {
