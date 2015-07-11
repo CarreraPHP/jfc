@@ -27,10 +27,18 @@
   <script src="app/controller/AdminController.js"></script>
   <script src="app/controller/UISelectController.js"></script>
   <script src="app/controller/UISearchController.js"></script>
+  <script src="app/controller/UITextController.js"></script>
+  <script src="app/controller/UITextAreaController.js"></script>
+  <script src="app/controller/UIChartItemController.js"></script>
+  <script src="app/controller/UIChartOptionController.js"></script>
   <script src="app/controller/ApplicationController.js"></script>
 
   <script src="app/directives/uiselect.js"></script>
   <script src="app/directives/uisearch.js"></script>
+  <script src="app/directives/uitext.js"></script>
+  <script src="app/directives/uitextarea.js"></script>
+  <script src="app/directives/uichartitem.js"></script>
+  <script src="app/directives/uichartoption.js"></script>
 
   <script src="app/controller.js"></script>
   <script src="app/filters.js"></script>
@@ -77,21 +85,21 @@
         <div class="jfc-box ">
           <div class="cell">
             <label class="align-left before-spacer">
-              <uiselect ng-model="selectedEnvironment" placeholder="Environment" list="environmentList"></uiselect>
+              <uiselect ng-model="selectedEnvironment" valuefield="" placeholder="Environment" list="environmentList"></uiselect>
             </label>
           </div>
         </div>
         <div class="jfc-box">
           <div class="cell">
             <label class="align-left">
-              <uiselect ng-model="selectedPortal" placeholder="Portal" list="portalList"></uiselect>
+              <uiselect ng-model="selectedPortal" valuefield="" placeholder="Portal" list="portalList"></uiselect>
             </label>
           </div>
         </div>
         <div class="jfc-box">
           <div class="cell">
             <label class="align-left">
-              <uiselect ng-model="selectedProject" placeholder="Project" list="projectList"></uiselect>
+              <uiselect ng-model="selectedProject" valuefield="" placeholder="Project" list="projectList"></uiselect>
             </label>
           </div>
         </div>
@@ -117,7 +125,7 @@
         <div class="jfc-view-container menu-container">
           <div class="jfc-box menu-item" ng-repeat="item in data.troubleList | filter:selectedEnvironment | filter:selectedPortal | filter:selectedProject as filterList">
             <div class="jfc-container " ng-click="hamburger.toggleAccordion($index)">
-              <div class="cell icon align-center icon-{{item.imageName}}"></div>
+              <div class="cell icon list-firstchild align-center icon-{{item.imageName}}"></div>
               <div class="cell align-justify align-middle">
                 <div class="">{{item.title}}</div>
               </div>
