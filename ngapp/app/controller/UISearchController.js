@@ -2,7 +2,7 @@ function UISearchController($scope, $attrs, progressConfig) {
     var self = this;
 
     self.list = [];
-    console.log(arguments);
+    // console.log(arguments);
     $scope.$watch($attrs.placeHolder, function(){
         $scope.placeholder = $attrs.placeholder;    
     });
