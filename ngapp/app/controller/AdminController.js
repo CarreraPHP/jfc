@@ -1,4 +1,48 @@
         
+    	$scope.getChartTemplate = function(){
+    	    return {
+                    id: '',
+                    name: '',
+                    type: '',
+                    description: '',
+                    options: [],
+                    internal: {
+                        style: {}
+                    }
+                };
+    	};
+            
+    	$scope.getOptionTemplate = function(){
+    	    return {
+                    name: '',
+                    impact: -1,
+                    charts: '',
+                    internal: {
+                        style:{},
+                        class: {
+                            'arrow': true,
+                            'arrow-reverse': false,
+                            'arrow-straight': false
+                        }
+                    }
+                };
+    	};
+	
+        $scope.addChartItem = function(){
+            var chartItem = $scope.getChartTemplate();
+            if($scope.editor.internal.incrementor == 0){
+                chartItem.id = generateID();
+                chartItem.type = "Begin";
+                chartItem.name = "Chart Name";
+                chartItem.description = "Chart Description";
+                chartItem.internal.mode = 'edit';                
+                chartItem.internal.style.left = 300 * (chartItem.id.split('-').length-1) + "px";
+                $scope.editor.chartList.push(chartItem);
+            }else{
+                $scope.application.model.toggle("Please add options to the existing chartitems to add another chartitem.");
+            }            
+    	}
+        
     	$scope.addOption = function(){
                 var selected = $scope.editor.internal.selected;
     	    if(selected.id == ''){
