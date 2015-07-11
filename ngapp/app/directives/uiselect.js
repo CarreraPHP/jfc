@@ -6,7 +6,9 @@ function uiselect() {
     controller: 'UISelectController',
     scope: {
       list: '=',
-      value: '=ngModel'      
+      value: '=ngModel',
+      valuefield: '=?valuefield',
+      change: '=?change'    
     },
     templateUrl: 'app/view/directives/uiselect.html',
     link: function(scope, element, attrs, UISelectCtrl) {
