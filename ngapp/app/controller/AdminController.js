@@ -1,4 +1,38 @@
         
+    	$scope.addOption = function(){
+                var selected = $scope.editor.internal.selected;
+    	    if(selected.id == ''){
+                    $scope.application.model.toggle("Please select an existing chartitem to add options to it.");
+                }else{
+                    var option = $scope.getOptionTemplate(),
+                        mappedChartItem = $scope.getChartTemplate();
+                    
+                    mappedChartItem.id = generateID(selected);
+                    mappedChartItem.type = "Activity";
+                    mappedChartItem.name = "Chart Name";
+                    mappedChartItem.description = "Chart Description";
+                    option.name = "Option Name";
+                    option.charts = mappedChartItem.id;
+                    $scope.editor.internal.selected.options.push(option);
+                    mappedChartItem.internal.mode = 'display'; 
+                    mappedChartItem.internal.style.left = 300 * (mappedChartItem.id.split('-').length-1) + "px";
+                    $scope.editor.chartList.push(mappedChartItem);
+                    
+                    console.log("option added", option, mappedChartItem);
+                    $scope.editor.internal.selected = {id: ''};
+                }
+    	}
+        
+        $scope.selectItem = function(item){
+            $scope.editor.internal.selected = item;
+            console.log(arguments);
+        }
+        
+        $scope.printChartJson = function(){
+            console.log($scope.editor.chartList);
+            console.log(JSON.stringify($scope.editor.chartList));
+        }
+        
         $scope.$watch('editor.chartList.length', function(newLength, oldLength){
             $scope.editor.parsedList = [];
             for (var y in $scope.editor.chartList) {
