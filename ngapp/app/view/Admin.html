@@ -1,118 +1,126 @@
-<div id="page-body" style="border:1px solid; height:98%;">
-  <div class="jfc-box" style="border:1px solid;">
-    <div class="">
-      <div>
-        <div class="jfc-container">
-          <div class="jfc-container align-center">
-            <div class="jfc-box">
-              <div class="header-bar menu-heading">
+<div id="page-body" style="">
+    <div class="jfc-container align-center">
+        <div class="jfc-box">
+            <div class="header-bar menu-heading">
                 <div class="beta">Playbook</div>
-              </div>
             </div>
-          </div>
-          <div class="jfc-container after-spacer">
-            <div class="jfc-box">
-              <div class="cell menu-heading">
+        </div>
+    </div>
+    <div class="jfc-container after-spacer">
+        <div class="jfc-box">
+            <div class="cell menu-heading">
                 <div>
-                  <h2 class="medium">Chart Configuration</h2>
+                    <h2 class="medium">Chart Configuration</h2>
                 </div>
-              </div>
             </div>
-          </div>
-          <div class="jfc-container">
-            <label class="jfc-box" class="align-left align-middle">
-              <span class="cell medium after-spacer before-spacer">
-                <span class="jfc-block">Prefix</span>
-              </span>
-              <span class="cell">
-                <input class="form-control" type="text" ng-model="editor.idPrefix" />
-              </span>
-            </label>
-            <label class="jfc-box" class="align-left align-middle">
-              <span class="cell medium after-spacer before-spacer">
-                <span class="jfc-block">Environment</span>
-              </span>
-              <span class="cell">
-                <uiselect ng-model="editor.environment" list="environmentList"></uiselect>
-              </span>
-            </label>
-            <label class="jfc-box" class="align-left align-middle">
-              <span class="cell medium after-spacer before-spacer">
-                <span class="jfc-block">Portal</span>
-              </span>
-              <span class="cell">
-                <uiselect ng-model="editor.portal" list="portalList"></uiselect>
-              </span>
-            </label>
-            <label class="jfc-box" class="align-left align-middle">
-              <span class="cell medium after-spacer before-spacer">
-                <span class="jfc-block">Project</span>
-              </span>
-              <span class="cell">
-                <uiselect ng-model="editor.project" list="projectList"></uiselect>
-              </span>
-            </label>
-          </div>
-          <div class="jfc-container jfc-toolbar">
-            <div class="jfc-box">
-              <div class="cell menu-heading">
+        </div>
+    </div>
+    <div class="jfc-container jfc-width-96 after-spacer">
+        <label class="jfc-box" class="align-left">
+            <span class="cell medium after-spacer before-spacer align-middle">
+                <span>Prefix</span>
+            </span>
+            <span class="cell">
+                <span>
+                    <uitext ng-model="editor.idPrefix"></uitext>
+                </span>
+            </span>
+        </label>
+        <label class="jfc-box" class="align-left">
+            <span class="cell medium after-spacer before-spacer align-middle">
+                <span>Environment</span>
+            </span>
+            <span class="cell">
+                <span>
+                    <uiselect ng-model="editor.environment" list="environmentList"></uiselect>
+                </span>
+            </span>
+        </label>
+        <label class="jfc-box" class="align-left">
+            <span class="cell medium after-spacer before-spacer align-middle">
+                <span>Portal</span>
+            </span>
+            <span class="cell">
+                <span>
+                    <uiselect ng-model="editor.portal" list="portalList"></uiselect>
+                </span>
+            </span>
+        </label>
+        <label class="jfc-box" class="align-left">
+            <span class="cell medium after-spacer before-spacer align-middle">
+                <span>Project</span>
+            </span>
+            <span class="cell after-spacer">
+                <span>
+                    <uiselect ng-model="editor.project" list="projectList"></uiselect>
+                </span>
+            </span>
+        </label>
+    </div>
+    <div class="jfc-container jfc-toolbar">
+        <div class="jfc-box">
+            <div class="cell menu-heading">
                 <div>
-                  <h2 class="medium">Build List</h2>
+                    <h2 class="medium">Build List</h2>
                 </div>
-              </div>
             </div>
-            <div class="jfc-box">
-              <div class="jfc-container">
+        </div>
+        <div class="jfc-box">
+            <div class="jfc-container">
                 <div class="cell align-middle align-left">
-                  <div>
-                    <button class="btn btn-medium" ng-click="printChartJson()">
-                      <i class="icon icon-add medium"></i>
-                      <span class="medium">Console-log</span>
-                    </button>
-                  </div>
+                    <div>
+                        <button class="btn btn-medium" ng-click="printChartJson()">
+                            <i class="icon icon-add medium"></i>
+                            <span class="medium">Console-log</span>
+                        </button>
+                    </div>
                 </div>
                 <div class="cell align-middle align-right">
-                  <div>
-                    <button class="btn btn-medium" ng-click="addChartItem()">
-                      <i class="icon icon-add medium"></i>
-                      <span class="medium">Chart</span>
-                    </button>
-                    <button class="btn btn-medium" ng-click="addOption()">
-                      <i class="icon icon-add medium"></i>
-                      <span class="medium">Option</span>
-                    </button>
-                  </div>
+                    <div>
+                        <button class="btn btn-medium" ng-click="addChartItem()">
+                            <i class="icon icon-add medium"></i>
+                            <span class="medium">Chart</span>
+                        </button>
+                        <button class="btn btn-medium" ng-click="addOption()">
+                            <i class="icon icon-add medium"></i>
+                            <span class="medium">Option</span>
+                        </button>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-      </div>
     </div>
-
-    <div class="" style="height:100%;border:13px solid green;overflow:scroll;">
-    <div class="jfc-box" style="overflow-y:auto;border:1px solid red;height:30%;">
-
-      <div class="jfc-container jfc-list" ng-show="editor.chartList.length > 0">
-        <div class="jfc-box jfc-list-item" ng-repeat="item in editor.chartList" ng-click="selectItem(item)" ng-class="{'jfc-list-item-selected': (item.id == editor.internal.selected.id)}">
-          <div class="cell">
-            <div>
-              <span class="jfc-item-title">Generated ID</span>{{item.id}}</div>
-            <div>
-              <span class="jfc-item-title">Item Name</span>{{item.name}}</div>
-            <div>
-              <span class="jfc-item-title">Item Type</span>{{item.type}}</div>
-            <div class="jfc-dockable jfc-list-options">
-              <span class="jfc-item-title jfc-docked dock-left">Options</span>
-              <div class="jfc-list-options" ng-repeat="subitem in item.options">
-                <div>{{subitem.name}}</div>
-                <div>{{subitem.charts}}</div>
-              </div>
+    <div class="jfc-container jfc-list" ng-show="editor.chartList.length > 0">
+        <uichartitem ng-repeat="item in editor.chartList" ng-click="selectItem(item)" ng-class="{'jfc-list-item-selected':(item.id === editor.internal.selected.id)}"></uichartitem>
+    </div>
+</div>
+<div id="chartcanvas">
+    <div id="chartscene">
+        <span style="display:hidden;" ng-init="xIndex = $index;yInit=0;initRepeatValues($index, 0);" ng-repeat-start="itemHolder in editor.parsedList"></span>
+        <div ng-repeat-start="item in itemHolder" id="{{item.id}}" class="card" ng-init="yIndex = $index;rearrangeChart(item, xIndex, $index, yInit, editor.parsedList)" ng-style="item.internal.style" style="left: 0px; top: 0px; z-index: 10;">
+            <div class="title">
+                <span class="fa fa-task"></span>{{item.name}}
+                <!--  {{xIndex}} {{$index}} {{yInit}} -->
             </div>
-          </div>
+            <div class="content">
+                {{item.description}}
+            </div>
+            <div class="options">
+                <div ng-repeat="subitem in item.options">
+                    <div>
+                        <span>{{subitem.name}}</span>
+                        <span class="fa fa-play"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <div ng-repeat="subitem in item.options" id="{{subitem.charts}}-arrow" 
+             ng-init="rearrangeOption(subitem, item, xIndex, yIndex, $index, yInit, editor.parsedList)" 
+             ng-class="subitem.internal.class" ng-style="subitem.internal.style" style="width: 78px; left: 0px; top: 92.1875px;">
+            <div></div>
+            <div></div>
+        </div>
+        <span style="display:hidden;" ng-repeat-end></span>
+        <span style="display:hidden;" ng-repeat-end></span>
     </div>
-  </div>
 </div>
