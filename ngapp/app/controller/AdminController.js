@@ -1,4 +1,5 @@
-        
+function AdminController($scope, $route, $http, $timeout){
+	$scope.editor = {chartList: [],parsedList: [],idPrefix: "ch",environment: "DEV",project: "GlobalUI",portal: "VEC",internal: {incrementor: 0,selected: {id: ''}}};
         function generateID(){
             var inc = $scope.editor.internal.incrementor,
                 idString = $scope.editor.idPrefix + (++$scope.editor.internal.incrementor);          
