@@ -1,4 +1,18 @@
-}
+        
+        $scope.$watch('editor.chartList.length', function(newLength, oldLength){
+            $scope.editor.parsedList = [];
+            for (var y in $scope.editor.chartList) {
+                var x = $scope.editor.chartList[y],
+                    x_id = x.id,
+                    v = x_id.split('-'),
+                    u = v.length - 1;
+
+                if (u in $scope.editor.parsedList) {
+                    $scope.editor.parsedList[u].push(x);
+                } else {
+                    $scope.editor.parsedList[u] = [x];
+                }
+            }
             
 //            console.log("newList", newLength, newLength, $scope.editor.parsedList);
         });
