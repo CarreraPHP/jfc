@@ -1,4 +1,14 @@
         
+        function generateID(){
+            var inc = $scope.editor.internal.incrementor,
+                idString = $scope.editor.idPrefix + (++$scope.editor.internal.incrementor);          
+            if(arguments.length > 0){
+                var selected = arguments[0];
+                return [selected.id, idString].join('-');
+            }
+            return idString;
+        }
+        
     	$scope.getChartTemplate = function(){
     	    return {
                     id: '',
