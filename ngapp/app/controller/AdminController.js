@@ -203,17 +203,6 @@
                         subitem.internal.class = {'arrow': false, 'arrow-reverse': true, 'arrow-straight': false };
                     }
                     subitem.internal.style.height = heightVal + "px";
-                    
-//                    console.log("subitem.internal.style.height", peerEl.getBoundingClientRect(), getTop(peerEl), getHeight(peerEl), subitem.internal.style, subitem.internal.style.height);
-                    
-                    if(yCnt === (list[xCnt].length-1)){
-//                        console.log("if this works, it will be gr8", item.internal.yInit, (item.internal.yInit-100)/2);
-//                        console.log("if this works, it will be gr8", item, xCnt, yCnt, yInit, list[xCnt]);
-                        angular.forEach(list[xCnt], function(inst, key){
-//                            inst.internal.style.top = (parseInt(inst.internal.style.top) - (item.internal.yInit-100)/2) + "px";
-//                            console.log("if this works, it will be gr8",parseInt(inst.internal.style.top), (item.internal.yInit-100)/2, inst.internal.top);
-                        });
-                    }
                 };
             })(), 800, true, [subitem, item, xCnt, yCnt, yInit, list[xCnt]]);
         };
