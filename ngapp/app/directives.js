@@ -16,4 +16,8 @@ angular.module('JFC.directives', [])
     	  };
     })
     .directive('uiselect', uiselect)
-    .directive('uisearch', uisearch);
+    .directive('uisearch', uisearch)
+    .directive('uitext', uitext)
+    .directive('uitextarea', uitextarea)
+    .directive('uichartitem', uichartitem)
+    .directive('uichartoption', uichartoption);
