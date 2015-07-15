@@ -9,7 +9,8 @@
     <ul class="" >
       <li ng-repeat="item in list">
         <a ng-if="isEnabled() == false" ng-click="itemSelect(item)">{{item}}</a>
-        <a ng-if="isEnabled() == true" ng-click="itemSelect(item[valuefield])" ng-bind-template="{{item[valuefield]}}"></a>
+        <a ng-if="isEnabled() == true" ng-click="itemSelect(item[valuefield])" 
+           ng-bind-template="{{item[valuefield]}}"></a>
       </li>     
     </ul>
     <ul ng-transclude></ul>

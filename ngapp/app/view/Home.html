@@ -1,6 +1,48 @@
 <div class="logo_container">
 	<img src="resources/images/logo.png" />
 </div>
-<div class="jfc-container" id="container">
-	<div id="scene2d"></div>
+<div id="chartcanvas" style="left:0;">
+    <div id="chartTitle" class="large mono bold">{{chart.name}}</div>
+    <div id="chartscene">        
+        <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
+             ng-style="item.internal.style" ng-class="item.internal.class"
+             ng-click="selectCard(item, editor.parsedList, editor)">
+            <div ng-if="item.type != 'Actor'" class="title">
+                <span class="fa fa-task"></span>{{item.name}}
+                <!--  {{xIndex}} {{$index}} {{yInit}} -->
+            </div>
+            <div ng-if="item.type != 'Actor'" class="content">
+                {{item.description}}
+            </div>
+            <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
+                <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
+                    <div></div>
+                    <div>
+                        <div class="medium">{{actor.name}}</div>
+                        <div class="small">{{actor.email}}</div>
+                        <div class="small">{{actor.contact}}</div>                        
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
+                     ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
+                    <div>
+                        <span>{{subitem.name}}</span>
+                        <span class="fa fa-play"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-repeat="subitem in item.options" id="{{subitem.id}}-arrow-{{subitem.charts}}"               
+             ng-class="subitem.internal.class" ng-style="subitem.internal.style">
+            <div></div>
+            <div>
+                <div></div>
+                <div></div>
+            </div>
+            <div></div>
+        </div>
+        <span style="display:hidden;" ng-repeat-end></span>        
+    </div>
 </div>

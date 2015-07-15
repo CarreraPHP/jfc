@@ -1,103 +1,22 @@
-<div class="jfc-container border-bottom">
-    <div class="jfc-box">
-        <div class="cell">
-            <div>
-                <div class="jfc-container jfc-list-item no-padding">
-<!--                    <div class="jfc-box">
-                        <div class="cell jfc-width-30 no-border">
-                            <div class="jfc-item-title">ID</div>
-                        </div>
-                        <div class="cell jfc-width-30 no-border">
-                            <div class="jfc-item-title">Type</div>
-                        </div>
-                    </div>            -->
-                    <div class="jfc-box">
-                        <div class="cell jfc-width-50">
-                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.id}}</div>
-                            <div ng-show="mode == 'edit'">
-                                <uitext ng-model="item.id"></uitext>
-                            </div>
-                        </div>
-                        <div class="cell jfc-width-50">
-                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.type}}</div>
-                            <div ng-show="mode == 'edit'">
-                                <uiselect ng-model="item.type" list="typeList"></uitext>
-                            </div>
+<div class="jfc-box">
+    <div class="cell">
+        <div>
+            <div class="jfc-container jfc-list-options no-padding">
+                <div class="jfc-box">
+                    <div class="cell no-margin">
+                        <div class="no-padding no-margin" ng-show="mode != 'edit'">{{subitem.name}}</div>
+                        <div ng-show="mode == 'edit'">
+                            <uitext ng-model="subitem.name"></uitext>
                         </div>
                     </div>
-                </div>
-                <div class="jfc-container jfc-list-item no-padding">
-<!--                    <div class="jfc-box">
-                        <div class="cell jfc-width-40 no-border">
-                            <div class="jfc-item-title no-margin">Name</div>
-                        </div>
-                    </div>            -->
-                    <div class="jfc-box">
-                        <div class="cell jfc-width-40">
-                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.name}}</div>
-                            <div ng-show="mode == 'edit'">
-                                <uitext ng-model="item.name"></uitext>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="jfc-container jfc-list-item no-padding">
-<!--                    <div class="jfc-box">
-                        <div class="cell jfc-width-100 no-border">
-                            <div class="jfc-item-title">Description</div>
-                        </div>
-                    </div>-->
-                    <div class="jfc-box">
-                        <div class="cell jfc-width-100 no-border">                
-                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.description}}</div>
-                            <div ng-show="mode == 'edit'">
-                                <uitextarea ng-model="item.description"></uitextarea>
-                            </div>                        
-                        </div>
-                    </div>
-                </div>
-                <div class="jfc-container jfc-list-item no-padding">
-                    <div class="jfc-box">
-                        <div class="cell jfc-width-100 no-border">
-                            <div class="jfc-item-title no-margin">Options</div>
-                        </div>
-                    </div>
-                    <div class="jfc-box" ng-repeat="subitem in item.options">
-                        <div class="cell">
-                            <div>
-                                <div class="jfc-container jfc-list-options no-padding">
-<!--                                    <div class="jfc-box">
-                                        <div class="cell jfc-width-50 no-border no-margin">
-                                            <div class="jfc-item-title no-margin">Name</div>
-                                        </div>
-                                        <div class="cell jfc-width-50 no-border no-margin">
-                                            <div class="jfc-item-title no-margin">Chart</div>
-                                        </div>
-                                    </div>-->
-                                    <div class="jfc-box">
-                                        <div class="cell">
-                                            <div ng-show="mode != 'edit'">{{subitem.name}}</div>
-                                            <div ng-show="mode == 'edit'">
-                                                <uitext ng-model="subitem.name"></uitext>
-                                            </div>
-                                        </div>
-                                        <div class="cell jfc-width-50">
-                                            <div ng-show="mode != 'edit'">{{subitem.charts}}</div>
-                                            <div ng-show="mode == 'edit'">
-                                                <uiselect ng-model="subitem.charts" change="chartChange" valuefield="chartValueField" list="editor.chartList"></uiselect>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                        
+                    <div class="cell">
+                        <div class="no-padding no-margin" ng-show="mode != 'edit'">{{subitem.charts}}</div>
+                        <div ng-show="mode == 'edit'">
+                            <uiselect ng-model="subitem.charts" change="chartChange" valuefield="chartValueField" list="editor.chartList"></uiselect>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="cell align-middle align-center jfc-width-10">
-            <button ng-show="mode != 'edit'" class="btn icon icon-edit" ng-click="doEdit()"></button>
-            <button ng-show="mode == 'edit'" class="btn icon icon-submit" ng-click="doSubmit()"></button>
-        </div>
+        </div>                        
     </div>
 </div>

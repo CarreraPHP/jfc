@@ -1,7 +1,10 @@
 <div id="page-body" style="">
-    <div class="jfc-container align-center">
+    <div class="jfc-container">            
         <div class="jfc-box">
-            <div class="header-bar menu-heading">
+            <div class="pull-left align-middle header-bar jfc-width-10">
+                <button class="btn icon icon-back" ng-click="editor.toggleEditor()"></button>
+            </div>
+            <div class="align-middle align-center header-bar align-center menu-heading">
                 <div class="beta">Playbook</div>
             </div>
         </div>
@@ -16,6 +19,16 @@
         </div>
     </div>
     <div class="jfc-container jfc-width-96 after-spacer">
+        <label class="jfc-box" class="align-left">
+            <span class="cell medium after-spacer before-spacer align-middle">
+                <span>Name</span>
+            </span>
+            <span class="cell">
+                <span>
+                    <uitext ng-model="editor.name"></uitext>
+                </span>
+            </span>
+        </label>
         <label class="jfc-box" class="align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Prefix</span>
@@ -77,36 +90,55 @@
                 </div>
                 <div class="cell align-middle align-right">
                     <div>
-                        <button class="btn btn-medium" ng-click="addChartItem()">
+                        <button ng-if="editor.chartList.length == 0" class="btn btn-medium" ng-click="addChartItem()">
                             <i class="icon icon-add medium"></i>
-                            <span class="medium">Chart</span>
+                            <span class="medium">Begin</span>
                         </button>
-                        <button class="btn btn-medium" ng-click="addOption()">
+                        <button ng-if="editor.editList.length > 0 && editor.editList[0].type != 'End'" class="btn btn-medium" ng-click="addOption()">
                             <i class="icon icon-add medium"></i>
                             <span class="medium">Option</span>
+                        </button>
+                        <button ng-if="editor.editList.length > 0 && editor.editList[0].type == 'Actor'" class="btn btn-medium" ng-click="addActor()">
+                            <i class="icon icon-add medium"></i>
+                            <span class="medium">Actor</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="jfc-container jfc-list" ng-show="editor.chartList.length > 0">
-        <uichartitem ng-repeat="item in editor.chartList" ng-click="selectItem(item)" ng-class="{'jfc-list-item-selected':(item.id === editor.internal.selected.id)}"></uichartitem>
+    <div class="jfc-container jfc-list" ng-show="editor.editList.length > 0">
+        <uichartitem ng-repeat="item in editor.editList" ng-click="selectItem(item)" ng-class="{'jfc-list-item-selected':(item.id === editor.internal.selected.id)}"></uichartitem>
     </div>
 </div>
 <div id="chartcanvas">
+    <div id="chartTitle" class="large mono bold">{{editor.name}}</div>
     <div id="chartscene">
         <span style="display:hidden;" ng-init="xIndex = $index;yInit=0;initRepeatValues($index, 0);" ng-repeat-start="itemHolder in editor.parsedList"></span>
-        <div ng-repeat-start="item in itemHolder" id="{{item.id}}" class="card" ng-init="yIndex = $index;rearrangeChart(item, xIndex, $index, yInit, editor.parsedList)" ng-style="item.internal.style" style="left: 0px; top: 0px; z-index: 10;">
-            <div class="title">
+        <div ng-repeat-start="item in itemHolder" id="{{item.id}}" class="card" 
+             ng-init="yIndex = $index;rearrangeChart(item, xIndex, $index, yInit, editor.parsedList)" 
+             ng-style="item.internal.style" ng-class="item.internal.class" style="left: 0px; top: 0px; z-index: 10;"
+             ng-click="selectCard(item, editor.parsedList, editor)">
+            <div ng-if="item.type != 'Actor'" class="title">
                 <span class="fa fa-task"></span>{{item.name}}
                 <!--  {{xIndex}} {{$index}} {{yInit}} -->
             </div>
-            <div class="content">
+            <div ng-if="item.type != 'Actor'" class="content">
                 {{item.description}}
             </div>
+            <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
+                <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
+                    <div></div>
+                    <div>
+                        <div class="medium">{{actor.name}}</div>
+                        <div class="small">{{actor.email}}</div>
+                        <div class="small">{{actor.contact}}</div>                        
+                    </div>
+                </div>
+            </div>
             <div class="options">
-                <div ng-repeat="subitem in item.options">
+                <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
+                     ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
                     <div>
                         <span>{{subitem.name}}</span>
                         <span class="fa fa-play"></span>
@@ -114,10 +146,14 @@
                 </div>
             </div>
         </div>
-        <div ng-repeat="subitem in item.options" id="{{subitem.charts}}-arrow" 
+        <div ng-repeat="subitem in item.options" id="{{subitem.id}}-arrow-{{subitem.charts}}" 
              ng-init="rearrangeOption(subitem, item, xIndex, yIndex, $index, yInit, editor.parsedList)" 
              ng-class="subitem.internal.class" ng-style="subitem.internal.style" style="width: 78px; left: 0px; top: 92.1875px;">
             <div></div>
+            <div>
+                <div></div>
+                <div></div>
+            </div>
             <div></div>
         </div>
         <span style="display:hidden;" ng-repeat-end></span>
