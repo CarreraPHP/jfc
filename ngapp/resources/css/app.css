@@ -151,7 +151,7 @@ canvas { width: 100%; height: 100% }
 .jfc-toolbar .pull-right{text-align:right;margin-right:0.3em;}
 .jfc-toolbar .jfc-title{height:49px;overflow:hidden;padding: 0px;}
 
-
+.mono{font-family: monospace;}
 .small, .large, .medium, .body-text{margin: 0;padding: 0;}
 .small {font-size:12px;}
 .body-text {font-size:14px;}
@@ -328,8 +328,8 @@ canvas { width: 100%; height: 100% }
     /* font-size:18px; */
 }
 .cell > div, .cell > .jfc-block, .cell > label, .cell > input, .cell > a, .inner-container{
-    margin:0.1em 0.3em;
-    padding:0.1em 0.6em;
+    margin: 0.1em 2px;
+    padding: 0.1em 2px;
     line-height: 1.4em;
 /*     display: block; */
 }
@@ -345,7 +345,7 @@ canvas { width: 100%; height: 100% }
     border-top:1px solid #ccc;border-bottom:1px solid #ccc;overflow-y: auto;
 }
 .jfc-list .cell{border-bottom:1px solid #ccc;/* outline: 1px solid darkcyan; */}
-.jfc-list .jfc-box:nth-last-child(1) > .cell{border-bottom:0}
+.jfc-list .jfc-box:nth-last-child(1) > .cell{border-bottom:0;/* margin-right: 0; */}
 .jfc-list .list-firstchild{padding: 0.3em 0 0.3em 0.3em;margin:0;border-bottom:0;width: 20px;}
 .jfc-list-item-selected{
     background-color: rgba(230, 230, 230, 0.5);
@@ -445,7 +445,7 @@ canvas { width: 100%; height: 100% }
     font-size:1.2em;
 }
 .icon-stop:before{
-    content:"\f05c";
+    content: "\f00d";
 }
 .icon-down:before{
     content:"\f107";
@@ -794,7 +794,10 @@ canvas { width: 100%; height: 100% }
 #page-body a{color: rgba(85, 85, 85, 1);text-shadow: 1px 2px 2px rgba(85, 85, 85, 0.3);}
 .header-bar {
     border-bottom:solid 1px #ccc;
-    padding:8px 0;
+    display: table-cell;
+    background: #F2F2F2;
+    padding: 0;
+    margin: 0;
 }
 #page-body .iptext{
     /* border-radius: 3px; */
@@ -1238,15 +1241,15 @@ p{color:#999;margin:0px;padding:1em;border-top:1px dashed #cccccc;width:200px;ma
 }
 
 .menu-container.jfc-view-container {
-    top: 50px;
+    /* top: 50px; */
 }
 
 .jfc-view-container {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 2px;
+    /* position: absolute; */
+    /* left: 0; */
+    /* right: 0; */
+    /* top: 0; */
+    /* bottom: 2px; */
     /* overflow: hidden; */
     overflow-y: hidden;
 }
@@ -1392,4 +1395,21 @@ input, textarea{
 
 .jfc-select-list ul li:hover {
     background-color: rgba(55, 55, 55, 0.2);
+}
+
+div#chartTitle {
+    top: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.icon-stop {
+    width: 35px;
+    color: red;
+}
+
+.jfc-list .cell:nth-child(1) > div {
+    margin-right: 0;
 }

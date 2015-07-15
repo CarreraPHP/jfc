@@ -83,27 +83,82 @@
 				z-index:5;
 			}
 
-			.arrow.highlight-node > div, .arrow-reverse.highlight-node > div, .arrow-straight.highlight-node > div{
+			.arrow.highlight-node div, .arrow-reverse.highlight-node div, .arrow-straight.highlight-node div{
 				border-color: #ED1C24 !important;
 			}
+                        
+                        .arrow > div, .arrow > div:nth-child(2) > div,
+                        .arrow-reverse > div, .arrow-reverse > div:nth-child(2) > div,
+                        .arrow-straight > div{
+                            position:absolute;
+                        }
 
-			.arrow > div:nth-child(1){
-				position:absolute;
+                        .arrow > div:nth-child(1){				
 				border-bottom: 3px solid blue;
-				border-right: 3px solid blue;
+				/* border-right: 3px solid blue; */
 				bottom: 0px;
 				left: 0px;
 				width: 40%;
 				height: 50%;
 				border-bottom-right-radius: 6px;
 			}
+                        
+                        .arrow > div:nth-child(2),
+                        .arrow-reverse > div:nth-child(2){
+                            top:0;
+                            bottom: 0;
+                            left:calc(40% - 6px);
+                            width: 12px;
+                        }
 
-			.arrow > div:nth-child(2){
-				position:absolute;
+                        .arrow > div:nth-child(2) > div:nth-child(1){
+                            border-top: 3px solid blue;
+                            border-left: 3px solid blue;
+                            top:0;
+                            /* bottom: 0px; */				
+                            right: -3px;				
+                            width: 6px;				
+                            height: 60%;
+                            border-top-left-radius: 6px;
+                        }
+                        
+			.arrow > div:nth-child(2) > div:nth-child(2){
+				border-bottom: 3px solid blue;
+				border-right: 3px solid blue;
+				bottom: 0;
+				bottom: 0;
+				right: 3px;
+				width: 6px;
+				height: 60%;
+				border-bottom-right-radius: 6px;
+			}
+                        
+                        .arrow-reverse > div:nth-child(2) > div:nth-child(1){
+                            border-bottom: 3px solid blue;
+                            border-left: 3px solid blue;
+                            /* top:0; */
+                            bottom: 0px;				
+                            right: -3px;				
+                            width: 6px;				
+                            height: 60%;
+                            border-bottom-left-radius: 6px;
+                        }
+                        
+			.arrow-reverse > div:nth-child(2) > div:nth-child(2){
 				border-top: 3px solid blue;
-				border-left: 3px solid blue;
+				border-right: 3px solid blue;
+				top: 0;
+				/* bottom: 0; */
+				right: 3px;
+				width: 6px;
+				height: 60%;
+				border-top-right-radius: 6px;
+			}
+                        
+                        .arrow > div:nth-child(3){
+				border-top: 3px solid blue;
+				/* border-left: 3px solid blue; */
 				top:0;
-				/* bottom: 0px; */
 				right: -3px;
 				width: 60%;
 				height: 50%;
@@ -113,33 +168,33 @@
 			.arrow-reverse > div:nth-child(1){
 				position:absolute;
 				border-top: 3px solid blue;
-				border-right: 3px solid blue;
+				/* border-right: 3px solid blue; */
 				top: 0px;
 				left: 0px;
-				width: 60%;
+				width: 40%;
 				height: 50%;
 				border-top-right-radius: 6px;
 			}
 
-			.arrow-reverse > div:nth-child(2){
+			.arrow-reverse > div:nth-child(3){
 				position:absolute;
 				border-bottom: 3px solid blue;
-				border-left: 3px solid blue;
+				/* border-left: 3px solid blue; */
 				bottom: 0;
 				right: -2px;
-				width: 40%;
+				width: 60%;
 				height: 60%;
 				border-bottom-left-radius: 6px;
 			}
 
-			.arrow-straight > div:nth-child(2){
+			.arrow-straight > div:nth-child(3){
 				border-bottom: 3px solid blue;
 				width: 100% !important;
+				top: 0%;
+                        }
 
-				bottom: 0;
-}
-
-			.arrow-straight > div:nth-child(1){
+			.arrow-straight > div:nth-child(1),
+                        .arrow-straight > div:nth-child(2){
 				display:none;
 			}
 
@@ -257,3 +312,41 @@
 				color: #000000;
 				/* background-color: rgba(0,255,255,0.75); */
 			}
+
+
+.arrow-flip {
+    transform: rotateY(180deg);
+}
+
+.actors {
+    display: table;
+    /* padding: 10px; */
+}
+
+.actor{
+    display:table-row;
+    /* width: 100%; */
+}
+
+.actor > div {    
+    display:table-cell;
+    border-top: 1px solid #ccc;
+}
+
+.actor > div:nth-child(1){
+    width:50px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.actor > div:nth-child(1):before {
+    content: '\f0c0';
+    font: normal normal normal 36px/1 FontAwesome;
+    color: rgb(39, 142, 252);
+    width: 40px;
+}
+
+.actor > div > div {
+    padding: 2px 2px;
+    word-break: break-word;
+}
