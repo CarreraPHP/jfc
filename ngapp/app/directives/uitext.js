@@ -5,7 +5,7 @@ function uitext() {
     transclude: true,
     controller: 'UITextController',
     scope: {
-      value: '=ngModel',
+      value: '=ngModel'
     },
     templateUrl: 'app/view/directives/uitext.html',
     link: function(scope, element, attrs, UISelectCtrl) {}

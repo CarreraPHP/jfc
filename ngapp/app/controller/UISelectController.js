@@ -25,6 +25,7 @@ function UISelectController($scope, $attrs, progressConfig) {
     }
     $scope.itemSelect = function(item){
 //        console.log("arguments", item, arguments);
+        $scope._value = $scope.value;
         $scope.value = item;
         $scope.expand = false;
     }
@@ -33,8 +34,8 @@ function UISelectController($scope, $attrs, progressConfig) {
 
     $scope.$watch('value', function(){
         if(angular.isDefined($scope.change)){
-            console.log($scope.change, $scope.value);
-            $scope.change($scope.value);
+            console.log($scope.value, $scope._value);
+            $scope.change($scope.value, $scope._value);
         }  
     });
 }
