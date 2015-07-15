@@ -1,0 +1,99 @@
+diff --git a/ngapp/app/view/Home.html b/ngapp/app/view/Home.html
+index 0758b25..3a34c0b 100644
+--- a/ngapp/app/view/Home.html
++++ b/ngapp/app/view/Home.html
+@@ -1,6 +1,48 @@
+ <div class="logo_container">
+ 	<img src="resources/images/logo.png" />
+ </div>
+-<div class="jfc-container" id="container">
+-	<div id="scene2d"></div>
+-</div>
++<div id="chartcanvas" style="left:0;">
++    <div id="chartTitle" class="large mono bold">{{chart.name}}</div>
++    <div id="chartscene">        
++        <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
++             ng-style="item.internal.style" ng-class="item.internal.class"
++             ng-click="selectCard(item, editor.parsedList, editor)">
++            <div ng-if="item.type != 'Actor'" class="title">
++                <span class="fa fa-task"></span>{{item.name}}
++                <!--  {{xIndex}} {{$index}} {{yInit}} -->
++            </div>
++            <div ng-if="item.type != 'Actor'" class="content">
++                {{item.description}}
++            </div>
++            <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
++                <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
++                    <div></div>
++                    <div>
++                        <div class="medium">{{actor.name}}</div>
++                        <div class="small">{{actor.email}}</div>
++                        <div class="small">{{actor.contact}}</div>                        
++                    </div>
++                </div>
++            </div>
++            <div class="options">
++                <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
++                     ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
++                    <div>
++                        <span>{{subitem.name}}</span>
++                        <span class="fa fa-play"></span>
++                    </div>
++                </div>
++            </div>
++        </div>
++        <div ng-repeat="subitem in item.options" id="{{subitem.id}}-arrow-{{subitem.charts}}"               
++             ng-class="subitem.internal.class" ng-style="subitem.internal.style">
++            <div></div>
++            <div>
++                <div></div>
++                <div></div>
++            </div>
++            <div></div>
++        </div>
++        <span style="display:hidden;" ng-repeat-end></span>        
++    </div>
++</div>
+\ No newline at end of file
+diff --git a/ngapp/app/view/directives/uiselect.html b/ngapp/app/view/directives/uiselect.html
+index ab3fbbf..a44701d 100644
+--- a/ngapp/app/view/directives/uiselect.html
++++ b/ngapp/app/view/directives/uiselect.html
+@@ -9,7 +9,8 @@
+     <ul class="" >
+       <li ng-repeat="item in list">
+         <a ng-if="isEnabled() == false" ng-click="itemSelect(item)">{{item}}</a>
+-        <a ng-if="isEnabled() == true" ng-click="itemSelect(item[valuefield])" ng-bind-template="{{item[valuefield]}}"></a>
++        <a ng-if="isEnabled() == true" ng-click="itemSelect(item[valuefield])" 
++           ng-bind-template="{{item[valuefield]}}"></a>
+       </li>     
+     </ul>
+     <ul ng-transclude></ul>
+diff --git a/ngapp/app/view/directives/uitext.html b/ngapp/app/view/directives/uitext.html
+index 1763668..861d580 100644
+--- a/ngapp/app/view/directives/uitext.html
++++ b/ngapp/app/view/directives/uitext.html
+@@ -1,8 +1,8 @@
+ <div class="jfc-component form-control">
+   <div class="jfc-component-thumb" ng-class="type" role="presentation">
+-    <input type="text" ng-model="value" ng-enter="" placeholder="{{placeholder}}"></input>
++    <input type="text" ng-model="value" ng-enter="" readonly="{{readonly}}" placeholder="{{placeholder}}"></input>
+     <button class="btn icon icon-clear-thumb"
+-            ng-click="clearValue()" ng-show="value.length > 0">
++            ng-click="clearValue()" ng-show="value.length > 0 && !readonly">
+     </button>
+   </div>
+ </div>
+diff --git a/ngapp/index.html b/ngapp/index.html
+index b5f78a0..a65a50a 100644
+--- a/ngapp/index.html
++++ b/ngapp/index.html
+@@ -56,7 +56,7 @@
+ 
+ <body ng-controller="ApplicationController">
+   <!-- Title Bar -->
+-  <div class="jfc-container jfc-toolbar jfc-docked dock-top" ng-hide="application.preventToolbar">
++  <div class="jfc-container jfc-toolbar jfc-docked dock-top" ng-hide="application.preventToolbar" style="display:none;">
+     <div class="cell pull-left">
+       <button class="btn icon icon-back" ng-click="application.slider.makeSlide()"></button>
+     </div>
