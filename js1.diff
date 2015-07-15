@@ -1,0 +1,160 @@
+diff --git a/ngapp/app/controller/AdminController.js b/ngapp/app/controller/AdminController.js
+index 365abdb..d66dd49 100644
+--- a/ngapp/app/controller/AdminController.js
++++ b/ngapp/app/controller/AdminController.js
+@@ -6,21 +6,41 @@
+             environment: "DEV",
+             project: "GlobalUI",
+             portal: "VEC",
++            name: "User Getting Slow",
+             internal: {
+                 incrementor: 0,
++                option:{
++                    incrementor: 0
++                },
++                actor:{
++                    incrementor: 0
++                },
+                 selected: {
+                     id: ''
+                 }
++            },
++            editList:[], // used for editing only one record at a time. In rare case we may need to edit multpile items.
++            toggleEditor: function(){
++                
+             }
+         };
+         
+         function generateID(){
+-            var inc = $scope.editor.internal.incrementor,
+-                idString = $scope.editor.idPrefix + (++$scope.editor.internal.incrementor);          
++            var idString = $scope.editor.idPrefix + (++$scope.editor.internal.incrementor);          
+             if(arguments.length > 0){
+                 var selected = arguments[0];
+                 return [selected.id, idString].join('-');
+             }
++            return idString;
++        }
++        
++        function generateOptionID(){
++            var idString = 'opt' + (++$scope.editor.internal.option.incrementor);
++            return idString;
++        }
++        
++        function generateActorID(){
++            var idString = 'act' + (++$scope.editor.internal.actor.incrementor);
+             return idString;
+         }
+         
+@@ -30,17 +50,21 @@
+                 name: '',
+                 type: '',
+                 description: '',
++                actors: [],
+                 options: [],
+                 internal: {
+-                    style: {}
++                    style: {},
++                    class: {
++                        'card': true
++                    }
+                 }
+             };
+ 	};
+         
+ 	$scope.getOptionTemplate = function(){
+ 	    return {
++                id: '',
+                 name: '',
+-                impact: -1,
+                 charts: '',
+                 internal: {
+                     style:{},
+@@ -52,14 +76,29 @@
+                 }
+             };
+ 	};
++        
++        $scope.getActorTemplate = function(){
++	    return {
++                id: '',
++                name: '',
++                contact: '',
++                email: ''
++            };
++	};
+ 	
+         $scope.addChartItem = function(){
+-            var chartItem = $scope.getChartTemplate();
++            var chartItem = $scope.getChartTemplate(),
++                actor = $scope.getActorTemplate();
+             if($scope.editor.internal.incrementor == 0){
+                 chartItem.id = generateID();
+                 chartItem.type = "Begin";
+                 chartItem.name = "Chart Name";
+                 chartItem.description = "Chart Description";
++                actor.id = generateActorID();
++                actor.name = "Actor Name";
++                actor.contact = "Contact No";
++                actor.email = "Email";
++                chartItem.actors.push(actor);
+                 chartItem.internal.mode = 'edit';                
+                 chartItem.internal.style.left = 300 * (chartItem.id.split('-').length-1) + "px";
+                 $scope.editor.chartList.push(chartItem);
+@@ -67,6 +106,20 @@
+                 $scope.application.model.toggle("Please add options to the existing chartitems to add another chartitem.");
+             }            
+ 	}
++        
++        $scope.addActor = function(){
++            var selected = $scope.editor.internal.selected;
++            if(selected.id == ''){
++                $scope.application.model.toggle("Please select an existing chartitem to add actor to it.");
++            }else{
++                var actor = $scope.getActorTemplate();
++                actor.id = generateActorID();
++                actor.name = "Actor Name";
++                actor.contact = "Contact No";
++                actor.email = "Email";
++                $scope.editor.internal.selected.actors.push(actor);
++            }
++        };
+ 	
+ 	$scope.addOption = function(){
+             var selected = $scope.editor.internal.selected;
+@@ -74,32 +127,58 @@
+                 $scope.application.model.toggle("Please select an existing chartitem to add options to it.");
+             }else{
+                 var option = $scope.getOptionTemplate(),
+-                    mappedChartItem = $scope.getChartTemplate();
++                    mappedChartItem = $scope.getChartTemplate(),
++                    actor = $scope.getActorTemplate();
+                 
+                 mappedChartItem.id = generateID(selected);
+                 mappedChartItem.type = "Activity";
+                 mappedChartItem.name = "Chart Name";
+                 mappedChartItem.description = "Chart Description";
++                option.id = generateOptionID();
+                 option.name = "Option Name";
+                 option.charts = mappedChartItem.id;
+                 $scope.editor.internal.selected.options.push(option);
++                actor.id = generateActorID();
++                actor.name = "Actor Name";
++                actor.contact = "Contact No";
++                actor.email = "Email";
++                mappedChartItem.actors.push(actor);
+                 mappedChartItem.internal.mode = 'display'; 
+                 mappedChartItem.internal.style.left = 300 * (mappedChartItem.id.split('-').length-1) + "px";
+                 $scope.editor.chartList.push(mappedChartItem);
+                 
+                 console.log("option added", option, mappedChartItem);
+-                $scope.editor.internal.selected = {id: ''};
++//                $scope.editor.internal.selected = {id: ''};
+             }
+ 	}
+         
+         $scope.selectItem = function(item){
+             $scope.editor.internal.selected = item;
+-            console.log(arguments);
++//            console.log(arguments);
+         }
