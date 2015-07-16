@@ -1,0 +1,115 @@
+@@ -39,13 +77,28 @@
+                 };
+     	};
+ 	
++        $scope.getActorTemplate = function(){
++	    return {
++                id: '',
++                name: '',
++                contact: '',
++                email: ''
++            };
++	};
++	
+         $scope.addChartItem = function(){
+-            var chartItem = $scope.getChartTemplate();
++            var chartItem = $scope.getChartTemplate(),
++                actor = $scope.getActorTemplate();
+             if($scope.editor.internal.incrementor == 0){
+                 chartItem.id = generateID();
+                 chartItem.type = "Begin";
+                 chartItem.name = "Chart Name";
+                 chartItem.description = "Chart Description";
++                actor.id = generateActorID();
++                actor.name = "Actor Name";
++                actor.contact = "Contact No";
++                actor.email = "Email";
++                chartItem.actors.push(actor);
+                 chartItem.internal.mode = 'edit';                
+                 chartItem.internal.style.left = 300 * (chartItem.id.split('-').length-1) + "px";
+                 $scope.editor.chartList.push(chartItem);
+@@ -54,39 +107,79 @@
+             }            
+     	}
+         
++        $scope.addActor = function(){
++            var selected = $scope.editor.internal.selected;
++            if(selected.id == ''){
++                $scope.application.model.toggle("Please select an existing chartitem to add actor to it.");
++            }else{
++                var actor = $scope.getActorTemplate();
++                actor.id = generateActorID();
++                actor.name = "Actor Name";
++                actor.contact = "Contact No";
++                actor.email = "Email";
++                $scope.editor.internal.selected.actors.push(actor);
++            }
++        };
++	
+     	$scope.addOption = function(){
+                 var selected = $scope.editor.internal.selected;
+     	    if(selected.id == ''){
+                     $scope.application.model.toggle("Please select an existing chartitem to add options to it.");
+                 }else{
+                     var option = $scope.getOptionTemplate(),
+-                        mappedChartItem = $scope.getChartTemplate();
++                    mappedChartItem = $scope.getChartTemplate(),
++                    actor = $scope.getActorTemplate();
+                     
+                     mappedChartItem.id = generateID(selected);
+                     mappedChartItem.type = "Activity";
+                     mappedChartItem.name = "Chart Name";
+                     mappedChartItem.description = "Chart Description";
++                option.id = generateOptionID();
+                     option.name = "Option Name";
+                     option.charts = mappedChartItem.id;
+                     $scope.editor.internal.selected.options.push(option);
++                actor.id = generateActorID();
++                actor.name = "Actor Name";
++                actor.contact = "Contact No";
++                actor.email = "Email";
++                mappedChartItem.actors.push(actor);
+                     mappedChartItem.internal.mode = 'display'; 
+                     mappedChartItem.internal.style.left = 300 * (mappedChartItem.id.split('-').length-1) + "px";
+                     $scope.editor.chartList.push(mappedChartItem);
+                     
+                     console.log("option added", option, mappedChartItem);
+-                    $scope.editor.internal.selected = {id: ''};
++//                $scope.editor.internal.selected = {id: ''};
+                 }
+     	}
+         
+         $scope.selectItem = function(item){
+             $scope.editor.internal.selected = item;
+-            console.log(arguments);
++//            console.log(arguments);
+         }
+         
+         $scope.printChartJson = function(){
+-            console.log($scope.editor.chartList);
+-            console.log(JSON.stringify($scope.editor.chartList));
++            var res = JSON.parse(angular.toJson($scope.editor));
++            delete res.parsedList;
++            delete res.editList;
++            delete res.internal;
++            delete res.parsedList;
++            angular.forEach(res.chartList, function(v, k){
++                angular.forEach(v.options, function(o, ok){
++                    delete o.internal.yInit;
++                });
++                delete v.internal.mode;
++                delete v.internal.yInit;
++                if(v.type == "Actor"){
++                    delete v.description;
++                    delete v.name;
++                }else {
++                    delete v.actors;
+         }
++                v.internal.class['highlight-node'] = false;
++            });
++            res.id = 'chart' + (new Date()).getTime();
++            console.log(angular.toJson(res));
++        }
+         
+         $scope.$watch('editor.chartList.length', function(newLength, oldLength){
+             $scope.editor.parsedList = [];
