@@ -1,0 +1,34 @@
+diff --git a/ngapp/app/controller/UITextController.js b/ngapp/app/controller/UITextController.js
+index e230142..db1bd4d 100644
+--- a/ngapp/app/controller/UITextController.js
++++ b/ngapp/app/controller/UITextController.js
+@@ -1,14 +1,14 @@
+ function UITextController($scope, $attrs, progressConfig) {
+     var self = this; 
+     
+-    $scope.readonly = false;
++//    $scope.readonly = false;
+ 
+     $scope.$watch($attrs.placeHolder, function(){
+         $scope.placeholder = $attrs.placeholder;    
+     });
+     
+     $scope.$watch($attrs.readonly, function(){
+-        $scope.readonly = $attrs.readonly;    
++        $scope.readonly = !!$attrs.readonly;    
+     });
+     
+     $scope.getPlaceHolder = function(){
+diff --git a/ngapp/app/view/directives/uitext.html b/ngapp/app/view/directives/uitext.html
+index 861d580..588c166 100644
+--- a/ngapp/app/view/directives/uitext.html
++++ b/ngapp/app/view/directives/uitext.html
+@@ -1,6 +1,7 @@
+ <div class="jfc-component form-control">
+   <div class="jfc-component-thumb" ng-class="type" role="presentation">
+-    <input type="text" ng-model="value" ng-enter="" readonly="{{readonly}}" placeholder="{{placeholder}}"></input>
++    <input type="text" ng-show="readonly" ng-model="value" ng-enter="" readonly placeholder="{{placeholder}}"></input>
++    <input type="text" ng-show="!readonly" ng-model="value" ng-enter="" placeholder="{{placeholder}}"></input>
+     <button class="btn icon icon-clear-thumb"
+             ng-click="clearValue()" ng-show="value.length > 0 && !readonly">
+     </button>
