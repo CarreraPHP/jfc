@@ -1,0 +1,114 @@
+diff --git a/ngapp/app/controller.js b/ngapp/app/controller.js
+index 5681cc6..a0a64ff 100644
+--- a/ngapp/app/controller.js
++++ b/ngapp/app/controller.js
+@@ -6,6 +6,7 @@
+     .controller("ApplicationController", ["$scope", "$http", "$location", "$timeout", "$rootScope","$localStorage","$sessionStorage", ApplicationController])
+     .controller("HomeController", ["$scope", "$route","$http","$localStorage", HomeController])
+     .controller("AdminController", ["$scope", "$route","$http","$timeout", AdminController])
++    .controller("SceneController", ["$scope", "$route","$http","$localStorage", SceneController])
+     .controller("LoginController", ["$scope", "$route","$http","$localStorage", LoginController])
+     .controller("UISelectController", ["$scope", "$attrs", "progressConfig", UISelectController])
+     .controller("UISearchController", ["$scope", "$attrs", "progressConfig", UISearchController])
+diff --git a/ngapp/app/controller/AdminController.js b/ngapp/app/controller/AdminController.js
+index d66dd49..54dd764 100644
+--- a/ngapp/app/controller/AdminController.js
++++ b/ngapp/app/controller/AdminController.js
+@@ -321,24 +321,4 @@
+                 };
+             })(), 800, true, [subitem, item, xCnt, yCnt, yInit, list[xCnt]]);
+         };
+-        
+-        $scope.selectCard = function(item, pList, editor){
+-            
+-            angular.forEach(pList, function(yList, yKey){
+-                angular.forEach(yList, function(inst, key){
+-                    inst.internal.mode = 'display'; 
+-                    inst.internal.class['highlight-node'] = false;
+-                });
+-            });
+-            item.internal.class['card'] = true;
+-            item.internal.class['highlight-node'] = true;
+-            item.internal.mode = 'edit'; 
+-            editor.internal.selected = item;
+-            editor.editList = [item];
+-        };
+-        
+-        $scope.highlightRelation = function(scope, enable){            
+-            var b = angular.element(document.querySelectorAll('[id*=' + scope.subitem.id + '-arrow-' + scope.subitem.charts +'], [id=' + scope.subitem.charts +']'));
+-            enable ? b.addClass('highlight-node') : b.removeClass('highlight-node');
+-        };
+ }
+diff --git a/ngapp/app/controller/HomeController.js b/ngapp/app/controller/HomeController.js
+index 3ef32ec..a0c8a0b 100644
+--- a/ngapp/app/controller/HomeController.js
++++ b/ngapp/app/controller/HomeController.js
+@@ -1,3 +1,14 @@
+ function HomeController($scope, $route, $http, $localStorage){
+     $scope.chart = {"chartList":[{"id":"ch1","name":"Chart Name","type":"Begin","description":"Chart Description","options":[{"id":"opt1","name":"Option Name","charts":"ch1-ch2","internal":{"style":{"left":"222.6666717529297px","top":"25px","height":"36px","width":"78px"},"class":{"arrow":true,"arrow-reverse":false,"arrow-straight":false,"arrow-flip":false}}}],"internal":{"style":{"left":"0px","top":"-32.333335876464844px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2","name":"Chart Name","type":"Activity","description":"Chart Description","options":[{"id":"opt2","name":"Option Name","charts":"ch1-ch2-ch3","internal":{"style":{"left":"522.6666717529297px","top":"-327.66666412353516px","height":"292.66666412353516px","width":"78px"},"class":{"arrow":true,"arrow-reverse":false,"arrow-straight":false,"arrow-flip":false}}},{"id":"opt4","name":"Option Name","charts":"ch1-ch2-ch5","internal":{"style":{"left":"522.6666717529297px","top":"-183px","height":"185px","width":"78px"},"class":{"arrow":true,"arrow-reverse":false,"arrow-straight":false,"arrow-flip":false}}},{"id":"opt5","name":"Option Name","charts":"ch1-ch2-ch6","internal":{"style":{"left":"522.6666717529297px","top":"-37.666664123535156px","height":"78.66666412353516px","width":"78px"},"class":{"arrow":true,"arrow-reverse":false,"arrow-straight":false,"arrow-flip":false}}},{"id":"opt6","name":"Option Name","charts":"ch1-ch2-ch7","internal":{"style":{"left":"522.6666717529297px","top":"80.16667366027832px","height":"46.333335876464844px","width":"78px"},"class":{"arrow":false,"arrow-reverse":true,"arrow-straight":false,"arrow-flip":false}}},{"id":"opt7","name":"Option Name","charts":"ch1-ch2-ch8","internal":{"style":{"left":"522.6666717529297px","top":"118.83334159851074px","height":"153px","width":"78px"},"class":{"arrow":false,"arrow-reverse":true,"arrow-straight":false,"arrow-flip":false}}},{"id":"opt8","name":"Option Name","charts":"ch1-ch2-ch9","internal":{"style":{"left":"522.6666717529297px","top":"157.50000953674316px","height":"240px","width":"78px"},"class":{"arrow":false,"arrow-reverse":true,"arrow-straight":false,"arrow-flip":false}}}],"internal":{"style":{"left":"300px","top":"-129px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2-ch3","type":"Actor","actors":[{"id":"act3","name":"Actor Name","contact":"Contact No","email":"Email"}],"options":[{"id":"opt3","name":"Option Name","charts":"ch1-ch2-ch3-ch4","internal":{"style":{"left":"822.6666717529297px","top":"-291.83333015441895px","height":"190px","width":"78px"},"class":{"arrow":false,"arrow-reverse":true,"arrow-straight":false,"arrow-flip":false}}}],"internal":{"style":{"left":"600px","top":"-385px"},"class":{"card":true,"highlight-node":true}}},{"id":"ch1-ch2-ch3-ch4","name":"Chart Name","type":"Activity","description":"Chart Description","options":[],"internal":{"style":{"left":"900px","top":"-139px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2-ch5","name":"Chart Name","type":"Activity","description":"Chart Description","options":[],"internal":{"style":{"left":"600px","top":"-221px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2-ch6","name":"Chart Name","type":"Activity","description":"Chart Description","options":[{"id":"opt9","name":"Option Name","charts":"ch1-ch2-ch6-ch10","internal":{"style":{"left":"822.6666717529297px","top":"-1.8333301544189453px","height":"26px","width":"78px"},"class":{"arrow":false,"arrow-reverse":true,"arrow-straight":false,"arrow-flip":false}}}],"internal":{"style":{"left":"600px","top":"-95px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2-ch7","name":"Chart Name","type":"Activity","description":"Chart Description","options":[{"id":"opt10","name":"Option Name","charts":"ch1-ch2-ch7-ch11","internal":{"style":{"left":"822.6666717529297px","top":"162.16666984558105px","height":"15px","width":"78px"},"class":{"arrow":false,"arrow-reverse":false,"arrow-straight":true,"arrow-flip":false}}}],"internal":{"style":{"left":"600px","top":"69px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2-ch8","name":"Chart Name","type":"Activity","description":"Chart Description","options":[],"internal":{"style":{"left":"600px","top":"233px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2-ch9","name":"Chart Name","type":"Activity","description":"Chart Description","options":[],"internal":{"style":{"left":"600px","top":"359px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2-ch6-ch10","name":"Chart Name","type":"Activity","description":"Chart Description","options":[],"internal":{"style":{"left":"900px","top":"-13px"},"class":{"card":true,"highlight-node":false}}},{"id":"ch1-ch2-ch7-ch11","name":"Chart Name","type":"Activity","description":"Chart Description","options":[],"internal":{"style":{"left":"900px","top":"113px"},"class":{"card":true,"highlight-node":false}}}],"idPrefix":"ch","environment":"DEV","project":"GlobalUI","portal":"VEC","name":"User Getting Slow","id":"chart1436995767298"};
+-}
++    
++    $scope.control ={
++        detail: {
++            enabled: false,
++            title: '',
++            content: '',
++            toggle: function(){
++                $scope.control.detail.enabled = !$scope.control.detail.enabled;
++            }
++        }
++    };
++}
+\ No newline at end of file
+diff --git a/ngapp/app/controller/SceneController.js b/ngapp/app/controller/SceneController.js
+new file mode 100644
+index 0000000..dfd3900
+--- /dev/null
++++ b/ngapp/app/controller/SceneController.js
+@@ -0,0 +1,45 @@
++function SceneController($scope, $route, $http, $localStorage){
++    $scope.selectCard = function(item, pList, editor){
++
++        angular.forEach(pList, function(yList, yKey){
++            if(angular.isArray(yList)){
++                angular.forEach(yList, function(inst, key){
++                    inst.internal.mode = 'display'; 
++                    inst.internal.class['highlight-node'] = false;                    
++                });
++            }else if(yList.internal && yList.internal.class){
++                yList.internal.class['highlight-node'] = false;
++            }            
++        });
++        item.internal.class['card'] = true;
++        item.internal.class['highlight-node'] = true;
++        item.internal.mode = 'edit'; 
++        
++        if(angular.isDefined(editor)){
++            editor.internal.selected = item;
++            editor.editList = [item];
++        }
++        
++        console.log($scope, $scope.control);
++        
++        if(angular.isDefined($scope.control)){
++            $scope.control.detail.enabled = true;
++            $scope.control.detail.title = item.name;
++            $scope.control.detail.content = item.description;
++        }
++    };
++        
++    $scope.highlightRelation = function(scope, enable){
++        var b = angular.element(document.querySelectorAll('[id*=' + scope.subitem.id + '-arrow-' + scope.subitem.charts +'], [id=' + scope.subitem.charts +']')),
++                scene = angular.element(document.querySelector('#chartscene'));
++        if(enable){
++            scene.addClass('opaque-node');
++            b.addClass('highlight-node');
++            
++        }else{
++            scene.removeClass('opaque-node');
++            b.removeClass('highlight-node');
++        } 
++        scope.item.internal.class['highlight-node'] = !!enable; 
++    };
++}
+\ No newline at end of file
