@@ -1,0 +1,136 @@
+diff --git a/ngapp/app/view/Admin.html b/ngapp/app/view/Admin.html
+index 1c1290f..f6410d3 100644
+--- a/ngapp/app/view/Admin.html
++++ b/ngapp/app/view/Admin.html
+@@ -111,7 +111,7 @@
+         <uichartitem ng-repeat="item in editor.editList" ng-click="selectItem(item)" ng-class="{'jfc-list-item-selected':(item.id === editor.internal.selected.id)}"></uichartitem>
+     </div>
+ </div>
+-<div id="chartcanvas">
++<div id="chartcanvas" ng-controller="SceneController">
+     <div id="chartTitle" class="large mono bold">{{editor.name}}</div>
+     <div id="chartscene">
+         <span style="display:hidden;" ng-init="xIndex = $index;yInit=0;initRepeatValues($index, 0);" ng-repeat-start="itemHolder in editor.parsedList"></span>
+diff --git a/ngapp/app/view/Home.html b/ngapp/app/view/Home.html
+index 3a34c0b..1e517c7 100644
+--- a/ngapp/app/view/Home.html
++++ b/ngapp/app/view/Home.html
+@@ -1,12 +1,12 @@
+ <div class="logo_container">
+ 	<img src="resources/images/logo.png" />
+ </div>
+-<div id="chartcanvas" style="left:0;">
++<div id="chartcanvas" style="left:0;" ng-controller="SceneController">
+     <div id="chartTitle" class="large mono bold">{{chart.name}}</div>
+     <div id="chartscene">        
+         <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
+              ng-style="item.internal.style" ng-class="item.internal.class"
+-             ng-click="selectCard(item, editor.parsedList, editor)">
++             ng-click="selectCard(item, chart.chartList, editor)">
+             <div ng-if="item.type != 'Actor'" class="title">
+                 <span class="fa fa-task"></span>{{item.name}}
+                 <!--  {{xIndex}} {{$index}} {{yInit}} -->
+@@ -45,4 +45,9 @@
+         </div>
+         <span style="display:hidden;" ng-repeat-end></span>        
+     </div>
++    <div id="chartDetail">
++        <div class="mono x-large">{{control.detail.title}}</div>
++        <div class="mono">{{control.detail.content}}</div>
++        <div class="icon icon-collapse" ng-class="{'icon-expand': !control.detail.enabled}" ng-click="control.detail.toggle()"><div>
++    </div>
+ </div>
+\ No newline at end of file
+diff --git a/ngapp/index.html b/ngapp/index.html
+index a65a50a..3d95b1e 100644
+--- a/ngapp/index.html
++++ b/ngapp/index.html
+@@ -25,12 +25,13 @@
+   <script src="app/controller/HomeController.js"></script>
+   <script src="app/controller/LoginController.js"></script>
+   <script src="app/controller/AdminController.js"></script>
++  <script src="app/controller/SceneController.js"></script>
+   <script src="app/controller/UISelectController.js"></script>
+   <script src="app/controller/UISearchController.js"></script>
+   <script src="app/controller/UITextController.js"></script>
+   <script src="app/controller/UITextAreaController.js"></script>
+   <script src="app/controller/UIChartItemController.js"></script>
+-  <script src="app/controller/UIChartOptionController.js"></script>
++  <script src="app/controller/UIChartOptionController.js"></script>  
+   <script src="app/controller/ApplicationController.js"></script>
+ 
+   <script src="app/directives/uiselect.js"></script>
+diff --git a/ngapp/resources/css/app.css b/ngapp/resources/css/app.css
+index c052df0..83ff79e 100644
+--- a/ngapp/resources/css/app.css
++++ b/ngapp/resources/css/app.css
+@@ -369,7 +369,7 @@
+ 
+ .jfc-select, .jfc-search, .jfc-component{width: 98%;height:98%;border:1px solid;position:relative;padding: 0; margin: 2% 2% 0 0;}
+ .jfc-select-thumb, .jfc-search-thumb, .jfc-component-thumb{width: 100%;}
+-.jfc-select-thumb input, .jfc-search-thumb input, .jfc-component-thumb input{width: 100%;/* margin-right: 40px; */border: 0;height: 30px;left: 0;/* right: 40px; *//* position: absolute; */}
++.jfc-select-thumb input, .jfc-search-thumb input, .jfc-component-thumb input, .jfc-component-thumb .disbled-text{width: 100%;/* margin-right: 40px; */border: 0;height: 30px;left: 0;/* right: 40px; *//* position: absolute; */}
+ .jfc-select-thumb .btn, .jfc-search-thumb .btn, .jfc-component-thumb .btn{width: 35px;border:0 solid;text-align: center;position:absolute;/* height: 30px; */right: 5px;top: 2%;height: 86%;}
+ 
+ .cell >div.jfc-select-list, .jfc-select-list, .select-list-hidden{
+diff --git a/ngapp/resources/css/demo.css b/ngapp/resources/css/demo.css
+index 4002a33..6a6c65e 100644
+--- a/ngapp/resources/css/demo.css
++++ b/ngapp/resources/css/demo.css
+@@ -67,6 +67,10 @@
+ 				width: 100%;
+ 				text-align: center;
+ 			}
++                        
++                        .highlight-node{
++                            opacity: 1 !important;
++                        }
+ 
+ 			.arrow, .arrow-reverse, .arrow-straight {
+ 				cursor: default;
+@@ -340,7 +344,7 @@
+ }
+ 
+ .actor > div:nth-child(1):before {
+-    content: '\f0c0';
++    content: '\f007';
+     font: normal normal normal 36px/1 FontAwesome;
+     color: rgb(39, 142, 252);
+     width: 40px;
+@@ -349,4 +353,35 @@
+ .actor > div > div {
+     padding: 2px 2px;
+     word-break: break-word;
++}
++
++div#chartDetail {
++    position: absolute;
++    border: 1px solid #ccc;
++    min-height: 35px;
++    width: calc(100% - 10px);
++    margin: 10px 5px;
++    bottom: 0;
++    box-shadow: 0px 4px 10px #ccc;
++    background: rgba(255,255,255,0.9);
++}
++
++.icon-collapse {
++    position: absolute;
++    right: 5px;
++    top: 5px;
++    height: 35px;
++    font-size: 25px;
++}
++
++.icon.icon-collapse:before {
++    content: '\f066';
++}
++
++.icon.icon-expand:before {
++    content: '\f065';
++}
++
++.opaque-node .card, .opaque-node .arrow, .opaque-node .arrow-reverse, .opaque-node .arrow-straight {
++    opacity: 0.3;
+ }
+\ No newline at end of file
