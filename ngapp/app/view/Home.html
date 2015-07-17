@@ -1,12 +1,12 @@
 <div class="logo_container">
 	<img src="resources/images/logo.png" />
 </div>
-<div id="chartcanvas" style="left:0;">
+<div id="chartcanvas" style="left:0;" ng-controller="SceneController">
     <div id="chartTitle" class="large mono bold">{{chart.name}}</div>
     <div id="chartscene">        
         <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
              ng-style="item.internal.style" ng-class="item.internal.class"
-             ng-click="selectCard(item, editor.parsedList, editor)">
+             ng-click="selectCard(item, chart.chartList, editor)">
             <div ng-if="item.type != 'Actor'" class="title">
                 <span class="fa fa-task"></span>{{item.name}}
                 <!--  {{xIndex}} {{$index}} {{yInit}} -->
@@ -44,5 +44,10 @@
             <div></div>
         </div>
         <span style="display:hidden;" ng-repeat-end></span>        
+    </div>
+    <div id="chartDetail">
+        <div class="mono x-large">{{control.detail.title}}</div>
+        <div class="mono">{{control.detail.content}}</div>
+        <div class="icon icon-collapse" ng-class="{'icon-expand': !control.detail.enabled}" ng-click="control.detail.toggle()"><div>
     </div>
 </div>

@@ -111,7 +111,7 @@
         <uichartitem ng-repeat="item in editor.editList" ng-click="selectItem(item)" ng-class="{'jfc-list-item-selected':(item.id === editor.internal.selected.id)}"></uichartitem>
     </div>
 </div>
-<div id="chartcanvas">
+<div id="chartcanvas" ng-controller="SceneController">
     <div id="chartTitle" class="large mono bold">{{editor.name}}</div>
     <div id="chartscene">
         <span style="display:hidden;" ng-init="xIndex = $index;yInit=0;initRepeatValues($index, 0);" ng-repeat-start="itemHolder in editor.parsedList"></span>

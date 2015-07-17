@@ -321,24 +321,4 @@ function AdminController($scope, $route, $http, $timeout){
                 };
             })(), 800, true, [subitem, item, xCnt, yCnt, yInit, list[xCnt]]);
         };
-        
-        $scope.selectCard = function(item, pList, editor){
-            
-            angular.forEach(pList, function(yList, yKey){
-                angular.forEach(yList, function(inst, key){
-                    inst.internal.mode = 'display'; 
-                    inst.internal.class['highlight-node'] = false;
-                });
-            });
-            item.internal.class['card'] = true;
-            item.internal.class['highlight-node'] = true;
-            item.internal.mode = 'edit'; 
-            editor.internal.selected = item;
-            editor.editList = [item];
-        };
-        
-        $scope.highlightRelation = function(scope, enable){            
-            var b = angular.element(document.querySelectorAll('[id*=' + scope.subitem.id + '-arrow-' + scope.subitem.charts +'], [id=' + scope.subitem.charts +']'));
-            enable ? b.addClass('highlight-node') : b.removeClass('highlight-node');
-        };
 }

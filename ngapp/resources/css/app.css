@@ -369,7 +369,7 @@ canvas { width: 100%; height: 100% }
 
 .jfc-select, .jfc-search, .jfc-component{width: 98%;height:98%;border:1px solid;position:relative;padding: 0; margin: 2% 2% 0 0;}
 .jfc-select-thumb, .jfc-search-thumb, .jfc-component-thumb{width: 100%;}
-.jfc-select-thumb input, .jfc-search-thumb input, .jfc-component-thumb input{width: 100%;/* margin-right: 40px; */border: 0;height: 30px;left: 0;/* right: 40px; *//* position: absolute; */}
+.jfc-select-thumb input, .jfc-search-thumb input, .jfc-component-thumb input, .jfc-component-thumb .disbled-text{width: 100%;/* margin-right: 40px; */border: 0;height: 30px;left: 0;/* right: 40px; *//* position: absolute; */}
 .jfc-select-thumb .btn, .jfc-search-thumb .btn, .jfc-component-thumb .btn{width: 35px;border:0 solid;text-align: center;position:absolute;/* height: 30px; */right: 5px;top: 2%;height: 86%;}
 
 .cell >div.jfc-select-list, .jfc-select-list, .select-list-hidden{

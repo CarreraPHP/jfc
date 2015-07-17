@@ -67,6 +67,10 @@
 				width: 100%;
 				text-align: center;
 			}
+                        
+                        .highlight-node{
+                            opacity: 1 !important;
+                        }
 
 			.arrow, .arrow-reverse, .arrow-straight {
 				cursor: default;
@@ -340,7 +344,7 @@
 }
 
 .actor > div:nth-child(1):before {
-    content: '\f0c0';
+    content: '\f007';
     font: normal normal normal 36px/1 FontAwesome;
     color: rgb(39, 142, 252);
     width: 40px;
@@ -349,4 +353,35 @@
 .actor > div > div {
     padding: 2px 2px;
     word-break: break-word;
+}
+
+div#chartDetail {
+    position: absolute;
+    border: 1px solid #ccc;
+    min-height: 35px;
+    width: calc(100% - 10px);
+    margin: 10px 5px;
+    bottom: 0;
+    box-shadow: 0px 4px 10px #ccc;
+    background: rgba(255,255,255,0.9);
+}
+
+.icon-collapse {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    height: 35px;
+    font-size: 25px;
+}
+
+.icon.icon-collapse:before {
+    content: '\f066';
+}
+
+.icon.icon-expand:before {
+    content: '\f065';
+}
+
+.opaque-node .card, .opaque-node .arrow, .opaque-node .arrow-reverse, .opaque-node .arrow-straight {
+    opacity: 0.3;
 }
