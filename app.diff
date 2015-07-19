@@ -1,0 +1,499 @@
+diff --git a/ngapp/app/controller/AdminController.js b/ngapp/app/controller/AdminController.js
+index 245e698..809cd5a 100644
+--- a/ngapp/app/controller/AdminController.js
++++ b/ngapp/app/controller/AdminController.js
+@@ -8,6 +8,10 @@
+             portal: "VEC",
+             name: "User Getting Slow",
+             internal: {
++                editconfig: false,
++                toggleConfigEditor: function(){
++                    $scope.editor.internal.editconfig = !$scope.editor.internal.editconfig;
++                },
+                 incrementor: 0,
+                 option:{
+                     incrementor: 0
+@@ -89,7 +93,7 @@
+         $scope.addChartItem = function(){
+             var chartItem = $scope.getChartTemplate(),
+                 actor = $scope.getActorTemplate();
+-            if($scope.editor.internal.incrementor == 0){
++            if($scope.editor.chartList.length == 0){
+                 chartItem.id = generateID();
+                 chartItem.type = "Begin";
+                 chartItem.name = "Chart Name";
+@@ -321,4 +325,10 @@
+                 };
+             })(), 800, true, [subitem, item, xCnt, yCnt, yInit, list[xCnt]]);
+         };
++        
++        // if the list is empty at the initial moment, load the Begin cart item to it.
++        if($scope.editor.chartList.length == 0){
++            $scope.addChartItem();
++            $scope.editor.editList.push($scope.editor.chartList[0]);
++        }
+ }
+diff --git a/ngapp/app/controller/SceneController.js b/ngapp/app/controller/SceneController.js
+index dfd3900..e648612 100644
+--- a/ngapp/app/controller/SceneController.js
++++ b/ngapp/app/controller/SceneController.js
+@@ -30,7 +30,7 @@
+     };
+         
+     $scope.highlightRelation = function(scope, enable){
+-        var b = angular.element(document.querySelectorAll('[id*=' + scope.subitem.id + '-arrow-' + scope.subitem.charts +'], [id=' + scope.subitem.charts +']')),
++        var b = angular.element(document.querySelectorAll('[id*=' + scope.subitem.id + '-arrow-' + scope.subitem.charts +'], [id=' + scope.subitem.charts +'], [id=' + scope.subitem.charts +'] .card')),
+                 scene = angular.element(document.querySelector('#chartscene'));
+         if(enable){
+             scene.addClass('opaque-node');
+@@ -42,4 +42,55 @@
+         } 
+         scope.item.internal.class['highlight-node'] = !!enable; 
+     };
++    
++    $scope.showCustomiseTool = function(e, enabled){
++        var scope = this,
++            ct = angular.element(document.querySelector('#' + scope.item.id + ' .customise-tool'));
++        (enabled) ? ct.removeClass('jfc-hide') : ct.addClass('jfc-hide');
++    };
++    
++    $scope.deleteCard = function(){
++        var scope = this,
++            item = scope.item;
++        if(item.options.length == 0){
++            var index = $scope.editor.chartList.indexOf(item),
++                excludeList = $scope.editor.chartList.splice(index, 1),
++                excludeItem = excludeList[0];
++
++            angular.forEach($scope.editor.chartList, function(yList, yKey){
++                angular.forEach(yList.options, function(option, key){
++                    if(option.charts == excludeItem.id){
++                        $scope.editor.chartList[yKey].options.splice(key, 1);
++                    }
++                    if(option.charts.indexOf(excludeItem.id) !== -1){
++                        var idArr = excludeItem.id.split('-');
++                        idArr.splice(idArr.length-1, 1);
++                        var newId = idArr.join('-');
++                        option.charts = option.charts.replace(new RegExp(excludeItem.id + '-', "gi"), newId);
++                    }
++                });
++                if(yList.id.indexOf(excludeItem.id) !== -1){
++                    var idArr = excludeItem.id.split('-');
++                    idArr.splice(idArr.length-1, 1);
++                    var newId = idArr.join('-');
++                    yList.id = yList.id.replace(new RegExp(excludeItem.id, "gi"), newId);                
++                }
++            });
++            $scope.editor.editList = [];
++        } else {
++            $scope.application.model.toggle("You cannot remove this item until its child items are removed.");
++        }   
++    };
++    
++    $scope.manageConfig = function(){
++        $scope.editor.internal.toggleConfigEditor();
++    };
++    
++    $scope.addOption = function(){
++        
++    };
++    
++    $scope.addActor = function(){
++        
++    };
+ }
+\ No newline at end of file
+diff --git a/ngapp/app/view/Admin.html b/ngapp/app/view/Admin.html
+index f6410d3..c1e5fb1 100644
+--- a/ngapp/app/view/Admin.html
++++ b/ngapp/app/view/Admin.html
+@@ -9,7 +9,7 @@
+             </div>
+         </div>
+     </div>
+-    <div class="jfc-container after-spacer">
++    <div ng-show="editor.internal.editconfig" class="jfc-container after-spacer">
+         <div class="jfc-box">
+             <div class="cell menu-heading">
+                 <div>
+@@ -18,7 +18,7 @@
+             </div>
+         </div>
+     </div>
+-    <div class="jfc-container jfc-width-96 after-spacer">
++    <div ng-if="editor.internal.editconfig" class="jfc-container jfc-width-96 after-spacer">
+         <label class="jfc-box" class="align-left">
+             <span class="cell medium after-spacer before-spacer align-middle">
+                 <span>Name</span>
+@@ -115,33 +115,62 @@
+     <div id="chartTitle" class="large mono bold">{{editor.name}}</div>
+     <div id="chartscene">
+         <span style="display:hidden;" ng-init="xIndex = $index;yInit=0;initRepeatValues($index, 0);" ng-repeat-start="itemHolder in editor.parsedList"></span>
+-        <div ng-repeat-start="item in itemHolder" id="{{item.id}}" class="card" 
++        <div ng-repeat-start="item in itemHolder" id="{{item.id}}" class="card-holder"
+              ng-init="yIndex = $index;rearrangeChart(item, xIndex, $index, yInit, editor.parsedList)" 
+-             ng-style="item.internal.style" ng-class="item.internal.class" style="left: 0px; top: 0px; z-index: 10;"
+-             ng-click="selectCard(item, editor.parsedList, editor)">
+-            <div ng-if="item.type != 'Actor'" class="title">
+-                <span class="fa fa-task"></span>{{item.name}}
+-                <!--  {{xIndex}} {{$index}} {{yInit}} -->
++             ng-style="item.internal.style"
++             
++             ng-mouseover="showCustomiseTool($event, true)" ng-mouseleave="showCustomiseTool($event, false)">
++            <div class="customise-tool jfc-hide" ng-style="{'width': (item.type == 'Actor' ? '105px' : '70px')}">
++                <button ng-click="manageConfig()">
++                    <i class="icon icon-config medium"></i>
++                </button>
++                <button ng-click="deleteCard()">
++                    <i class="icon icon-stop medium"></i>
++                </button>
++                <button ng-if="item.type == 'Actor'">
++                    <i class="icon icon-add-actor medium"></i>
++                </button>
++                <button>
++                    <i class="icon icon-add-option medium"></i>
++                </button>
++                <div class="card-info small">#{{item.id}}</div>
+             </div>
+-            <div ng-if="item.type != 'Actor'" class="content">
+-                {{item.description}}
+-            </div>
+-            <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
+-                <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
+-                    <div></div>
++            <div class="card" ng-click="selectCard(item, editor.parsedList, editor)" ng-class="item.internal.class">
++                <div ng-if="item.type == 'Activity'" class="title">
++                    <span class="fa fa-task"></span>{{item.name}}
++                </div>
++                <div ng-if="item.type == 'Begin' || item.type == 'End'" class="content card-special">
+                     <div>
+-                        <div class="medium">{{actor.name}}</div>
+-                        <div class="small">{{actor.email}}</div>
+-                        <div class="small">{{actor.contact}}</div>                        
++                        <div class="jfc-width-20">
++                            <i  ng-if="item.type == 'Begin'" class="icon icon-flag-start x-large"></i>
++                            <i  ng-if="item.type == 'End'" class="icon icon-flag-end x-large"></i>
++                        </div>
++                        <div>
++                            <div class="medium special-title">{{item.name}}</div>
++                            <div class="small">{{item.description}}</div>
++                        </div>
+                     </div>
+                 </div>
+-            </div>
+-            <div class="options">
+-                <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
+-                     ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
+-                    <div>
+-                        <span>{{subitem.name}}</span>
+-                        <span class="fa fa-play"></span>
++                <div ng-if="item.type == 'Activity'" class="content">
++                    {{item.description}}
++                </div>
++                <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
++                    <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
++                        <div></div>
++                        <div>
++                            <div class="medium">{{actor.name}}</div>
++                            <div class="small">{{actor.email}}</div>
++                            <div class="small">{{actor.contact}}</div>                        
++                        </div>
++                    </div>
++                </div>
++                <div class="options">
++                    <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
++                         ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
++                        <div>
++                            <span>{{subitem.name}}</span>
++                            <span class="fa fa-play"></span>
++                        </div>
+                     </div>
+                 </div>
+             </div>
+diff --git a/ngapp/app/view/Admin_1.html b/ngapp/app/view/Admin_1.html
+deleted file mode 100644
+index 75d60f3..0000000
+--- a/ngapp/app/view/Admin_1.html
++++ /dev/null
+@@ -1,105 +0,0 @@
+-<div id="page-body">
+-    <form name="adminform" class="css-form" ng-submit1="submitForm()" novalidate>
+-	<div class="jfc-container">
+-            <div class="jfc-container align-center">
+-                <div class="jfc-box">
+-                    <div class="header-bar menu-heading">
+-                            <div class="beta">Playbook</div>
+-                    </div>
+-                </div>
+-            </div>
+-            <div class="jfc-container after-spacer">
+-                <div class="jfc-box">
+-                    <div class="cell menu-heading">
+-                        <div><h2 class="medium">Chart Configuration</h2></div>
+-                    </div>
+-                </div>
+-            </div>
+-            <div class="jfc-container jfc-width-90">
+-                <label class="jfc-box" class="align-left align-middle">
+-                    <span class="cell medium after-spacer before-spacer">
+-                        <span class="jfc-block">Prefix</span>
+-                    </span>
+-                    <span class="cell">
+-                        <input class="form-control" type="text" ng-model="editor.idPrefix" />
+-                    </span>
+-                </label>
+-                <label class="jfc-box" class="align-left align-middle">
+-                    <span class="cell medium after-spacer before-spacer">
+-                        <span class="jfc-block">Environment</span>
+-                    </span>
+-                    <span class="cell">
+-                        <uiselect ng-model="editor.environment" list="environmentList"></uiselect>
+-                    </span>
+-                </label>
+-                <label class="jfc-box" class="align-left align-middle">
+-                    <span class="cell medium after-spacer before-spacer">
+-                        <span class="jfc-block">Portal</span>
+-                    </span>
+-                    <span class="cell">
+-                        <uiselect ng-model="editor.portal" list="portalList"></uiselect>
+-                    </span>
+-                </label>
+-                <label class="jfc-box" class="align-left align-middle">
+-                    <span class="cell medium after-spacer before-spacer">
+-                        <span class="jfc-block">Project</span>
+-                    </span>
+-                    <span class="cell">
+-                        <uiselect ng-model="editor.project" list="projectList"></uiselect>
+-                    </span>
+-                </label>
+-            </div>
+-            <div class="jfc-container jfc-toolbar">
+-                <div class="jfc-box">
+-                    <div class="cell menu-heading">
+-                        <div><h2 class="medium">Build List</h2></div>
+-                    </div>
+-                </div>
+-                <div class="jfc-box">
+-                    <div class="jfc-container">
+-                        <div class="cell align-middle align-left">
+-                            <div>
+-                                <button class="btn btn-medium" ng-click="printChartJson()">
+-                                    <i class="icon icon-add medium"></i>
+-                                    <span class="medium">Console-log</span>
+-                                </button>
+-                            </div>
+-                        </div>
+-                        <div class="cell align-middle align-right">
+-                            <div>
+-                                <button class="btn btn-medium" ng-click="addChartItem()">
+-                                    <i class="icon icon-add medium"></i>
+-                                    <span class="medium">Chart</span>
+-                                </button>
+-                                <button class="btn btn-medium" ng-click="addOption()">
+-                                    <i class="icon icon-add medium"></i>
+-                                    <span class="medium">Option</span>
+-                                </button>
+-                            </div>
+-                        </div>
+-                    </div>
+-                </div>
+-            </div>
+-            <div style="overflow-y:auto;">
+-              <div class="jfc-container jfc-list" ng-show="editor.chartList.length > 0">
+-                  <div class="jfc-box jfc-list-item" ng-repeat="item in editor.chartList"
+-                      ng-click="selectItem(item)"
+-                      ng-class="{'jfc-list-item-selected': (item.id == editor.internal.selected.id)}">
+-                      <div class="cell">
+-                          <div><span class="jfc-item-title">Generated ID</span>{{item.id}}</div>
+-                          <div><span class="jfc-item-title">Item Name</span>{{item.name}}</div>
+-                          <div><span class="jfc-item-title">Item Type</span>{{item.type}}</div>
+-                          <div class="jfc-dockable jfc-list-options">
+-                              <span class="jfc-item-title jfc-docked dock-left">Options</span>
+-                              <div class="jfc-list-options" ng-repeat="subitem in item.options">
+-                                  <div>{{subitem.name}}</div>
+-                                  <div>{{subitem.charts}}</div>
+-                              </div>
+-                          </div>
+-                      </div>
+-                  </div>
+-              </div>
+-            </div>
+-        </div>
+-    </form>
+-</div>
+diff --git a/ngapp/app/view/Home.html b/ngapp/app/view/Home.html
+index 1e517c7..db6953c 100644
+--- a/ngapp/app/view/Home.html
++++ b/ngapp/app/view/Home.html
+@@ -7,11 +7,22 @@
+         <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
+              ng-style="item.internal.style" ng-class="item.internal.class"
+              ng-click="selectCard(item, chart.chartList, editor)">
+-            <div ng-if="item.type != 'Actor'" class="title">
++            <div ng-if="item.type == 'Activity'" class="title">
+                 <span class="fa fa-task"></span>{{item.name}}
+-                <!--  {{xIndex}} {{$index}} {{yInit}} -->
+             </div>
+-            <div ng-if="item.type != 'Actor'" class="content">
++            <div ng-if="item.type == 'Begin' || item.type == 'End'" class="content card-special">
++                <div>
++                    <div class="jfc-width-20">
++                        <i  ng-if="item.type == 'Begin'" class="icon icon-flag-start x-large"></i>
++                        <i  ng-if="item.type == 'End'" class="icon icon-flag-end x-large"></i>
++                    </div>
++                    <div>
++                        <div class="medium special-title">{{item.name}}</div>
++                        <div class="small">{{item.description}}</div>
++                    </div>
++                </div>
++            </div>
++            <div ng-if="item.type == 'Activity'" class="content">
+                 {{item.description}}
+             </div>
+             <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
+diff --git a/ngapp/resources/css/app.css b/ngapp/resources/css/app.css
+index 81138ec..04ea390 100644
+--- a/ngapp/resources/css/app.css
++++ b/ngapp/resources/css/app.css
+@@ -166,7 +166,7 @@
+ .icon{
+     font: normal normal normal 1.8em/1 FontAwesome;
+     color:lightseagreen;
+-    width: 25px;
++    width: 35px;
+     /* z-index:100; */
+ }
+ .icon-back:before{
+@@ -1412,4 +1412,32 @@
+ 
+ .jfc-list .cell:nth-child(1) > div {
+     margin-right: 0;
++}
++
++.icon-config {
++    width: 35px;
++    color: darkblue;
++}
++
++.icon-config:before {
++    content: '\f0ad';
++}
++
++.icon-add-actor:before {
++    content: '\f234';
++    text-shadow: rgb(251, 255, 84) 1px 1px 0px;
++}
++
++.icon-add-option:before {
++    content: '\f067';
++    color: #FBFF54;
++    text-shadow: green 1px 1px 0px;
++}
++
++.icon-flag-start:before{
++    content: '\f024';
++}
++
++.icon-flag-end:before{
++    content: '\f11e';
+ }
+\ No newline at end of file
+diff --git a/ngapp/resources/css/demo.css b/ngapp/resources/css/demo.css
+index 6a6c65e..8f31798 100644
+--- a/ngapp/resources/css/demo.css
++++ b/ngapp/resources/css/demo.css
+@@ -219,7 +219,10 @@
+ /* 				rgba(131,113,106,1); */
+ 				text-shadow: 0 0 10px rgba(160,108,78,0.2);
+ 				overflow:hidden;
+-			}
++			
++				z-index: 10;
++				position: relative;
++}
+ 
+ 			.card:hover, .card.highlight-node {
+ 				box-shadow: 0px 0px 12px rgba(0,0,0,1);
+@@ -384,4 +387,81 @@
+ 
+ .opaque-node .card, .opaque-node .arrow, .opaque-node .arrow-reverse, .opaque-node .arrow-straight {
+     opacity: 0.3;
++}
++
++.customise-tool {
++    position: absolute;
++    top: -34px;
++    right: -34px;
++    background-color: #F2F2F2;
++    border: 1px solid #CCC;
++    min-height: 74px;
++    z-index: 0;
++    border-top-left-radius: 10px;
++    border-bottom-right-radius: 10px;
++}
++
++.card-holder {
++    /* padding: 0 0 20px 0; */
++}
++
++.customise-tool button:nth-child(3) {
++    right: 35px;
++    top: 0;
++}
++
++.customise-tool button:nth-child(4) {
++    right: 70px;
++    top: 0;
++}
++
++.customise-tool button {
++    position: absolute;
++    height: 35px;
++    width: 35px;
++}
++
++.customise-tool button:nth-child(1) {
++    right: 0;
++    top: 35px;
++}
++
++.customise-tool button:nth-child(2) {
++    top: 0;
++    right: 0;
++}
++
++.card-special {
++    display: table;
++    width: 100%;
++}
++
++.card-special > div {
++    display: table-row;
++}
++
++.card-special > div > div {
++    display: table-cell;
++    text-align: left;
++    vertical-align: middle;
++    padding: 10px 0;
++}
++
++.card-special > div > div:nth-child(1) {
++    text-align: center;
++    vertical-align: middle;
++}
++
++.special-title {
++    margin-bottom: 5px;
++}
++
++.card-info {
++    position: absolute;
++    top: 0;
++    line-height: 35px;
++    right: 90px;
++    width: 160px;
++    /* border: 1px solid; */
++    font-size: 9px;
+ }
+\ No newline at end of file
