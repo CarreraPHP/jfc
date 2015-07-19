@@ -9,7 +9,7 @@
             </div>
         </div>
     </div>
-    <div class="jfc-container after-spacer">
+    <div ng-show="editor.internal.editconfig" class="jfc-container after-spacer">
         <div class="jfc-box">
             <div class="cell menu-heading">
                 <div>
@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="jfc-container jfc-width-96 after-spacer">
+    <div ng-if="editor.internal.editconfig" class="jfc-container jfc-width-96 after-spacer">
         <label class="jfc-box" class="align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Name</span>
@@ -115,33 +115,62 @@
     <div id="chartTitle" class="large mono bold">{{editor.name}}</div>
     <div id="chartscene">
         <span style="display:hidden;" ng-init="xIndex = $index;yInit=0;initRepeatValues($index, 0);" ng-repeat-start="itemHolder in editor.parsedList"></span>
-        <div ng-repeat-start="item in itemHolder" id="{{item.id}}" class="card" 
+        <div ng-repeat-start="item in itemHolder" id="{{item.id}}" class="card-holder"
              ng-init="yIndex = $index;rearrangeChart(item, xIndex, $index, yInit, editor.parsedList)" 
-             ng-style="item.internal.style" ng-class="item.internal.class" style="left: 0px; top: 0px; z-index: 10;"
-             ng-click="selectCard(item, editor.parsedList, editor)">
-            <div ng-if="item.type != 'Actor'" class="title">
-                <span class="fa fa-task"></span>{{item.name}}
-                <!--  {{xIndex}} {{$index}} {{yInit}} -->
+             ng-style="item.internal.style"
+             
+             ng-mouseover="showCustomiseTool($event, true)" ng-mouseleave="showCustomiseTool($event, false)">
+            <div class="customise-tool jfc-hide" ng-style="{'width': (item.type == 'Actor' ? '105px' : '70px')}">
+                <button ng-click="manageConfig()">
+                    <i class="icon icon-config medium"></i>
+                </button>
+                <button ng-click="deleteCard()">
+                    <i class="icon icon-stop medium"></i>
+                </button>
+                <button ng-if="item.type == 'Actor'">
+                    <i class="icon icon-add-actor medium"></i>
+                </button>
+                <button>
+                    <i class="icon icon-add-option medium"></i>
+                </button>
+                <div class="card-info small">#{{item.id}}</div>
             </div>
-            <div ng-if="item.type != 'Actor'" class="content">
-                {{item.description}}
-            </div>
-            <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
-                <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
-                    <div></div>
+            <div class="card" ng-click="selectCard(item, editor.parsedList, editor)" ng-class="item.internal.class">
+                <div ng-if="item.type == 'Activity'" class="title">
+                    <span class="fa fa-task"></span>{{item.name}}
+                </div>
+                <div ng-if="item.type == 'Begin' || item.type == 'End'" class="content card-special">
                     <div>
-                        <div class="medium">{{actor.name}}</div>
-                        <div class="small">{{actor.email}}</div>
-                        <div class="small">{{actor.contact}}</div>                        
+                        <div class="jfc-width-20">
+                            <i  ng-if="item.type == 'Begin'" class="icon icon-flag-start x-large"></i>
+                            <i  ng-if="item.type == 'End'" class="icon icon-flag-end x-large"></i>
+                        </div>
+                        <div>
+                            <div class="medium special-title">{{item.name}}</div>
+                            <div class="small">{{item.description}}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="options">
-                <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
-                     ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
-                    <div>
-                        <span>{{subitem.name}}</span>
-                        <span class="fa fa-play"></span>
+                <div ng-if="item.type == 'Activity'" class="content">
+                    {{item.description}}
+                </div>
+                <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
+                    <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
+                        <div></div>
+                        <div>
+                            <div class="medium">{{actor.name}}</div>
+                            <div class="small">{{actor.email}}</div>
+                            <div class="small">{{actor.contact}}</div>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="options">
+                    <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
+                         ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
+                        <div>
+                            <span>{{subitem.name}}</span>
+                            <span class="fa fa-play"></span>
+                        </div>
                     </div>
                 </div>
             </div>
