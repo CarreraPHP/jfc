@@ -8,6 +8,10 @@ function AdminController($scope, $route, $http, $timeout){
             portal: "VEC",
             name: "User Getting Slow",
             internal: {
+                editconfig: false,
+                toggleConfigEditor: function(){
+                    $scope.editor.internal.editconfig = !$scope.editor.internal.editconfig;
+                },
                 incrementor: 0,
                 option:{
                     incrementor: 0
@@ -89,7 +93,7 @@ function AdminController($scope, $route, $http, $timeout){
         $scope.addChartItem = function(){
             var chartItem = $scope.getChartTemplate(),
                 actor = $scope.getActorTemplate();
-            if($scope.editor.internal.incrementor == 0){
+            if($scope.editor.chartList.length == 0){
                 chartItem.id = generateID();
                 chartItem.type = "Begin";
                 chartItem.name = "Chart Name";
@@ -321,4 +325,10 @@ function AdminController($scope, $route, $http, $timeout){
                 };
             })(), 800, true, [subitem, item, xCnt, yCnt, yInit, list[xCnt]]);
         };
+        
+        // if the list is empty at the initial moment, load the Begin cart item to it.
+        if($scope.editor.chartList.length == 0){
+            $scope.addChartItem();
+            $scope.editor.editList.push($scope.editor.chartList[0]);
+        }
 }
