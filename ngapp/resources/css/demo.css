@@ -219,7 +219,10 @@
 /* 				rgba(131,113,106,1); */
 				text-shadow: 0 0 10px rgba(160,108,78,0.2);
 				overflow:hidden;
-			}
+			
+				z-index: 10;
+				position: relative;
+}
 
 			.card:hover, .card.highlight-node {
 				box-shadow: 0px 0px 12px rgba(0,0,0,1);
@@ -384,4 +387,81 @@ div#chartDetail {
 
 .opaque-node .card, .opaque-node .arrow, .opaque-node .arrow-reverse, .opaque-node .arrow-straight {
     opacity: 0.3;
+}
+
+.customise-tool {
+    position: absolute;
+    top: -34px;
+    right: -34px;
+    background-color: #F2F2F2;
+    border: 1px solid #CCC;
+    min-height: 74px;
+    z-index: 0;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.card-holder {
+    /* padding: 0 0 20px 0; */
+}
+
+.customise-tool button:nth-child(3) {
+    right: 35px;
+    top: 0;
+}
+
+.customise-tool button:nth-child(4) {
+    right: 70px;
+    top: 0;
+}
+
+.customise-tool button {
+    position: absolute;
+    height: 35px;
+    width: 35px;
+}
+
+.customise-tool button:nth-child(1) {
+    right: 0;
+    top: 35px;
+}
+
+.customise-tool button:nth-child(2) {
+    top: 0;
+    right: 0;
+}
+
+.card-special {
+    display: table;
+    width: 100%;
+}
+
+.card-special > div {
+    display: table-row;
+}
+
+.card-special > div > div {
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+    padding: 10px 0;
+}
+
+.card-special > div > div:nth-child(1) {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.special-title {
+    margin-bottom: 5px;
+}
+
+.card-info {
+    position: absolute;
+    top: 0;
+    line-height: 35px;
+    right: 90px;
+    width: 160px;
+    /* border: 1px solid; */
+    font-size: 9px;
 }
