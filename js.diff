@@ -1,0 +1,166 @@
+diff --git a/ngapp/app/controller.js b/ngapp/app/controller.js
+index a0a64ff..daae5e3 100644
+--- a/ngapp/app/controller.js
++++ b/ngapp/app/controller.js
+@@ -5,6 +5,7 @@
+     })
+     .controller("ApplicationController", ["$scope", "$http", "$location", "$timeout", "$rootScope","$localStorage","$sessionStorage", ApplicationController])
+     .controller("HomeController", ["$scope", "$route","$http","$localStorage", HomeController])
++    .controller("ConfigController", ["$scope", "$route","$http","$localStorage", ConfigController])    
+     .controller("AdminController", ["$scope", "$route","$http","$timeout", AdminController])
+     .controller("SceneController", ["$scope", "$route","$http","$localStorage", SceneController])
+     .controller("LoginController", ["$scope", "$route","$http","$localStorage", LoginController])
+diff --git a/ngapp/app/controller/AdminController.js b/ngapp/app/controller/AdminController.js
+index c1a3609..328be7f 100644
+--- a/ngapp/app/controller/AdminController.js
++++ b/ngapp/app/controller/AdminController.js
+@@ -2,11 +2,11 @@
+ 	$scope.editor = {
+             chartList: [],
+             parsedList: [],
+-            idPrefix: "ch",
++            idPrefix: "c",
+             environment: "DEV",
+             project: "GlobalUI",
+             portal: "VEC",
+-            name: "User Getting Slow",
++            name: "User is Getting Slow",
+             internal: {
+                 editconfig: false,
+                 toggleConfigEditor: function(){
+diff --git a/ngapp/app/controller/ApplicationController.js b/ngapp/app/controller/ApplicationController.js
+index ba2a1fb..09efedd 100644
+--- a/ngapp/app/controller/ApplicationController.js
++++ b/ngapp/app/controller/ApplicationController.js
+@@ -9,24 +9,17 @@
+ 	$scope.callBackpageLoading();
+ */
+ 	$scope.isActive=function(pathMenu){
+-		pathMenu = "/"+pathMenu;
+-		if($location.path() == pathMenu){
+-			return true;
+-		}
+-		else{
+-			return false;
+-		}
+-
++            pathMenu = "/"+pathMenu;
++            if($location.path() == pathMenu){
++                    return true;
++            }
++            else{
++                    return false;
++            }
+ 	}
+-        $scope.environmentList = [
+-		"DEV", "QA", "ALT-PROD", "PROD"
+-	];
+-	$scope.projectList = [
+-		"PROJ 1", "PROJ 2", "PROJ 3", "PROJ 4"
+-	];
+-	$scope.portalList = [
+-		"PORTAL 1", "PORTAL 2"
+-	];
++        $scope.environmentList = ["DEV", "QA", "ALT-PROD", "PROD"];
++	$scope.projectList = ["PROJ 1", "PROJ 2", "PROJ 3", "PROJ 4"];
++	$scope.portalList = ["PORTAL 1", "PORTAL 2"];
+ 
+         $rootScope.data = {
+             userName: 'Yogesh Surendran',
+@@ -85,6 +78,9 @@
+ 
+ 	$rootScope.application = {
+ 	    title: "JSON Flow Chart",
++            portalList: [],
++            environmentList: [],
++            projectList: [],
+ 	    setProject: false,
+ 	    removeProject: false,
+ 	    getProject: false,
+diff --git a/ngapp/app/controller/ConfigController.js b/ngapp/app/controller/ConfigController.js
+new file mode 100644
+index 0000000..e1ca49d
+--- /dev/null
++++ b/ngapp/app/controller/ConfigController.js
+@@ -0,0 +1,66 @@
++function ConfigController($scope, $route, $http, $localStorage) {
++    $scope.portalValueField = 'portalNm';
++    $scope.environmentValueField = 'environmentNm';
++    $scope.projectValueField = 'moduleNm';
++    
++    $scope.$watch('editor.portal', function(newValue, oldValue){        
++        var idValue = -1;
++        angular.forEach($scope.application.portalList, function(value, key){
++            console.log(arguments, "arguments 2");
++            if(value.portalNm === newValue){
++                idValue = value.portalId;
++            }
++        });
++        if(idValue !== -1){
++            $scope.loadEnvironmentList(idValue);
++            $scope.loadProjectList(idValue);        
++            console.log(arguments, "arguments");
++        }
++    });
++    
++    $scope.loadPortalList = function(){
++        if($scope.application.portalList.length === 0){
++            $http
++                .get('http://localhost:8080/getPortalList')
++                .success(function (data, status, headers, config) {
++                    $scope.application.portalList = data;
++                    if(data.length > 0){
++                        $scope.loadEnvironmentList(data[0].portalId);
++                        $scope.loadProjectList(data[0].portalId); 
++                        console.log($scope.application.portalList);
++                    }
++                })
++                .error(function (data, status, headers, config) {
++                    $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
++                });
++        }
++    }
++    $scope.loadEnvironmentList = function(param){
++        if($scope.application.environmentList.length === 0){
++            $http
++                .get('http://localhost:8080/getEnvironmentList?portal_id=' + param)
++                .success(function (data, status, headers, config) {
++                    $scope.application.environmentList = data.data.result;
++                    console.log($scope.application.environmentList, data);
++                })
++                .error(function (data, status, headers, config) {
++                    $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
++                });
++        }
++    };
++    $scope.loadProjectList = function(param){
++        if($scope.application.projectList.length === 0){
++            $http
++                .get('http://localhost:8080/getModuleList?portal_id=' + param)
++                .success(function (data, status, headers, config) {
++                    $scope.application.projectList = data.data.result;
++                    console.log($scope.application.projectList);
++                })
++                .error(function (data, status, headers, config) {
++                    $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
++                });
++        }
++    };
++    
++    $scope.loadPortalList();
++}
+\ No newline at end of file
+diff --git a/ngapp/app/controller/UISelectController.js b/ngapp/app/controller/UISelectController.js
+index bfca46c..7f1c70e 100644
+--- a/ngapp/app/controller/UISelectController.js
++++ b/ngapp/app/controller/UISelectController.js
+@@ -34,7 +34,7 @@
+ 
+     $scope.$watch('value', function(){
+         if(angular.isDefined($scope.change)){
+-            console.log($scope.value, $scope._value);
++//            console.log($scope.value, $scope._value);
+             $scope.change($scope.value, $scope._value);
+         }  
+     });
+
