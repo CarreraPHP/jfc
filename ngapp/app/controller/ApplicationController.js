@@ -9,24 +9,17 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 	$scope.callBackpageLoading();
 */
 	$scope.isActive=function(pathMenu){
-		pathMenu = "/"+pathMenu;
-		if($location.path() == pathMenu){
-			return true;
-		}
-		else{
-			return false;
-		}
-
+            pathMenu = "/"+pathMenu;
+            if($location.path() == pathMenu){
+                    return true;
+            }
+            else{
+                    return false;
+            }
 	}
-        $scope.environmentList = [
-		"DEV", "QA", "ALT-PROD", "PROD"
-	];
-	$scope.projectList = [
-		"PROJ 1", "PROJ 2", "PROJ 3", "PROJ 4"
-	];
-	$scope.portalList = [
-		"PORTAL 1", "PORTAL 2"
-	];
+        $scope.environmentList = ["DEV", "QA", "ALT-PROD", "PROD"];
+	$scope.projectList = ["PROJ 1", "PROJ 2", "PROJ 3", "PROJ 4"];
+	$scope.portalList = ["PORTAL 1", "PORTAL 2"];
 
         $rootScope.data = {
             userName: 'Yogesh Surendran',
@@ -85,6 +78,9 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 
 	$rootScope.application = {
 	    title: "JSON Flow Chart",
+            portalList: [],
+            environmentList: [],
+            projectList: [],
 	    setProject: false,
 	    removeProject: false,
 	    getProject: false,
