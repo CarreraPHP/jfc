@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div ng-if="editor.internal.editconfig" class="jfc-container jfc-width-96 after-spacer">
+    <div ng-if="editor.internal.editconfig" class="jfc-container jfc-width-96 after-spacer" ng-controller="ConfigController">
         <label class="jfc-box" class="align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Name</span>
@@ -41,31 +41,31 @@
         </label>
         <label class="jfc-box" class="align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
-                <span>Environment</span>
-            </span>
-            <span class="cell">
-                <span>
-                    <uiselect ng-model="editor.environment" list="environmentList"></uiselect>
-                </span>
-            </span>
-        </label>
-        <label class="jfc-box" class="align-left">
-            <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Portal</span>
             </span>
             <span class="cell">
                 <span>
-                    <uiselect ng-model="editor.portal" list="portalList"></uiselect>
+                    <uiselect ng-model="editor.portal" list="application.portalList" displayField="portalNm" valuefield="portalValueField"></uiselect>
                 </span>
             </span>
         </label>
         <label class="jfc-box" class="align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
-                <span>Project</span>
+                <span>Environment</span>
+            </span>
+            <span class="cell">
+                <span>
+                    <uiselect ng-model="editor.environment" list="application.environmentList" valuefield="environmentValueField"></uiselect>
+                </span>
+            </span>
+        </label>
+        <label class="jfc-box" class="align-left">
+            <span class="cell medium after-spacer before-spacer align-middle">
+                <span>Module</span>
             </span>
             <span class="cell after-spacer">
                 <span>
-                    <uiselect ng-model="editor.project" list="projectList"></uiselect>
+                    <uiselect ng-model="editor.project" list="application.projectList" valuefield="projectValueField"></uiselect>
                 </span>
             </span>
         </label>
