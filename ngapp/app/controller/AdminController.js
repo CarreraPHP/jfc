@@ -2,11 +2,11 @@ function AdminController($scope, $route, $http, $timeout){
 	$scope.editor = {
             chartList: [],
             parsedList: [],
-            idPrefix: "ch",
+            idPrefix: "c",
             environment: "DEV",
             project: "GlobalUI",
             portal: "VEC",
-            name: "User Getting Slow",
+            name: "User is Getting Slow",
             internal: {
                 editconfig: false,
                 toggleConfigEditor: function(){
