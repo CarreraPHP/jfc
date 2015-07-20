@@ -34,7 +34,7 @@ function UISelectController($scope, $attrs, progressConfig) {
 
     $scope.$watch('value', function(){
         if(angular.isDefined($scope.change)){
-            console.log($scope.value, $scope._value);
+//            console.log($scope.value, $scope._value);
             $scope.change($scope.value, $scope._value);
         }  
     });
