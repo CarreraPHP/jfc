@@ -1,0 +1,96 @@
+diff --git a/ngapp/app/view/Admin.html b/ngapp/app/view/Admin.html
+index 694478e..5e5be9b 100644
+--- a/ngapp/app/view/Admin.html
++++ b/ngapp/app/view/Admin.html
+@@ -18,7 +18,7 @@
+             </div>
+         </div>
+     </div>
+-    <div ng-if="editor.internal.editconfig" class="jfc-container jfc-width-96 after-spacer">
++    <div ng-if="editor.internal.editconfig" class="jfc-container jfc-width-96 after-spacer" ng-controller="ConfigController">
+         <label class="jfc-box" class="align-left">
+             <span class="cell medium after-spacer before-spacer align-middle">
+                 <span>Name</span>
+@@ -41,31 +41,31 @@
+         </label>
+         <label class="jfc-box" class="align-left">
+             <span class="cell medium after-spacer before-spacer align-middle">
+-                <span>Environment</span>
+-            </span>
+-            <span class="cell">
+-                <span>
+-                    <uiselect ng-model="editor.environment" list="environmentList"></uiselect>
+-                </span>
+-            </span>
+-        </label>
+-        <label class="jfc-box" class="align-left">
+-            <span class="cell medium after-spacer before-spacer align-middle">
+                 <span>Portal</span>
+             </span>
+             <span class="cell">
+                 <span>
+-                    <uiselect ng-model="editor.portal" list="portalList"></uiselect>
++                    <uiselect ng-model="editor.portal" list="application.portalList" displayField="portalNm" valuefield="portalValueField"></uiselect>
+                 </span>
+             </span>
+         </label>
+         <label class="jfc-box" class="align-left">
+             <span class="cell medium after-spacer before-spacer align-middle">
+-                <span>Project</span>
++                <span>Environment</span>
++            </span>
++            <span class="cell">
++                <span>
++                    <uiselect ng-model="editor.environment" list="application.environmentList" valuefield="environmentValueField"></uiselect>
++                </span>
++            </span>
++        </label>
++        <label class="jfc-box" class="align-left">
++            <span class="cell medium after-spacer before-spacer align-middle">
++                <span>Module</span>
+             </span>
+             <span class="cell after-spacer">
+                 <span>
+-                    <uiselect ng-model="editor.project" list="projectList"></uiselect>
++                    <uiselect ng-model="editor.project" list="application.projectList" valuefield="projectValueField"></uiselect>
+                 </span>
+             </span>
+         </label>
+diff --git a/ngapp/app/view/directives/uichartitem.html b/ngapp/app/view/directives/uichartitem.html
+index 325a5ad..e872e03 100644
+--- a/ngapp/app/view/directives/uichartitem.html
++++ b/ngapp/app/view/directives/uichartitem.html
+@@ -15,7 +15,7 @@
+                         <div class="cell no-border">
+                             <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.type}}</div>
+                             <div ng-show="mode == 'edit'">
+-                                <uiselect ng-model="item.type" list="typeList"></uitext>
++                                <uiselect ng-model="item.type" list="typeList"></uiselect>
+                             </div>
+                         </div>
+                     </div>
+diff --git a/ngapp/index.html b/ngapp/index.html
+index 3d95b1e..dd3213a 100644
+--- a/ngapp/index.html
++++ b/ngapp/index.html
+@@ -23,6 +23,7 @@
+   <script src="app/services.js"></script>
+ 
+   <script src="app/controller/HomeController.js"></script>
++  <script src="app/controller/ConfigController.js"></script>
+   <script src="app/controller/LoginController.js"></script>
+   <script src="app/controller/AdminController.js"></script>
+   <script src="app/controller/SceneController.js"></script>
+diff --git a/ngapp/resources/css/app.css b/ngapp/resources/css/app.css
+index 0d74474..4cd2ee4 100644
+--- a/ngapp/resources/css/app.css
++++ b/ngapp/resources/css/app.css
+@@ -1435,7 +1435,7 @@
+ }
+ 
+ .icon-flag-start:before{
+-    content: '\f024';
++    content: '\f01d';
+ }
+ 
+ .icon-flag-end:before{
