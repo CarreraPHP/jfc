@@ -1,0 +1,44 @@
+diff --git a/ngapp/resources/data/environment.json b/ngapp/resources/data/environment.json
+new file mode 100644
+index 0000000..8f69ab3
+--- /dev/null
++++ b/ngapp/resources/data/environment.json
+@@ -0,0 +1 @@
++{"data":{"result":[{"portalId":1,"environmentNm":"PROD","environmentId":1},{"portalId":1,"environmentNm":"ALT-PROD","environmentId":2},{"portalId":1,"environmentNm":"QA","environmentId":3},{"portalId":1,"environmentNm":"SIT","environmentId":4}]}}
+\ No newline at end of file
+diff --git a/ngapp/resources/data/module.json b/ngapp/resources/data/module.json
+new file mode 100644
+index 0000000..b0c7c96
+--- /dev/null
++++ b/ngapp/resources/data/module.json
+@@ -0,0 +1 @@
++{"data":{"result":[{"moduleNm":"PROJECT 1","moduleId":1,"portalId":1}]}}
+\ No newline at end of file
+diff --git a/ngapp/resources/data/portal.json b/ngapp/resources/data/portal.json
+new file mode 100644
+index 0000000..224303b
+--- /dev/null
++++ b/ngapp/resources/data/portal.json
+@@ -0,0 +1 @@
++[{"portalNm":"PORTAL 1","portalId":1},{"portalNm":"PORTAL 2","portalId":2}]
+\ No newline at end of file
+diff --git a/server/main-mvm.rb b/server/main-mvm.rb
+index 2e89d2f..3757ecb 100644
+--- a/server/main-mvm.rb
++++ b/server/main-mvm.rb
+@@ -8,13 +8,13 @@
+ #spath = File.expand_path '~\MyWorkspace\JFC\ngapp'
+ 
+ host = { 'root' => spath, 'port' => 84}
+-#busdomain = { 'url' => '127.0.0.1', 'port' =>'8080' }
++busdomain = { 'url' => '127.0.0.1', 'port' =>'8080' }
+ staticfiles = [".js", ".css", ".html", ".gif", ".jpg", ".jpeg", ".mpg", ".mpge", ".ico", ".doc", ".xls", ".svg", ".txt", ".pdf", ".png", ".ico", ".woff", ".eot", ".ttf", ".json"]
+ 
+ puts "Host Path : " + host['root']
+ 
+ server = WEBrick::HTTPServer.new :Port => host['port'], :DocumentRoot => host['root']
+-server.mount_proc '/data' do |req, res|
++server.mount_proc '/get' do |req, res|
+   rs = req.request_uri.to_s #:doc Getting Request URL as string value.
+   found = false;
+   
