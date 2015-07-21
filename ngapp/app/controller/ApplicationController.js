@@ -9,18 +9,9 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
 	$scope.callBackpageLoading();
 */
 	$scope.isActive=function(pathMenu){
-            pathMenu = "/"+pathMenu;
-            if($location.path() == pathMenu){
-                    return true;
-            }
-            else{
-                    return false;
-            }
+            return ($location.path() == "/" + pathMenu) ? true : false;
 	}
-        $scope.environmentList = ["DEV", "QA", "ALT-PROD", "PROD"];
-	$scope.projectList = ["PROJ 1", "PROJ 2", "PROJ 3", "PROJ 4"];
-	$scope.portalList = ["PORTAL 1", "PORTAL 2"];
-
+        
         $rootScope.data = {
             userName: 'Yogesh Surendran',
             greetingKey: 'Mr. ',
@@ -81,32 +72,54 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
             portalList: [],
             environmentList: [],
             projectList: [],
+            getEnvironmentId: function(value){
+                return $scope.application.getId($scope.application.environmentList, value, "environmentId", "environmentNm")
+            },
+            getEnvironmentId: function(value){
+                return $scope.application.getId($scope.application.environmentList, value, "environmentId", "environmentNm")
+            },
+            getProjectId: function(value){
+                return $scope.application.getId($scope.application.projectList, value, "moduleId", "moduleNm")
+            },
+            getPortalId: function(value){
+                return $scope.application.getId($scope.application.portalList, value, "portalId", "portalNm")
+            },
+            getId: function(list, value, idField, valueField){
+                var id = -1;
+                for(var i=0; i < list.length; i++){
+                    var obj = list[i];
+                    if(obj[valueField] === value){
+                        id = obj[idField];
+                    }
+                }
+                return id;
+            },
 	    setProject: false,
 	    removeProject: false,
 	    getProject: false,
 	    getEnvironment:false,
-		preventToolbar: false,
-		preventTabbar: false,
-		errorMsg:"",
-		futureMsg:"Thanks for your interest This option will be added as part of next release!",
-		notificationsCount:"",
-		model:{
-			errMsg:"",
-			visible: false,
-			toggle: function(temp){
-				$rootScope.application.model.errMsg = temp;
-				$rootScope.application.model.visible = !$rootScope.application.model.visible;
-			}
-		},
-		dosignout:{
-			sout: false,
-			toggle1: function(){
-				$rootScope.application.dosignout.sout = !$rootScope.application.dosignout.sout;
-				$localStorage.$reset();
-				localStorage.clear();
-			}
-		},
-		showSubPageToolbarBtn: false,
+            preventToolbar: false,
+            preventTabbar: false,
+            errorMsg:"",
+            futureMsg:"Thanks for your interest This option will be added as part of next release!",
+            notificationsCount:"",
+            model:{
+                    errMsg:"",
+                    visible: false,
+                    toggle: function(temp){
+                            $rootScope.application.model.errMsg = temp;
+                            $rootScope.application.model.visible = !$rootScope.application.model.visible;
+                    }
+            },
+            dosignout:{
+                    sout: false,
+                    toggle1: function(){
+                            $rootScope.application.dosignout.sout = !$rootScope.application.dosignout.sout;
+                            $localStorage.$reset();
+                            localStorage.clear();
+                    }
+            },
+            showSubPageToolbarBtn: false,
 	    slider:{
 	    	animated:false,
 	    	makeSlide: function(){
