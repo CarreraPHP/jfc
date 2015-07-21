@@ -1,6 +1,5 @@
 function SceneController($scope, $route, $http, $localStorage){
     $scope.selectCard = function(item, pList, editor){
-
         angular.forEach(pList, function(yList, yKey){
             if(angular.isArray(yList)){
                 angular.forEach(yList, function(inst, key){
@@ -49,48 +48,19 @@ function SceneController($scope, $route, $http, $localStorage){
         (enabled) ? ct.removeClass('jfc-hide') : ct.addClass('jfc-hide');
     };
     
-    $scope.deleteCard = function(){
-        var scope = this,
-            item = scope.item;
-        if(item.options.length == 0){
-            var index = $scope.editor.chartList.indexOf(item),
-                excludeList = $scope.editor.chartList.splice(index, 1),
-                excludeItem = excludeList[0];
-
-            angular.forEach($scope.editor.chartList, function(yList, yKey){
-                angular.forEach(yList.options, function(option, key){
-                    if(option.charts == excludeItem.id){
-                        $scope.editor.chartList[yKey].options.splice(key, 1);
-                    }
-                    if(option.charts.indexOf(excludeItem.id) !== -1){
-                        var idArr = excludeItem.id.split('-');
-                        idArr.splice(idArr.length-1, 1);
-                        var newId = idArr.join('-');
-                        option.charts = option.charts.replace(new RegExp(excludeItem.id + '-', "gi"), newId);
-                    }
-                });
-                if(yList.id.indexOf(excludeItem.id) !== -1){
-                    var idArr = excludeItem.id.split('-');
-                    idArr.splice(idArr.length-1, 1);
-                    var newId = idArr.join('-');
-                    yList.id = yList.id.replace(new RegExp(excludeItem.id, "gi"), newId);                
-                }
-            });
-            $scope.editor.editList = [];
-        } else {
-            $scope.application.model.toggle("You cannot remove this item until its child items are removed.");
-        }   
-    };
-    
     $scope.manageConfig = function(){
         $scope.editor.internal.toggleConfigEditor();
     };
     
     $scope.addOption = function(){
-        
+        var scope = this;
+        $scope.editor.internal.selected = scope.item;
+        $scope.$parent.addOption();
     };
     
     $scope.addActor = function(){
-        
+        var scope = this;
+        $scope.editor.internal.selected = scope.item;
+        $scope.$parent.addActor();
     };
 }
