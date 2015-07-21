@@ -1,0 +1,113 @@
+diff --git a/ngapp/resources/css/app.css b/ngapp/resources/css/app.css
+index 4cd2ee4..78c79c3 100644
+--- a/ngapp/resources/css/app.css
++++ b/ngapp/resources/css/app.css
+@@ -153,7 +153,7 @@
+ 
+ .mono{font-family: monospace;}
+ .small, .large, .medium, .body-text{margin: 0;padding: 0;}
+-.small {font-size:12px;}
++.small {font-size: 12px !important;}
+ .body-text {font-size:14px;}
+ .medium {font-size: 16px !important;}
+ .large {font-size: 24px !important;}
+@@ -777,21 +777,20 @@
+ .right{float:right}
+ 
+ .padding_3{padding-top:5px;}
+-#page-body {
++#page-body, .property-pane {
+     position: absolute;
+-    top: 0;
+-    left: 0;
+-    /* width: 50%; */
+-    width: 420px;
+-    height: 100%;
+-    background-color: #f9f9f9;
+-    padding: 0 0 0 0;
+-    margin: 0;
++    top: 0px;
++    right: 0;
++    width: 410px;
++    height: calc(100% - 10px);
++    padding: 0;
+     overflow: hidden;
+-    overflow-y: auto;
++    overflow-y: auto;    border: 1px solid #ccc;    
++    min-width: 35px;        
++    margin: 5px;        box-shadow: 0px 4px 10px #ccc;    background: rgba(255,255,255,0.9);
+ }
+-#page-body h3{margin:20px 0px;padding:0px;color:#b00000;}
+-#page-body a{color: rgba(85, 85, 85, 1);text-shadow: 1px 2px 2px rgba(85, 85, 85, 0.3);}
++#page-body h3, .property-pane h3{margin:20px 0px;padding:0px;color:#b00000;}
++#page-body a, .property-pane a{color: rgba(85, 85, 85, 1);text-shadow: 1px 2px 2px rgba(85, 85, 85, 0.3);}
+ .header-bar {
+     border-bottom:solid 1px #ccc;
+     display: table-cell;
+@@ -799,7 +798,7 @@
+     padding: 0;
+     margin: 0;
+ }
+-#page-body .iptext{
++#page-body .iptext, .property-pane .iptext{
+     /* border-radius: 3px; */
+     /* border: 1px solid #9A9AA9; */
+     /* height:16px; */
+@@ -808,7 +807,6 @@
+     width: 100%;
+     box-sizing: border-box;
+ }
+-#page-body > div{/* margin-right:20px; */}
+ 
+ /*.button-dark{
+ background: #c40000;
+@@ -970,7 +968,7 @@
+     border-radius:4px;
+     box-sizing:border-box;
+     -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+-    box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
++    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5);
+     -webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+     -o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+     transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+@@ -1064,6 +1062,7 @@
+ 
+     width: 100%;
+     height: 100%;
++    background-color: rgba(0,0,0,0.4);
+ }
+ 
+ .modal-content{
+@@ -1353,9 +1352,9 @@
+ 
+ div#chartcanvas {
+     position: absolute;
+-    left: 420px;
++    right: 420px;
+     /* width: 100%; */
+-    right: 0;
++    left: 0;
+     /* border: 1px solid; */
+     /* height: 100%; */
+     top: 0;
+@@ -1387,10 +1386,6 @@
+     margin: 0.2em 0.3em;
+     list-style: none;
+     padding: 0.1em 0.2em;
+-}
+-
+-#page-body .jfc-select-list ul li a, .jfc-select-list ul li a {
+-    /* color: rgb(85, 85, 85); */
+ }
+ 
+ .jfc-select-list ul li:hover {
+@@ -1440,4 +1435,8 @@
+ 
+ .icon-flag-end:before{
+     content: '\f11e';
++}
++
++.icon-database:before{
++    content: '\f1c0';
+ }
+\ No newline at end of file
