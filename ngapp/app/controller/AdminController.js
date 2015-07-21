@@ -1,12 +1,13 @@
-function AdminController($scope, $route, $http, $timeout){
+function AdminController($scope, $route, $http, $timeout, $location){
 	$scope.editor = {
             chartList: [],
             parsedList: [],
             idPrefix: "c",
-            environment: "DEV",
-            project: "GlobalUI",
-            portal: "VEC",
-            name: "User is Getting Slow",
+            environment: "",
+            project: "",
+            portal: "",
+            name: "Chart Title",
+            owner: "Build Team",
             internal: {
                 editconfig: false,
                 toggleConfigEditor: function(){
@@ -126,6 +127,9 @@ function AdminController($scope, $route, $http, $timeout){
         };
 	
     	$scope.addOption = function(){
+            
+            console.log("caleed or not?");
+            
                 var selected = $scope.editor.internal.selected;
     	    if(selected.id == ''){
                     $scope.application.model.toggle("Please select an existing chartitem to add options to it.");
@@ -161,7 +165,7 @@ function AdminController($scope, $route, $http, $timeout){
 //            console.log(arguments);
         }
         
-        $scope.printChartJson = function(){
+        $scope.getEditorObject = function(){
             var res = JSON.parse(angular.toJson($scope.editor));
             delete res.parsedList;
             delete res.editList;
@@ -181,9 +185,78 @@ function AdminController($scope, $route, $http, $timeout){
         }
                 v.internal.class['highlight-node'] = false;
             });
-            res.id = 'chart' + (new Date()).getTime();
-            console.log(angular.toJson(res));
-        }
+            return res;
+        };
+        
+        $scope.saveChartJson = function(){
+            var res = $scope.getEditorObject(),
+                param = {};
+            param.jsonData = res.chartList;
+            param.moduleNm = res.project;
+            param.environmentNm = res.environment;
+            param.portalNm = res.portal;
+            param.scenarioNm = res.name;
+            param.primaryOwner = res.owner;
+            param.environmentId = $scope.application.getEnvironmentId(res.environment);
+            param.portalId = $scope.application.getPortalId(res.portal);
+            param.moduleId = $scope.application.getProjectId(res.project);
+            param.status = 'Active';
+
+            if(param.portalId === -1){
+                $scope.application.model.toggle("Portal cannot be empty.");
+                return;
+            }
+            if(param.environmentId === -1){
+                $scope.application.model.toggle("Environment cannot be empty.");
+                return;
+            }
+            if(param.moduleId === -1){
+                $scope.application.model.toggle("Module cannot be empty.");
+                return;
+            }
+
+            console.log(angular.toJson(param));
+            $http({
+                url: 'http://localhost:8080/saveScenario',
+                method: 'POST',
+                transformRequest: function(obj) {
+                    var str = [];
+                    for(var p in obj){
+                        var val = ((typeof obj[p]).toLowerCase() == "object") ? angular.toJson(obj[p]) : obj[p];
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(val));
+                    }
+                    return str.join("&");
+
+                },
+                data: param,
+                headers: {
+                    'Content-type': 'application/x-www-form-urlencoded'
+                }
+            }).success(function (data, status, headers, config) {
+//                Chart
+                console.log(data, data.data.result);
+                var record = data.data.result;
+                if(record === -1){
+                    $scope.application.model.toggle("Chart Name '" + $scope.editor.name + "' has been already taken. Please choose another title.");
+                }else {
+                    window.open("#!/Chart/" + record.scenarioId + "/" + record.urlNm, "_blank");
+                }
+//                 $location.path("/Chart/" + record.scenarioId + "/" + record.urlNm);
+            }).error(function (data, status, headers, config) {
+                $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
+            });
+        };
+
+        $scope.exportChartJson = function(){
+            var list = $scope.editor.chartList;
+            for(var i=0; i < list.length; i++){
+                if(list[i].options.length === 0 && list[i].type !== 'End'){
+                    $scope.application.model.toggle("Chart is incomplete, please add 'End' type chart item to last child items.");
+                    return;
+                }
+            }
+            $scope.saveChartJson();
+        };
         
         $scope.$watch('editor.chartList.length', function(newLength, oldLength){
             $scope.editor.parsedList = [];
@@ -326,9 +399,43 @@ function AdminController($scope, $route, $http, $timeout){
             })(), 800, true, [subitem, item, xCnt, yCnt, yInit, list[xCnt]]);
         };
         
-        // if the list is empty at the initial moment, load the Begin cart item to it.
-        if($scope.editor.chartList.length == 0){
-            $scope.addChartItem();
-            $scope.editor.editList.push($scope.editor.chartList[0]);
-        }
+        $scope.deleteCard = function(scope){
+        var scope = this,
+            item = scope.item;
+        if(item.options.length == 0 && item.type != 'Begin'){
+            var index = $scope.editor.chartList.indexOf(item),
+                excludeList = $scope.editor.chartList.splice(index, 1),
+                excludeItem = excludeList[0];
+
+            angular.forEach($scope.editor.chartList, function(yList, yKey){
+                angular.forEach(yList.options, function(option, key){
+                    if(option.charts == excludeItem.id){
+                        $scope.editor.chartList[yKey].options.splice(key, 1);
+                    }
+                    if(option.charts.indexOf(excludeItem.id) !== -1){
+                        var idArr = excludeItem.id.split('-');
+                        idArr.splice(idArr.length-1, 1);
+                        var newId = idArr.join('-');
+                        option.charts = option.charts.replace(new RegExp(excludeItem.id + '-', "gi"), newId);
+                    }
+                });
+                if(yList.id.indexOf(excludeItem.id) !== -1){
+                    var idArr = excludeItem.id.split('-');
+                    idArr.splice(idArr.length-1, 1);
+                    var newId = idArr.join('-');
+                    yList.id = yList.id.replace(new RegExp(excludeItem.id, "gi"), newId);
+                }
+            });
+            $scope.editor.editList = [];
+        } else {
+            $scope.application.model.toggle("You cannot remove this item if it is of 'Begin' Type or it has child items.");
+         }
+    };
+
+    // if the list is empty at the initial moment, load the Begin cart item to it.
+    if($scope.editor.chartList.length == 0){
+        $scope.addChartItem();
+        $scope.editor.editList.push($scope.editor.chartList[0]);
+        $scope.editor.internal.selected = $scope.editor.chartList[0];
+    }
 }
