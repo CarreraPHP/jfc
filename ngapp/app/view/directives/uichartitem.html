@@ -5,7 +5,7 @@
                 <div class="jfc-container no-padding">
                     <div class="jfc-box">
                         <div class="cell no-border">
-                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.id}}</div>
+                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">ID : {{item.id}}</div>
                             <div ng-show="mode == 'edit'">
                                 <uitext ng-model="item.id" readonly="true"></uitext>
                             </div>
@@ -13,15 +13,15 @@
                     </div>
                     <div class="jfc-box">
                         <div class="cell no-border">
-                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.type}}</div>
-                            <div ng-show="mode == 'edit'">
+                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit' || item.type == 'Begin'">Type : {{item.type}}</div>
+                            <div ng-show="mode == 'edit' && item.type != 'Begin'">
                                 <uiselect ng-model="item.type" list="typeList"></uiselect>
                             </div>
                         </div>
                     </div>
                     <div ng-if="item.type !== 'Actor'" class="jfc-box">
                         <div class="cell no-border">
-                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.name}}</div>
+                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">Name : {{item.name}}</div>
                             <div ng-show="mode == 'edit'">
                                 <uitext ng-model="item.name"></uitext>
                             </div>
@@ -29,7 +29,7 @@
                     </div>
                     <div ng-if="item.type !== 'Actor'" class="jfc-box">
                         <div class="cell jfc-width-100 no-border">                
-                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">{{item.description}}</div>
+                            <div class="jfc-item-title no-margin" ng-show="mode != 'edit'">Description : {{item.description}}</div>
                             <div ng-show="mode == 'edit'">
                                 <uitextarea ng-model="item.description"></uitextarea>
                             </div>                        
@@ -87,7 +87,7 @@
                 </div>
                 <div class="jfc-box">
                     <div class="cell no-border">
-                        <button class="btn icon icon-stop" ng-click="doDelete(this)"></button>                        
+                        <button class="btn icon icon-stop" ng-click="deleteCard()"></button>                        
                     </div>
                 </div>
             </div>
