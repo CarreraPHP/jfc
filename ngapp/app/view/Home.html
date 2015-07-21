@@ -1,7 +1,7 @@
 <div class="logo_container">
 	<img src="resources/images/logo.png" />
 </div>
-<div id="chartcanvas" style="left:0;" ng-controller="SceneController">
+<div id="chartcanvas" style="right:0;" ng-controller="SceneController">
     <div id="chartTitle" class="large mono bold">{{chart.name}}</div>
     <div id="chartscene">        
         <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
