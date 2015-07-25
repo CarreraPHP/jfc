@@ -1,0 +1,221 @@
+diff --git a/ngapp/resources/css/app.css b/ngapp/resources/css/app.css
+index 78c79c3..7260057 100644
+--- a/ngapp/resources/css/app.css
++++ b/ngapp/resources/css/app.css
+@@ -196,7 +196,7 @@
+ }
+ .icon-edit:before{
+     content:"\f040";
+-    /* width: 30px; */
++    color:darkblue;
+ }
+ 
+ .icon-edit, .icon-submit {
+@@ -415,9 +415,9 @@
+     left: -510px;
+     top: 0;
+     bottom: 0;
+-    box-shadow: 2px 2px 8px #222;
++    box-shadow: 0px 4px 12px #222 !important;
+ }
+-.jfc-slider .icon:nth-child(1){border-bottom:1px solid #ccc;}
++.jfc-slider .icon:nth-child(1){/* border-bottom:1px solid #ccc; */}
+ 
+ .reveal-slider {
+     left:0;
+@@ -708,7 +708,7 @@
+ */
+ .jfc-dockable{position: relative;}
+ .jfc-docked{position:absolute;}
+-.dock-top{top:0;}
++.dock-top{top: 8px;left: 8px;right: 450px;width: auto;}
+ .dock-top div{/* border-bottom:1px solid #ccc; */border-top:0}
+ .dock-bottom{bottom:0}
+ .dock-bottom div{border-bottom:0;border-top:1px solid #ccc;}
+@@ -727,8 +727,8 @@
+     /* opacity: 0.7; */
+     position: absolute;
+     display:none;
+-    z-index: 10;
+-    background: rgba(0, 0, 0, 0.2);
++    z-index: 15;
++    background: rgba(0, 0, 0, 0.7);
+ }
+ .jfc-overlay-block{display:block;}
+ 
+@@ -1095,8 +1095,7 @@
+ }
+ .shadow{
+     position:absolute;
+-    /* background:#ccc; */
+-    opacity:0.6;
++    background: rgba(0, 0, 0, 0.5);
+     top:0;
+     left:0;
+     height:100%;
+@@ -1108,11 +1107,11 @@
+     margin-bottom: 50px;
+ }
+ .modal-footer{
+-    position: absolute;
++    /* position: absolute; */
+     bottom: 0;
+     width: 90%;
+     border-top: 1px solid #BBB8B8;
+-    padding: 0 3%;
++    padding: 0.6em 1em 0.5em 1em;
+ 
+ }
+ 
+@@ -1439,4 +1438,72 @@
+ 
+ .icon-database:before{
+     content: '\f1c0';
++}
++
++.pane-collasped {
++    width: 50px;
++}
++
++.pane-collasped .jfc-container {
++    display: none;
++}
++
++.pane-collasped .jfc-container:nth-child(1) {
++    display: block;
++}
++
++.modal-anchored{
++    width: 100%;
++    height: 100%;
++}
++
++.modal-anchored .modal-content{
++    width:98%;
++    padding: 2%;
++    box-shadow: 0 0 0 rgba(0,0,0,0);
++    top: -1px;
++    margin-top: 20px;
++}
++
++.modal-anchor{
++    width: 100%;
++    height:20px;
++    overflow:hidden;
++    position: absolute;
++    z-index: 101;
++}
++
++.modal-anchor-tip{
++    position: relative;
++    width:40px;height:20px;
++    margin:0 auto;
++}
++
++.modal-anchor-bg{
++    width:40px;height:40px;
++    background-color: #fff;
++    border: 1px solid #E5E5E5;
++    position:absolute;
++    left:0;
++    top:8px;
++    -webkit-transform: rotateZ(45deg);-moz-transform: rotateZ(45deg);transform: rotateZ(45deg);
++}
++
++.modal-anchored .modal-header {
++    border-bottom: 1px solid #BBB8B8;
++}
++
++.modal-anchored .modal-fade {
++    position: absolute;
++    width: 401px;    height: auto;    
++    margin-top: 12px;  
++    z-index: 10;
++};
++}
++
++.modal-anchor .modal-body {}
++
++.modal-anchored .modal-body {
++    margin: 0;
++    padding: 0;
+ }
+\ No newline at end of file
+diff --git a/ngapp/resources/css/demo.css b/ngapp/resources/css/demo.css
+index 65897f8..e6748dd 100644
+--- a/ngapp/resources/css/demo.css
++++ b/ngapp/resources/css/demo.css
+@@ -237,7 +237,8 @@
+ 				display: table;
+ 				text-align: justify;
+ 				width: 90%;
+-			}
++				word-break: break-all;
++}
+ 
+ 			.card .title {
+ 				border-bottom: 1px solid rgb(128, 128, 128);
+@@ -248,6 +249,7 @@
+ 				color: #fff;
+ 				font: normal bold 16px/1 "Arial";
+ 				width: 100%;
++                                word-break: break-all;
+ 			}
+ 
+ 			.fa{
+@@ -292,6 +294,7 @@
+ 				padding: 4%;
+ 				display: table-cell;
+ 				vertical-align:middle;
++                                word-break: break-all;
+ 			}
+ 
+ 			.options > div > div {
+@@ -367,14 +370,19 @@
+     bottom: 0;
+     box-shadow: 0px 4px 10px #ccc;
+     background: rgba(255,255,255,0.9);
++    z-index: 25;
+ }
+ 
+ .icon-collapse {
+-    position: absolute;
+-    right: 5px;
+-    top: 5px;
+-    height: 35px;
+-    font-size: 25px;
++    /* position: absolute; */
++    /* right: 5px; */
++    /* top: 5px; */
++    /* margin: 0 !important; */
++    /* height: 35px; */
++    font-size: 30px;
++    /* line-height: 25px !important; */
++    padding: 0 5px !important;
++    /* width: 15px; */
+ }
+ 
+ .icon.icon-collapse:before {
+@@ -385,8 +393,12 @@
+     content: '\f065';
+ }
+ 
+-.opaque-node .card, .opaque-node .arrow, .opaque-node .arrow-reverse, .opaque-node .arrow-straight {
++.opaque-node .card {
+     opacity: 0.3;
++}
++
++.opaque-node .arrow, .opaque-node .arrow-reverse, .opaque-node .arrow-straight {
++    opacity: 0.0;
+ }
+ 
+ .customise-tool {
+@@ -396,7 +408,7 @@
+     background-color: #F2F2F2;
+     border: 1px solid #CCC;
+     min-height: 74px;
+-    z-index: 0;
++    z-index: 10;
+     border-top-left-radius: 10px;
+     border-bottom-right-radius: 10px;
+ }
