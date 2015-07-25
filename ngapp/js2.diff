@@ -1,0 +1,112 @@
+diff --git a/ngapp/app/controller/ApplicationController.js b/ngapp/app/controller/ApplicationController.js
+index b25be31..d2a387d 100644
+--- a/ngapp/app/controller/ApplicationController.js
++++ b/ngapp/app/controller/ApplicationController.js
+@@ -15,56 +15,21 @@
+         $rootScope.data = {
+             userName: 'Yogesh Surendran',
+             greetingKey: 'Mr. ',
+-            troubleList: [{
+-                    imageName: 'question',
+-                    title: 'User is getting slow response',
+-                    chart: 'chart2',
+-					environment: 'DEV',
+-					project: 'PROJ 1',
+-					portal: 'PORTAL 1'
+-            },{
+-                    imageName: 'question',
+-                    title: 'User getting Error response from middle layer (bus,DB,batch etc..)',
+-                    chart: 'chart2',
+-					environment: 'QA',
+-					project: 'PROJ 1',
+-					portal: 'PORTAL 1'
+-            },{
+-                    imageName: 'question',
+-                    title: 'Web Page Not Render in user system',
+-                    chart: 'chart2',
+-					environment: 'ALT-PROD',
+-					project: 'PROJ 1',
+-					portal: 'PORTAL 1'
+-            },{
+-                    imageName: 'question',
+-                    title: 'Request is not reaching to application server (eBonding specific)',
+-                    chart: 'chart2',
+-					environment: 'PROD',
+-					project: 'PROJ 1',
+-					portal: 'PORTAL 1'
+-            },{
+-                    imageName: 'question',
+-                    title: 'Helpdesk is reporting multiple end users are unable to sign into ',
+-                    chart: 'chart2',
+-					environment: 'QA',
+-					project: 'PROJ 3',
+-					portal: 'PORTAL 1'
+-            },{
+-                    imageName: 'question',
+-                    title: 'Production support is reporting high CPU utilization on server VAPSBDFFRGDHGJPKAL37 ',
+-                    chart: 'chart',
+-					environment: 'QA',
+-					project: 'PROJ 2',
+-					portal: 'PORTAL 1'
+-            },{
+-                    imageName: 'question',
+-                    title: 'Helpdesk is reporting Voice Mail Manager, a sub-application has not been working for at least a week',
+-                    chart: 'chart2',
+-					environment: 'QA',
+-					project: 'PROJ 1',
+-					portal: 'PORTAL 1'
+-            }]
++            troubleList: [],
++            loadTroubleList: function(){
++                $http
++                .get('http://' + location.hostname + ':8080/getScenarioList')
++                .success(function (data, status, headers, config) {
++                    $scope.data.troubleList = data.data.result;
++                    console.log($scope.data.troubleList);
++                })
++                .error(function (data, status, headers, config) {
++                    $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
++                });
++            },
++            loadTroubleChart: function(item){
++                $location.url("/Chart/" + item.scenarioId + "/" + item.urlNm);
++            }
+ 	};
+ 
+ 	$rootScope.application = {
+@@ -111,13 +76,21 @@
+                             $rootScope.application.model.visible = !$rootScope.application.model.visible;
+                     }
+             },
+-            dosignout:{
+-                    sout: false,
+-                    toggle1: function(){
+-                            $rootScope.application.dosignout.sout = !$rootScope.application.dosignout.sout;
+-                            $localStorage.$reset();
+-                            localStorage.clear();
+-                    }
++            anchoredModal:{
++                enabled: false,
++                style: {
++                    top:0,
++                    left:0
++                },
++                toggle: function(){
++                    var icon = document.querySelector('#chartTitle .icon'),
++                        rect = icon.getBoundingClientRect();
++                    $scope.application.anchoredModal.enabled = !$scope.application.anchoredModal.enabled;
++                    $scope.application.anchoredModal.style = {
++                        left: (rect.left - 200) + "px",
++                        top: rect.top + "px"
++                    };
++                }
+             },
+             showSubPageToolbarBtn: false,
+ 	    slider:{
+@@ -189,4 +162,6 @@
+ 			history.go();
+ 		}
+ 	}
++        
++        $scope.data.loadTroubleList();
+ }
