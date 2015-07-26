@@ -237,7 +237,8 @@
 				display: table;
 				text-align: justify;
 				width: 90%;
-			}
+				word-break: break-all;
+}
 
 			.card .title {
 				border-bottom: 1px solid rgb(128, 128, 128);
@@ -248,6 +249,7 @@
 				color: #fff;
 				font: normal bold 16px/1 "Arial";
 				width: 100%;
+                                word-break: break-all;
 			}
 
 			.fa{
@@ -292,6 +294,7 @@
 				padding: 4%;
 				display: table-cell;
 				vertical-align:middle;
+                                word-break: break-all;
 			}
 
 			.options > div > div {
@@ -367,14 +370,19 @@ div#chartDetail {
     bottom: 0;
     box-shadow: 0px 4px 10px #ccc;
     background: rgba(255,255,255,0.9);
+    z-index: 25;
 }
 
 .icon-collapse {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    height: 35px;
-    font-size: 25px;
+    /* position: absolute; */
+    /* right: 5px; */
+    /* top: 5px; */
+    /* margin: 0 !important; */
+    /* height: 35px; */
+    font-size: 30px;
+    /* line-height: 25px !important; */
+    padding: 0 5px !important;
+    /* width: 15px; */
 }
 
 .icon.icon-collapse:before {
@@ -385,8 +393,12 @@ div#chartDetail {
     content: '\f065';
 }
 
-.opaque-node .card, .opaque-node .arrow, .opaque-node .arrow-reverse, .opaque-node .arrow-straight {
+.opaque-node .card {
     opacity: 0.3;
+}
+
+.opaque-node .arrow, .opaque-node .arrow-reverse, .opaque-node .arrow-straight {
+    opacity: 0.0;
 }
 
 .customise-tool {
@@ -396,7 +408,7 @@ div#chartDetail {
     background-color: #F2F2F2;
     border: 1px solid #CCC;
     min-height: 74px;
-    z-index: 0;
+    z-index: 10;
     border-top-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
