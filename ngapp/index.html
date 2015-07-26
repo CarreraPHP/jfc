@@ -58,85 +58,123 @@
 
 <body ng-controller="ApplicationController">
   <!-- Title Bar -->
-  <div class="jfc-container jfc-toolbar jfc-docked dock-top" ng-hide="application.preventToolbar" style="display:none;">
+  <div class="jfc-container jfc-toolbar jfc-docked dock-top" ng-hide="application.preventToolbar" style="">
     <div class="cell pull-left">
-      <button class="btn icon icon-back" ng-click="application.slider.makeSlide()"></button>
+      <button class="btn icon icon-back" ng-click="data.loadTroubleList();application.slider.makeSlide();"></button>
     </div>
   </div>
   <!-- END - Title Bar -->
   <div class="jfc-viewport animate-slide" ng-class="{'adjust-view': application.slider.animated}">
 
     <!-- side bar menu -->
-    <div id="slider" class="jfc-slider animate-slide" ng-class="{'reveal-slider': application.slider.animated}" ng-swipe-left="application.slider.makeSlide()">
+    <div id="slider" class="jfc-slider property-pane animate-slide" ng-class="{'reveal-slider': application.slider.animated}" ng-swipe-left="application.slider.makeSlide()">
       <!-- FILTER -->
-      <div class="jfc-container">
-        <div class="jfc-box align-center">
-          <h1 class="menu-heading red">Trouble Shoot Wizard</h1>
-        </div>
-      </div>
-      <div class="jfc-container">
-        <div class="jfc-box align-center">
-          <div class="cell">
-            <label class="align-left before-spacer">
-              <uisearch ng-model="searchEntry" ng-init="ph = ''" placeholder="Type here to search" list="environmentList"></uisearch>
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="jfc-container after-spacer">
-        <div class="jfc-box ">
-          <div class="cell">
-            <label class="align-left before-spacer">
-              <uiselect ng-model="selectedEnvironment" valuefield="" placeholder="Environment" list="environmentList"></uiselect>
-            </label>
-          </div>
-        </div>
-        <div class="jfc-box">
-          <div class="cell">
-            <label class="align-left">
-              <uiselect ng-model="selectedPortal" valuefield="" placeholder="Portal" list="portalList"></uiselect>
-            </label>
-          </div>
-        </div>
-        <div class="jfc-box">
-          <div class="cell">
-            <label class="align-left">
-              <uiselect ng-model="selectedProject" valuefield="" placeholder="Project" list="projectList"></uiselect>
-            </label>
-          </div>
-        </div>
-        <div class="jfc-box" ng-show="false">
-          <div class="cell after-spacer">
-            <div>
-              <button class="btn btn-danger btn-fullwidth" ng-click="handleSubmit()" type="submit">Filter</button>
+        <div class="jfc-container">            
+            <div class="jfc-box">
+                <div style="display:none;" class="pull-left align-middle header-bar jfc-width-10">
+                    <button class="btn icon icon-back" ng-click=""></button>
+                </div>
+                <div class="align-middle align-center header-bar align-center menu-heading">
+                    <div class="beta">Playbook</div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="jfc-box">
-          <div class="cell after-spacer">
-            <div>
-              <button class="btn btn-gray btn-fullwidth" ng-click="selectedEnvironment='';selectedPortal='';selectedProject='';">Reset</button>
+        </div> 
+      <div class="jfc-container" style="border-bottom:1px solid #ccc;" ng-controller="ConfigController">
+            <div class="cell align-middle align-right">
+                <div>
+                    <button class="btn btn-medium" ng-click="application.navigation.goTo('Admin');application.slider.makeSlide();">
+                        <i class="icon icon-database medium"></i>
+                        <span class="medium">Go to Admin</span>
+                    </button>
+                </div>
             </div>
+        </div> 
+        <div ng-show="true" class="jfc-container after-spacer">
+          <div class="jfc-box">
+              <div class="cell menu-heading">
+                  <div>
+                      <h2 class="medium">Search Scenario</h2>
+                  </div>
+              </div>
           </div>
         </div>
-      </div>
-      <!-- FILTER -->
+        <div class="jfc-container jfc-width-96 after-spacer">
+            <label class="jfc-box" class="align-left">
+                <span class="cell medium after-spacer before-spacer align-middle">
+                    <span>Scenario</span>
+                </span>
+                <span class="cell">
+                    <span>
+                        <uisearch ng-model="searchEntry" ng-init="ph = ''" placeholder="Type here to search" list="environmentList"></uisearch>
+                    </span>
+                </span>
+            </label>
+            <label class="jfc-box" class="align-left">
+                <span class="cell medium after-spacer before-spacer align-middle">
+                    <span>Portal</span>
+                </span>
+                <span class="cell">
+                    <span>
+                        <uiselect ng-model="selectedPortal" placeholder="Portal" list="application.portalList" displayField="portalNm" valuefield="portalValueField"></uiselect>                        
+                    </span>
+                </span>
+            </label>
+            <label class="jfc-box" class="align-left">
+                <span class="cell medium after-spacer before-spacer align-middle">
+                    <span>Environment</span>
+                </span>
+                <span class="cell">
+                    <span>
+                        <uiselect ng-model="selectedEnvironment" placeholder="Environment" list="application.environmentList" valuefield="environmentValueField"></uiselect>
+                    </span>
+                </span>
+            </label>
+            <label class="jfc-box" class="align-left">
+                <span class="cell medium after-spacer before-spacer align-middle">
+                    <span>Module</span>
+                </span>
+                <span class="cell">
+                    <span>
+                        <uiselect ng-model="selectedProject" placeholder="Project" list="application.projectList" valuefield="projectValueField"></uiselect>                        
+                    </span>
+                </span>
+            </label>
+        </div>
+        <div class="jfc-container">
+            <div class="cell align-middle align-left">
+                <div>
+                    <button class="btn btn-medium" ng-click="selectedEnvironment='';selectedPortal='';selectedProject='';">
+                        <i class="icon icon-stop medium"></i>
+                        <span class="medium">Reset</span>
+                    </button>
+                </div>
+            </div>
+            <div class="cell align-middle align-right">
+                <div>
+                    <button class="btn btn-medium" ng-click="handleSubmit()">
+                        <i class="icon icon-database medium"></i>
+                        <span class="medium">Filter</span>
+                    </button>
+                </div>
+            </div>
+        </div>      
+        <!-- FILTER -->
 
       <!-- SLIDER LIST -->
       <div class="jfc-container jfc-list">
         <div class="jfc-view-container menu-container">
           <div class="jfc-box menu-item" ng-repeat="item in data.troubleList | filter:selectedEnvironment | filter:selectedPortal | filter:selectedProject as filterList">
-            <div class="jfc-container " ng-click="hamburger.toggleAccordion($index)">
-              <div class="cell icon list-firstchild align-center icon-{{item.imageName}}"></div>
+            <div class="jfc-container " ng-click="data.loadTroubleChart(item);application.slider.makeSlide();">
+              <div class="cell icon list-firstchild align-center icon-question"></div>
               <div class="cell align-justify align-middle">
-                <div class="">{{item.title}}</div>
+                <div class="">{{item.scenarioNm}}</div>
               </div>
               <div class="cell align-middle align-left icon icon-right-angle"></div>
             </div>
           </div>
 
-          <div ng-show="filterList.length == 0" class="jfc-box menu-item">
-            <div class="jfc-container " ng-click="hamburger.toggleAccordion($index)">
+          <div ng-show="data.troubleList.length == 0" class="jfc-box menu-item">
+            <div class="jfc-container " ng-click="">
               <div class="cell icon align-center"></div>
               <div class="cell align-justify align-middle">
                 <div class="">No result Found</div>
@@ -199,7 +237,7 @@
       </div>
     </div>
     <div class="shadow" ng-click="application.model.toggle()"></div>
-  </div>
+  </div>  
 
 
 
