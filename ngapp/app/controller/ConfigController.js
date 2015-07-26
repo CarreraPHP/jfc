@@ -21,7 +21,7 @@ function ConfigController($scope, $route, $http, $localStorage) {
     $scope.loadPortalList = function(){
         if($scope.application.portalList.length === 0){
             $http
-                .get('http://localhost:8080/getPortalList')
+                .get('http://' + location.hostname + ':8080/getPortalList')
                 .success(function (data, status, headers, config) {
                     $scope.application.portalList = data;
                     if(data.length > 0){
@@ -38,7 +38,7 @@ function ConfigController($scope, $route, $http, $localStorage) {
     $scope.loadEnvironmentList = function(param){
         if($scope.application.environmentList.length === 0){
             $http
-                .get('http://localhost:8080/getEnvironmentList?portal_id=' + param)
+                .get('http://' + location.hostname + ':8080/getEnvironmentList?portal_id=' + param)
                 .success(function (data, status, headers, config) {
                     $scope.application.environmentList = data.data.result;
                     console.log($scope.application.environmentList, data);
@@ -51,7 +51,7 @@ function ConfigController($scope, $route, $http, $localStorage) {
     $scope.loadProjectList = function(param){
         if($scope.application.projectList.length === 0){
             $http
-                .get('http://localhost:8080/getModuleList?portal_id=' + param)
+                .get('http://' + location.hostname + ':8080/getModuleList?portal_id=' + param)
                 .success(function (data, status, headers, config) {
                     $scope.application.projectList = data.data.result;
                     console.log($scope.application.projectList);

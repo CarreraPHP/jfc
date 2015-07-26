@@ -6,7 +6,7 @@ function HomeController($scope, $route, $http, $routeParams){
     $scope.loadScenarioList = function(param){
         if($scope.chart.chartList.length === 0){
             $http
-                .get('http://localhost:8080/getScenarioList?scenarioId=' + param)
+                .get('http://' + location.hostname + ':8080/getScenarioList?scenarioId=' + param)
                 .success(function (data, status, headers, config) {
                     if(data.data.result.length > 0){                        
                         var record = data.data.result[0];
