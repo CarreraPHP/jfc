@@ -1,4 +1,4 @@
-<div class="property-pane" style="">
+<div class="property-pane animate-slide" style="" ng-class="{'pane-collasped': !editor.internal.enabled}">
     <div class="jfc-container">            
         <div class="jfc-box">
             <div class="pull-left align-middle header-bar jfc-width-10">
@@ -8,7 +8,7 @@
                 <div class="beta">Playbook</div>
             </div>
         </div>
-    </div>
+    </div>    
     <div ng-show="editor.internal.editconfig" class="jfc-container after-spacer">
         <div class="jfc-box">
             <div class="cell menu-heading">
@@ -178,27 +178,32 @@
     </div>
 </div>
 <div id="chartcanvas" ng-controller="SceneController">
-    <div id="chartTitle" class="large mono bold">{{editor.name}}</div>
+    <div id="chartTitle" class="large mono bold">
+        {{editor.name}}
+        <i class="icon icon-edit medium" ng-click="application.anchoredModal.toggle($event)"></i>
+    </div>
     <div id="chartscene">
         <span style="display:hidden;" ng-init="xIndex = $index;yInit=0;initRepeatValues($index, 0);" ng-repeat-start="itemHolder in editor.parsedList"></span>
         <div ng-repeat-start="item in itemHolder" id="{{item.id}}" class="card-holder"
              ng-init="yIndex = $index;rearrangeChart(item, xIndex, $index, yInit, editor.parsedList)" 
              ng-style="item.internal.style"
              ng-mouseover="showCustomiseTool($event, true)" ng-mouseleave="showCustomiseTool($event, false)">
-            <div class="customise-tool jfc-hide" ng-style="{'width': (item.type == 'Actor' ? '105px' : '70px')}">
-                <button ng-click="manageConfig()">
-                    <i class="icon icon-config medium"></i>
-                </button>
-                <button ng-click="deleteCard()">
-                    <i class="icon icon-stop medium"></i>
-                </button>
-                <button ng-if="item.type == 'Actor'" ng-click="addActor()">
-                    <i class="icon icon-add-actor medium"></i>
-                </button>
-                <button ng-click="addOption()">
-                    <i class="icon icon-add-option medium"></i>
-                </button>
-                <div class="card-info small">#{{item.id}}</div>
+            <div class="customise-tool jfc-hide">
+                <div ng-style="{'width': (item.type == 'Actor' ? '105px' : '70px')}">
+                    <button ng-click="manageConfig(false)">
+                        <i class="icon icon-config large"></i>
+                    </button>
+                    <button ng-click="deleteCard()">
+                        <i class="icon icon-stop large"></i>
+                    </button>
+                    <button ng-if="item.type == 'Actor'" ng-click="addActor()">
+                        <i class="icon icon-add-actor large"></i>
+                    </button>
+                    <button ng-click="addOption()">
+                        <i class="icon icon-add-option large"></i>
+                    </button>
+                    <div class="card-info small">#{{item.id}}</div>
+                </div>
             </div>
             <div class="card" ng-click="selectCard(item, editor.parsedList, editor)" ng-class="item.internal.class">
                 <div ng-if="item.type == 'Activity'" class="title">
@@ -233,8 +238,8 @@
                     <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
                          ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
                         <div>
-                            <span>{{subitem.name}}</span>
-                            <span class="fa fa-play"></span>
+                            <span class="jfc-width-80">{{subitem.name}}</span>
+                            <span class="jfc-width-20 fa fa-play"></span>
                         </div>
                     </div>
                 </div>
@@ -253,4 +258,90 @@
         <span style="display:hidden;" ng-repeat-end></span>
         <span style="display:hidden;" ng-repeat-end></span>
     </div>
+</div>
+
+<!-- anchored popup -->
+<div class="modal modal-anchored" ng-show="application.anchoredModal.enabled">
+  <div class=" modal-fade" ng-style="application.anchoredModal.style">
+      <div class="modal-anchor">
+          <div class="modal-anchor-tip">
+            <div class="modal-anchor-bg"></div>
+        </div>
+      </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="jfc-container align-middle">
+          <div class="cell align-middle bold">Chart Configuration</div>
+        </div>
+      </div>
+      <div class="modal-body">
+          <div class="jfc-container jfc-width-96 before-spacer after-spacer" ng-controller="ConfigController">
+              <label class="jfc-box" class="align-left">
+                  <span class="cell medium after-spacer before-spacer align-middle">
+                      <span>Name</span>
+                  </span>
+                  <span class="cell">
+                      <span>
+                          <uitext ng-model="editor.name"></uitext>
+                      </span>
+                  </span>
+              </label>
+              <label class="jfc-box" class="align-left">
+                  <span class="cell medium after-spacer before-spacer align-middle">
+                      <span>Prefix</span>
+                  </span>
+                  <span class="cell">
+                      <span>
+                          <uitext ng-model="editor.idPrefix"></uitext>
+                      </span>
+                  </span>
+              </label>
+              <label class="jfc-box" class="align-left">
+                  <span class="cell medium after-spacer before-spacer align-middle">
+                      <span>Portal</span>
+                  </span>
+                  <span class="cell">
+                      <span>
+                          <uiselect ng-model="editor.portal" list="application.portalList" displayField="portalNm" valuefield="portalValueField"></uiselect>
+                      </span>
+                  </span>
+              </label>
+              <label class="jfc-box" class="align-left">
+                  <span class="cell medium after-spacer before-spacer align-middle">
+                      <span>Environment</span>
+                  </span>
+                  <span class="cell">
+                      <span>
+                          <uiselect ng-model="editor.environment" list="application.environmentList" valuefield="environmentValueField"></uiselect>
+                      </span>
+                  </span>
+              </label>
+              <label class="jfc-box" class="align-left">
+                  <span class="cell medium after-spacer before-spacer align-middle">
+                      <span>Module</span>
+                  </span>
+                  <span class="cell after-spacer">
+                      <span>
+                          <uiselect ng-model="editor.project" list="application.projectList" valuefield="projectValueField"></uiselect>
+                      </span>
+                  </span>
+              </label>
+              <label class="jfc-box" class="align-left">
+                  <span class="cell medium after-spacer before-spacer align-middle">
+                      <span>Owner</span>
+                  </span>
+                  <span class="cell">
+                      <span>
+                          <uitext ng-model="editor.owner"></uitext>
+                      </span>
+                  </span>
+              </label>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <div class="align-center modal-btn-left"></div>
+      </div>
+    </div>    
+    </div>
+    <div class="shadow" ng-click="application.anchoredModal.toggle($event)"></div>
 </div>
