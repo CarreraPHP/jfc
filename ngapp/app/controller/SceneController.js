@@ -48,19 +48,21 @@ function SceneController($scope, $route, $http, $localStorage){
         (enabled) ? ct.removeClass('jfc-hide') : ct.addClass('jfc-hide');
     };
     
-    $scope.manageConfig = function(){
-        $scope.editor.internal.toggleConfigEditor();
+    $scope.manageConfig = function(){          
+        $scope.application.anchoredModal.toggle();
     };
     
     $scope.addOption = function(){
         var scope = this;
         $scope.editor.internal.selected = scope.item;
+        $scope.editor.internal.enabled = true;
         $scope.$parent.addOption();
     };
     
     $scope.addActor = function(){
         var scope = this;
         $scope.editor.internal.selected = scope.item;
+        $scope.editor.internal.enabled = true;
         $scope.$parent.addActor();
     };
 }
