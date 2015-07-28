@@ -6,7 +6,7 @@
     <div id="chartscene">        
         <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
              ng-style="item.internal.style" ng-class="item.internal.class"
-             ng-click="selectCard(item, chart.chartList, editor)">
+             ng-click="selectCard($event, item, chart.chartList, editor)">
             <div ng-if="item.type == 'Activity'" class="title">
                 <span class="fa fa-task"></span>{{item.name}}
             </div>
@@ -18,13 +18,11 @@
                     </div>
                     <div>
                         <div class="medium special-title">{{item.name}}</div>
-                        <div class="small">{{item.description}}</div>
+                        <div class="small" ng-bind-html="item.description | formattext"></div>
                     </div>
                 </div>
             </div>
-            <div ng-if="item.type == 'Activity'" class="content">
-                {{item.description}}
-            </div>
+            <div ng-if="item.type == 'Activity'" class="content" ng-bind-html="item.description | formattext"></div>
             <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
                 <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
                     <div></div>
