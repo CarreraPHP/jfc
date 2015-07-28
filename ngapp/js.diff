@@ -1,1 +1,143 @@
-
+diff --git a/ngapp/app/controller.js b/ngapp/app/controller.js
+index c4db961..cf35e14 100644
+--- a/ngapp/app/controller.js
++++ b/ngapp/app/controller.js
+@@ -14,4 +14,5 @@
+     .controller("UITextController", ["$scope", "$attrs", "progressConfig", UITextController])
+     .controller("UITextAreaController", ["$scope", "$attrs", "progressConfig", UITextAreaController])
+     .controller("UIChartItemController", ["$scope", "$attrs", "progressConfig", "$timeout", UIChartItemController])
+-    .controller("UIChartOptionController", ["$scope", "$attrs", "progressConfig", "$timeout", UIChartOptionController]);
++    .controller("UIChartOptionController", ["$scope", "$attrs", "progressConfig", "$timeout", UIChartOptionController])
++    .controller("UIAnchoredModalController", ["$scope", "$attrs", "progressConfig", "$timeout", UIAnchoredModalController]);
+diff --git a/ngapp/app/controller/SceneController.js b/ngapp/app/controller/SceneController.js
+index 9c6f8e4..dca5412 100644
+--- a/ngapp/app/controller/SceneController.js
++++ b/ngapp/app/controller/SceneController.js
+@@ -1,5 +1,6 @@
+ function SceneController($scope, $route, $http, $localStorage){
+-    $scope.selectCard = function(item, pList, editor){
++    $scope.selectCard = function(event, item, pList, editor){
++        console.log(event, arguments);
+         angular.forEach(pList, function(yList, yKey){
+             if(angular.isArray(yList)){
+                 angular.forEach(yList, function(inst, key){
+@@ -17,6 +18,8 @@
+         if(angular.isDefined(editor)){
+             editor.internal.selected = item;
+             editor.editList = [item];
++            
++            editor.item.toggle(event.target);
+         }
+         
+         console.log($scope, $scope.control);
+diff --git a/ngapp/app/controller/UIAnchoredModalController.js b/ngapp/app/controller/UIAnchoredModalController.js
+new file mode 100644
+index 0000000..d452f33
+--- /dev/null
++++ b/ngapp/app/controller/UIAnchoredModalController.js
+@@ -0,0 +1,25 @@
++function UIAnchoredModalController($scope, $attrs, progressConfig, $timeout) {
++    $scope.modal = {};
++    
++//    console.log($scope.overlayclick);
++//    $scope.$watch($attrs.show, function(){
++//        console.log($attrs, $attrs.show);
++//        $scope.modal.show = $attrs.show;
++//    });
++//    $scope.$watch($attrs.style, function(){
++//        console.log($attrs.style);
++//        $scope.modal.style = $attrs.style;
++//    });
++//    $scope.$watch($attrs.anchor, function(){
++//        console.log($attrs.anchor);
++//        $scope.modal.anchor = $attrs.anchor;
++//    });
++//    $scope.$watch($attrs.title, function(){
++//        console.log($attrs.title);
++//        $scope.modal.title = $attrs.title;
++//    });
++//    $scope.$watch($attrs.overlayclick, function(){
++//        console.log($attrs.overlayclick);
++//        $scope.modal.overlayclick = $attrs.overlayclick;
++//    });
++}
+\ No newline at end of file
+diff --git a/ngapp/app/directives.js b/ngapp/app/directives.js
+index fb3fd81..9413096 100644
+--- a/ngapp/app/directives.js
++++ b/ngapp/app/directives.js
+@@ -20,4 +20,5 @@
+     .directive('uitext', uitext)
+     .directive('uitextarea', uitextarea)
+     .directive('uichartitem', uichartitem)
+-    .directive('uichartoption', uichartoption);
++    .directive('uichartoption', uichartoption)
++    .directive('uianchoredmodal', uianchoredmodal);
+diff --git a/ngapp/app/directives/uianchoredmodal.js b/ngapp/app/directives/uianchoredmodal.js
+new file mode 100644
+index 0000000..24ca635
+--- /dev/null
++++ b/ngapp/app/directives/uianchoredmodal.js
+@@ -0,0 +1,18 @@
++function uianchoredmodal() {
++  return {
++    restrict: 'E',
++    replace: true,
++    transclude: true,
++    controller: 'UIAnchoredModalController',
++    scope: {
++        title: '=',
++        anchor: '=',
++        show: '=',
++        style: '=',
++        overlayclick: '=',
++        notes: '='
++    },
++    templateUrl: 'app/view/directives/uianchoredmodal.html',
++    link: function(scope, element, attrs, UISelectCtrl) {}
++  };
++}
+\ No newline at end of file
+diff --git a/ngapp/app/filters.js b/ngapp/app/filters.js
+index 43dc925..4d835fa 100644
+--- a/ngapp/app/filters.js
++++ b/ngapp/app/filters.js
+@@ -9,11 +9,19 @@
+             return "";
+         };
+     }])    
+-     .filter('displayusername', [function () {  
+-        return function (uname) {
+-            if(uname){
+-                var a = uname.match(/^[\d]+$/);
+-                return a ? "Kevin Johnathan" : uname;
++     .filter('stripparent', [function () {  
++        return function (id) {
++            if(typeof id === "string"){
++                var pos = id.lastIndexOf('-');            
++                return (pos !== -1) ? id.substr(pos + 1) : id;
++            }
++            return id;
++        };
++    }])
++    .filter('formattext', [function () {  
++        return function (text) {
++            if(text.length && text.length > 0){
++                return text.replace(/#lb#/ig, '<br/>');
+             }
+             return "";
+         };
+diff --git a/ngapp/application.js b/ngapp/application.js
+index 67497b3..0c21b2a 100644
+--- a/ngapp/application.js
++++ b/ngapp/application.js
+@@ -9,7 +9,8 @@
+     'ngAnimate',
+     'ngMessages',
+     'ngCookies',
+-    'ngStorage'
++    'ngStorage',
++    'ngSanitize'
+ ])
+ .run(['$rootScope', '$location', 'Auth', function afterInjectionFn($rootScope, $location, Auth) {
+ // 		console.log("afterInjectionFn", arguments);
