@@ -9,7 +9,8 @@ var JFC = angular.module('JFC', [
     'ngAnimate',
     'ngMessages',
     'ngCookies',
-    'ngStorage'
+    'ngStorage',
+    'ngSanitize'
 ])
 .run(['$rootScope', '$location', 'Auth', function afterInjectionFn($rootScope, $location, Auth) {
 // 		console.log("afterInjectionFn", arguments);
