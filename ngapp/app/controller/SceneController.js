@@ -1,5 +1,6 @@
 function SceneController($scope, $route, $http, $localStorage){
-    $scope.selectCard = function(item, pList, editor){
+    $scope.selectCard = function(event, item, pList, editor){
+        console.log(event, arguments);
         angular.forEach(pList, function(yList, yKey){
             if(angular.isArray(yList)){
                 angular.forEach(yList, function(inst, key){
@@ -17,6 +18,8 @@ function SceneController($scope, $route, $http, $localStorage){
         if(angular.isDefined(editor)){
             editor.internal.selected = item;
             editor.editList = [item];
+            
+            editor.item.toggle(event.target);
         }
         
         console.log($scope, $scope.control);
