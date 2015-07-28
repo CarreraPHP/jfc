@@ -2,15 +2,16 @@
   <div class="jfc-select-thumb" 
     ng-class="type" ng-click="expandList()"
     role="presentation">
-     <input type="text" ng-model="value" placeholder="{{placeholder}}" readonly></input>
-     <button  class="btn icon icon-dropdown-thumb"></button>
+    <!--<div class="ui-input">{{value | stripparent}}</div>-->
+    <input type="text" value="{{value | stripparent}}" placeholder="{{placeholder}}" readonly />
+    <button  class="btn icon icon-dropdown-thumb"></button>
   </div>
   <div class="jfc-select-list" ng-class="{'select-list-hidden': !expand}">
     <ul class="" >
       <li ng-repeat="item in list">
-        <a ng-if="isEnabled() == false" ng-click="itemSelect(item)">{{item}}</a>
+        <a ng-if="isEnabled() == false" ng-click="itemSelect(item)">{{item | stripparent}}</a>
         <a ng-if="isEnabled() == true" ng-click="itemSelect(item[valuefield])" 
-           ng-bind-template="{{item[valuefield]}}"></a>
+           ng-bind-template="{{item[valuefield] | stripparent}}"></a>
       </li>     
     </ul>
     <ul ng-transclude></ul>

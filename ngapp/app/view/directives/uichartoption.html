@@ -9,7 +9,7 @@
                             <uitext ng-model="subitem.name"></uitext>
                         </div>
                     </div>
-                    <div class="cell">
+                    <div class="cell jfc-width-49">
                         <div class="no-padding no-margin" ng-show="mode != 'edit'">{{subitem.charts}}</div>
                         <div ng-show="mode == 'edit'">
                             <uiselect ng-model="subitem.charts" change="chartChange" valuefield="chartValueField" list="editor.chartList"></uiselect>
