@@ -20,4 +20,5 @@ angular.module('JFC.directives', [])
     .directive('uitext', uitext)
     .directive('uitextarea', uitextarea)
     .directive('uichartitem', uichartitem)
-    .directive('uichartoption', uichartoption);
+    .directive('uichartoption', uichartoption)
+    .directive('uianchoredmodal', uianchoredmodal);
