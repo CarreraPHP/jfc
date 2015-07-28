@@ -18,7 +18,8 @@
   <script src="resources/js/libs/angular-messages.min.js"></script>
   <script src="resources/js/libs/angular-cookies.min.js"></script>
   <script src="resources/js/libs/ngStorage.min.js"></script>
-
+  <script src="resources/js/libs/angular-sanitize.min.js" type="text/javascript"></script>
+  
   <script src="app/services/AUTHProvider.js"></script>
   <script src="app/services.js"></script>
 
@@ -32,7 +33,8 @@
   <script src="app/controller/UITextController.js"></script>
   <script src="app/controller/UITextAreaController.js"></script>
   <script src="app/controller/UIChartItemController.js"></script>
-  <script src="app/controller/UIChartOptionController.js"></script>  
+  <script src="app/controller/UIChartOptionController.js"></script>
+  <script src="app/controller/UIAnchoredModalController.js"></script>
   <script src="app/controller/ApplicationController.js"></script>
 
   <script src="app/directives/uiselect.js"></script>
@@ -41,6 +43,7 @@
   <script src="app/directives/uitextarea.js"></script>
   <script src="app/directives/uichartitem.js"></script>
   <script src="app/directives/uichartoption.js"></script>
+  <script src="app/directives/uianchoredmodal.js"></script>
 
   <script src="app/controller.js"></script>
   <script src="app/filters.js"></script>
@@ -243,7 +246,7 @@
 
   <!-- modal popup signout -->
 
-  <div class="modal-logout" ng-show="application.dosignout.sout">
+  <div class="modal" ng-show="application.dosignout.sout">
     <div class="modal-overlay modal-fade">
       <div class="modal-content">
         <div class="modal-header">
@@ -273,7 +276,6 @@
       </div>
     </div>
     <div class="shadow" ng-click="application.dosignout.toggle1()">></div>
-  </div>
   </div>
 </body>
 
