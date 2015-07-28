@@ -9,11 +9,19 @@ angular.module('JFC.filters', [])
             return "";
         };
     }])    
-     .filter('displayusername', [function () {  
-        return function (uname) {
-            if(uname){
-                var a = uname.match(/^[\d]+$/);
-                return a ? "Kevin Johnathan" : uname;
+     .filter('stripparent', [function () {  
+        return function (id) {
+            if(typeof id === "string"){
+                var pos = id.lastIndexOf('-');            
+                return (pos !== -1) ? id.substr(pos + 1) : id;
+            }
+            return id;
+        };
+    }])
+    .filter('formattext', [function () {  
+        return function (text) {
+            if(text.length && text.length > 0){
+                return text.replace(/#lb#/ig, '<br/>');
             }
             return "";
         };
