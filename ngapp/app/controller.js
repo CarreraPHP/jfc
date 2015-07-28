@@ -14,4 +14,5 @@ angular.module('JFC.controller', [])
     .controller("UITextController", ["$scope", "$attrs", "progressConfig", UITextController])
     .controller("UITextAreaController", ["$scope", "$attrs", "progressConfig", UITextAreaController])
     .controller("UIChartItemController", ["$scope", "$attrs", "progressConfig", "$timeout", UIChartItemController])
-    .controller("UIChartOptionController", ["$scope", "$attrs", "progressConfig", "$timeout", UIChartOptionController]);
+    .controller("UIChartOptionController", ["$scope", "$attrs", "progressConfig", "$timeout", UIChartOptionController])
+    .controller("UIAnchoredModalController", ["$scope", "$attrs", "progressConfig", "$timeout", UIAnchoredModalController]);
