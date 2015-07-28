@@ -1,0 +1,23 @@
+<div class="modal modal-anchored" ng-show="show">
+    <div class=" modal-fade animate-slide" ng-style="style">
+        <div class="modal-anchor" 
+             ng-class="{'anchor-bottom' : (anchor === 'bottom'), 'anchor-left' : (anchor === 'left'), 'anchor-right' : (anchor === 'right')}" 
+             ng-if="anchor !== ''">
+            <div class="modal-anchor-tip">
+                <div class="modal-anchor-bg"></div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="jfc-container align-middle">
+                    <div class="cell align-middle bold">{{title}}</div>
+                </div>
+            </div>
+            <div class="modal-body" ng-transclude></div>
+            <div class="modal-footer">
+                <div class="align-center" ng-bind-html="notes"></div>
+            </div>
+        </div>
+    </div>
+    <div class="shadow" ng-click="overlayclick()"></div>
+</div>
