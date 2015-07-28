@@ -8,8 +8,64 @@ function AdminController($scope, $route, $http, $timeout, $location){
             portal: "",
             name: "Chart Title",
             owner: "Build Team",
+            config:{
+                edit: false,
+                title: "Chart Configuration",
+                style: {top:0,left:0},
+                anchor: 'top',
+                notes: '',
+                toggle: function(e){
+                    var icon = document.querySelector('#chartTitle .icon'),
+                        rect = icon.getBoundingClientRect();
+                    $scope.editor.config.edit = !$scope.editor.config.edit;
+                    $scope.editor.config.style = {
+                        left: (rect.left - 200) + "px",
+                        top: rect.top + "px"
+                    };
+                }
+            },
+            item:{
+                edit: false,
+                title: "Chart Item Properties",
+                style: {top:0,left:0},
+                anchor: 'left',
+                notes: '',
+                toggle: function(el, noToggle){
+                    console.log(el, "el");
+                    if(typeof el !== "undefined"){
+                        var rect = el.getBoundingClientRect(),
+                            iHolder = el.parentNode.parentNode.parentNode.parentNode,
+                            card = iHolder.querySelector('.card'),
+                            cardRect = card.getBoundingClientRect();
+
+                        $timeout(function(){
+                            var modal = document.querySelector('#chartItemModal .modal-fade'),
+                                modalRect = modal.getBoundingClientRect(),
+                                topValue = (cardRect.top - 20 + (cardRect.height/2) - (modalRect.height/2)),
+                                leftValue = (cardRect.left + cardRect.width + 20);
+
+                            $scope.editor.item.anchor = 'left';
+                            if((leftValue + modalRect.width) > window.innerWidth){
+                                leftValue = (cardRect.left - modalRect.width - 30);
+                                $scope.editor.item.anchor = 'right';
+                            }
+
+                            $scope.editor.item.style = {
+                                left: leftValue + "px",
+                                top: topValue + "px"
+                            };
+                            console.log(el, modal, modalRect, cardRect, $scope.editor.item.style, "el");
+                        }, 100);
+                    }
+                    $scope.editor.item.edit = noToggle ? $scope.editor.item.edit : !$scope.editor.item.edit;
+                },
+                handleOption: function(item){
+                    var el = document.querySelector('#' + item.id + ' .edit-card i');
+                    $scope.editor.item.toggle(el, true);
+                }
+            },
             internal: {
-                editconfig: false,
+                enabled: true,
                 toggleConfigEditor: function(){
                     $scope.editor.internal.editconfig = !$scope.editor.internal.editconfig;
                 },
@@ -26,29 +82,29 @@ function AdminController($scope, $route, $http, $timeout, $location){
             },
             editList:[], // used for editing only one record at a time. In rare case we may need to edit multpile items.
             toggleEditor: function(){
-                
+								$scope.editor.internal.enabled = !$scope.editor.internal.enabled;
             }
-        }; 
-        
+        };
+
         function generateID(){
-            var idString = $scope.editor.idPrefix + (++$scope.editor.internal.incrementor);          
+            var idString = $scope.editor.idPrefix + (++$scope.editor.internal.incrementor);
             if(arguments.length > 0){
                 var selected = arguments[0];
                 return [selected.id, idString].join('-');
             }
             return idString;
         }
-        
+
         function generateOptionID(){
             var idString = 'opt' + (++$scope.editor.internal.option.incrementor);
             return idString;
         }
-        
+
         function generateActorID(){
             var idString = 'act' + (++$scope.editor.internal.actor.incrementor);
             return idString;
         }
-        
+
     	$scope.getChartTemplate = function(){
     	    return {
                     id: '',
@@ -65,7 +121,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 }
                 };
     	};
-            
+
     	$scope.getOptionTemplate = function(){
     	    return {
                 id: '',
@@ -81,7 +137,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
                     }
                 };
     	};
-	
+
         $scope.getActorTemplate = function(){
 	    return {
                 id: '',
@@ -90,7 +146,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 email: ''
             };
 	};
-	
+
         $scope.addChartItem = function(){
             var chartItem = $scope.getChartTemplate(),
                 actor = $scope.getActorTemplate();
@@ -104,14 +160,14 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 actor.contact = "Contact No";
                 actor.email = "Email";
                 chartItem.actors.push(actor);
-                chartItem.internal.mode = 'edit';                
+                chartItem.internal.mode = 'edit';
                 chartItem.internal.style.left = 300 * (chartItem.id.split('-').length-1) + "px";
                 $scope.editor.chartList.push(chartItem);
             }else{
                 $scope.application.model.toggle("Please add options to the existing chartitems to add another chartitem.");
-            }            
+            }
     	}
-        
+
         $scope.addActor = function(){
             var selected = $scope.editor.internal.selected;
             if(selected.id == ''){
@@ -125,19 +181,17 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 $scope.editor.internal.selected.actors.push(actor);
             }
         };
-	
+
     	$scope.addOption = function(){
-            
-            console.log("caleed or not?");
-            
-                var selected = $scope.editor.internal.selected;
+					var selected = $scope.editor.internal.selected;
     	    if(selected.id == ''){
                     $scope.application.model.toggle("Please select an existing chartitem to add options to it.");
                 }else{
+									if($scope.editor.internal.selected.options.length < 5){
                     var option = $scope.getOptionTemplate(),
                     mappedChartItem = $scope.getChartTemplate(),
                     actor = $scope.getActorTemplate();
-                    
+
                     mappedChartItem.id = generateID(selected);
                     mappedChartItem.type = "Activity";
                     mappedChartItem.name = "Chart Name";
@@ -151,20 +205,20 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 actor.contact = "Contact No";
                 actor.email = "Email";
                 mappedChartItem.actors.push(actor);
-                    mappedChartItem.internal.mode = 'display'; 
+                    mappedChartItem.internal.mode = 'display';
                     mappedChartItem.internal.style.left = 300 * (mappedChartItem.id.split('-').length-1) + "px";
                     $scope.editor.chartList.push(mappedChartItem);
-                    
-                    console.log("option added", option, mappedChartItem);
-//                $scope.editor.internal.selected = {id: ''};
+										} else {
+                    	$scope.application.model.toggle("Only 5 number of Options are allowed.");
+                		}
                 }
     	}
-        
+
         $scope.selectItem = function(item){
             $scope.editor.internal.selected = item;
 //            console.log(arguments);
         }
-        
+
         $scope.getEditorObject = function(){
             var res = JSON.parse(angular.toJson($scope.editor));
             delete res.parsedList;
@@ -187,7 +241,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
             });
             return res;
         };
-        
+
         $scope.saveChartJson = function(){
             var res = $scope.getEditorObject(),
                 param = {};
@@ -257,7 +311,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
             }
             $scope.saveChartJson();
         };
-        
+
         $scope.$watch('editor.chartList.length', function(newLength, oldLength){
             $scope.editor.parsedList = [];
             for (var y in $scope.editor.chartList) {
@@ -272,30 +326,30 @@ function AdminController($scope, $route, $http, $timeout, $location){
                     $scope.editor.parsedList[u] = [x];
                 }
             }
-            
+
 //            console.log("newList", newLength, newLength, $scope.editor.parsedList);
         });
-        
+
         $scope.initRepeatValues = function(index, yInit){
 //            $scope.xIndex = index;
-//            $scope.yInit = yInit;            
+//            $scope.yInit = yInit;
 //            console.log("call once", $scope.yInit);
         };
-        
+
         $scope.rearrangeChart = function(item, xCnt, yCnt, yInit, list){
 //            console.log("if this works, it will be gr8", arguments, (yCnt < 1 ? 0 : yCnt-1));
             item.internal.style.left = (xCnt * 300) + "px";
             item.internal.yInit = yInit; //list[xCnt][(yCnt < 1 ? 0 : yCnt-1)].internal.yInit || 0;
-            
-            $timeout((function(){               
+
+            $timeout((function(){
                 return function(){
 //                    console.log("yInit inital value", yInit, itemHolder, itemHolder[(yCnt < 0 ? 0 : yCnt-1)]);
                     var el = document.getElementById(item.id),
                         height = el.getBoundingClientRect().height;
-                    
+
                     item.internal.style.top = (list[xCnt][(yCnt < 1 ? 0 : yCnt-1)].internal.yInit) + "px";
                     item.internal.yInit = parseInt(item.internal.style.top) + (height + 50);
-                    
+
                     if(yCnt === (list[xCnt].length-1)){
                         console.log("if this works, it will be gr8", item.internal.yInit, (item.internal.yInit-100)/2);
 //                        console.log("if this works, it will be gr8", item, xCnt, yCnt, yInit, list[xCnt]);
@@ -307,12 +361,12 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 };
             })(), 500, true, [item, xCnt, yCnt, yInit, list[xCnt]]);
         };
-        
+
         $scope.rearrangeOption = function(subitem, item, xCnt, yCnt, cnt, yInit, list, inc){
             console.log("rearrange has been called ....", arguments);
             subitem.internal.yInit = yInit;
-            
-            $timeout((function(){               
+
+            $timeout((function(){
                 return function(){
                     function getHeight(elem){
                         if(elem !== null){
@@ -325,11 +379,11 @@ function AdminController($scope, $route, $http, $timeout, $location){
                         var peerItem = false,
                             c = angular.element(elem),
                             d = c.scope()
-                        
+
                         inc = d.xIndex;
                         var peerList = list[inc]; //xCnt+
                         for (var i=0; i < peerList.length; i++){
-                            
+
                             if(peerList[i].id == elem.id){
                                 peerItem = peerList[i];
                                 break;
@@ -359,7 +413,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
                         peerEl = document.querySelector('#' + subitem.charts),
                         heightVal = 0,
                         widthVal = 0;
-                
+
                     angular.forEach(list, function(yList, yKey){
                         angular.forEach(yList, function(inst, key){
                             if(inst.id == subitem.charts){
@@ -367,10 +421,10 @@ function AdminController($scope, $route, $http, $timeout, $location){
                             }
                         });
                     });
-                
+
                     subitem.internal.style.left = (xCnt * 300 + width) + "px";
                     widthVal = (parseInt(peerItem.internal.style.left) - parseInt(subitem.internal.style.left));
-                    
+
                     subitem.internal.style.top = (parseInt(item.internal.style.top) + getTopAdjustment(chartEl, subitem, cnt)) + "px";
                     heightVal = -(parseInt(subitem.internal.style.top) - getTop(peerEl) - (getHeight(peerEl)/2));
                     console.log("heightVal", heightVal, arrowEl);
@@ -386,8 +440,8 @@ function AdminController($scope, $route, $http, $timeout, $location){
                         subitem.internal.class = {'arrow': false, 'arrow-reverse': true, 'arrow-straight': false };
                     subitem.internal.style.height = heightVal + "px";
                     }
-                    
-                    if(widthVal < 0){                        
+
+                    if(widthVal < 0){
                         subitem.internal.style.left = (parseInt(subitem.internal.style.left) + widthVal) + "px";
                         widthVal = widthVal * -1;
                         subitem.internal.class['arrow-flip'] = true;
@@ -398,7 +452,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 };
             })(), 800, true, [subitem, item, xCnt, yCnt, yInit, list[xCnt]]);
         };
-        
+
         $scope.deleteCard = function(scope){
         var scope = this,
             item = scope.item;
@@ -430,6 +484,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
         } else {
             $scope.application.model.toggle("You cannot remove this item if it is of 'Begin' Type or it has child items.");
          }
+				 $scope.editor.item.edit = false;
     };
 
     // if the list is empty at the initial moment, load the Begin cart item to it.
