@@ -402,9 +402,17 @@ div#chartDetail {
 }
 
 .customise-tool {
+    width: 260px;
+    height: 160px;
     position: absolute;
     top: -34px;
     right: -34px;
+}
+
+.customise-tool > div {
+    position: absolute;
+    top: 0;
+    right: 0;
     background-color: #F2F2F2;
     border: 1px solid #CCC;
     min-height: 74px;
@@ -424,6 +432,11 @@ div#chartDetail {
 
 .customise-tool button:nth-child(4) {
     right: 70px;
+    top: 0;
+}
+
+.customise-tool button:nth-child(5) {
+    right: 105px;
     top: 0;
 }
 
