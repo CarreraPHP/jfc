@@ -1,4 +1,14 @@
-function AdminController($scope, $route, $http, $timeout, $location){
+/**
+ * @todo Implement Search, Copy Option, Edit functionality for existing flow, Filter options, Fix cosmetic issues.
+ * 
+ * @param {type} $scope
+ * @param {type} $route
+ * @param {type} $http
+ * @param {type} $timeout
+ * @param {type} $location
+ * @returns {undefined}
+ */
+function AdminController($scope, $route, $http, $timeout, $location, $routeParams){
 	$scope.editor = {
             chartList: [],
             parsedList: [],
@@ -13,7 +23,13 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 title: "Chart Configuration",
                 style: {top:0,left:0},
                 anchor: 'top',
-                notes: '',
+                notes: [
+                    'Notes<br/>', 
+                    '<ul>',
+                        '<li>Fields are 2 way binded, no need for buttons.</li>', 
+                        '<li>Click on the gray area to clock the window.</li>',
+                    '</ul>'
+                ].join(''),
                 toggle: function(e){
                     var icon = document.querySelector('#chartTitle .icon'),
                         rect = icon.getBoundingClientRect();
@@ -29,7 +45,14 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 title: "Chart Item Properties",
                 style: {top:0,left:0},
                 anchor: 'left',
-                notes: '',
+                notes: [
+                    'Notes<br/>', 
+                    '<ul>',
+                        '<li>Fields are 2 way binded, no need for buttons.</li>', 
+                        '<li>Click on the gray area to close the window.</li>', 
+                        '<li>Add #lb# in description for inserting line break.</li>',                         
+                    '</ul>'
+                ].join(''),
                 toggle: function(el, noToggle){
                     console.log(el, "el");
                     if(typeof el !== "undefined"){
@@ -85,6 +108,8 @@ function AdminController($scope, $route, $http, $timeout, $location){
 								$scope.editor.internal.enabled = !$scope.editor.internal.enabled;
             }
         };
+
+
 
         function generateID(){
             var idString = $scope.editor.idPrefix + (++$scope.editor.internal.incrementor);
@@ -271,7 +296,7 @@ function AdminController($scope, $route, $http, $timeout, $location){
 
             console.log(angular.toJson(param));
             $http({
-                url: 'http://localhost:8080/saveScenario',
+                url: 'http://' + location.hostname + ':8080/saveScenario',
                 method: 'POST',
                 transformRequest: function(obj) {
                     var str = [];
@@ -293,7 +318,8 @@ function AdminController($scope, $route, $http, $timeout, $location){
                 if(record === -1){
                     $scope.application.model.toggle("Chart Name '" + $scope.editor.name + "' has been already taken. Please choose another title.");
                 }else {
-                    window.open("#!/Chart/" + record.scenarioId + "/" + record.urlNm, "_blank");
+//                    window.open("#!/Chart/" + record.scenarioId + "/" + record.urlNm, "_blank");
+                    $scope.data.loadTroubleChart(record);
                 }
 //                 $location.path("/Chart/" + record.scenarioId + "/" + record.urlNm);
             }).error(function (data, status, headers, config) {
