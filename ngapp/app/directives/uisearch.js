@@ -5,7 +5,7 @@ function uisearch() {
     transclude: true,
     controller: 'UISearchController',
     scope: {
-      list: '=ngModel',
+      value: '=ngModel',
     },
     templateUrl: 'app/view/directives/uisearch.html',
     link: function(scope, element, attrs, UISelectCtrl) {
