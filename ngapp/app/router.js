@@ -8,6 +8,7 @@ function routerFn($routeProvider, $locationProvider) {
         .when('/Chart/:id/:name', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
         .when('/Login', {templateUrl: 'app/view/Login.html', controller: 'LoginController'})
         .when('/Admin', {templateUrl: 'app/view/Admin.html', controller: 'AdminController'})
+        .when('/Admin/:id/:name', {templateUrl: 'app/view/Admin.html', controller: 'AdminController'})
         .otherwise({
                 redirectTo:'/Admin'
         });
