@@ -54,7 +54,7 @@
         </div>
         <span style="display:hidden;" ng-repeat-end></span>        
     </div>
-    <div id="chartDetail">
+    <div id="chartDetail" ng-show="false">
         <div class="mono x-large">{{control.detail.title}}</div>
         <div class="mono">{{control.detail.content}}</div>
         <div class="icon icon-collapse" ng-class="{'icon-expand': !control.detail.enabled}" ng-click="control.detail.toggle()"><div>
