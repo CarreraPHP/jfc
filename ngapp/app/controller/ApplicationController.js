@@ -16,6 +16,7 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
             userName: 'Yogesh Surendran',
             greetingKey: 'Mr. ',
             troubleList: [],
+            searchEntry: '',
             loadTroubleList: function(){
                 $http
                 .get('http://' + location.hostname + ':8080/getScenarioList')
