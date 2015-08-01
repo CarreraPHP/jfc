@@ -9,7 +9,7 @@ angular.module('JFC.filters', [])
             return "";
         };
     }])    
-     .filter('stripparent', [function () {  
+    .filter('stripparent', [function () {  
         return function (id) {
             if(typeof id === "string"){
                 var pos = id.lastIndexOf('-');            
@@ -21,6 +21,13 @@ angular.module('JFC.filters', [])
     .filter('formattext', [function () {  
         return function (text) {
             if(text.length && text.length > 0){
+                var match = text.match(/(^|\s|\()((http(s){0,}?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi);
+            
+                if(match && match.length && match.length > 0){
+                    console.log(match[0]);
+                    text = text.replace(match[0], '<a href="' + match[0].replace(/\(|\)/gi, '') + '" target="_blank">' + match[0].replace(/\(|\)/gi, '') + '</a>');
+                }
+                
                 return text.replace(/#lb#/ig, '<br/>');
             }
             return "";
