@@ -1,9 +1,24 @@
-function ConfigController($scope, $route, $http, $localStorage) {
+function ConfigController($scope, $route, $http, $localStorage, $routeParams) {
     $scope.portalValueField = 'portalNm';
     $scope.environmentValueField = 'environmentNm';
     $scope.projectValueField = 'moduleNm';
     
     $scope.$watch('editor.portal', function(newValue, oldValue){        
+        var idValue = -1;
+        angular.forEach($scope.application.portalList, function(value, key){
+            console.log(arguments, "arguments 2");
+            if(value.portalNm === newValue){
+                idValue = value.portalId;
+            }
+        });
+        if(idValue !== -1){
+            $scope.loadEnvironmentList(idValue);
+            $scope.loadProjectList(idValue);        
+            console.log(arguments, "arguments");
+        }
+    });
+    
+    $scope.$watch('selectedPortal', function(newValue, oldValue){        
         var idValue = -1;
         angular.forEach($scope.application.portalList, function(value, key){
             console.log(arguments, "arguments 2");
@@ -27,7 +42,7 @@ function ConfigController($scope, $route, $http, $localStorage) {
                     if(data.length > 0){
                         $scope.loadEnvironmentList(data[0].portalId);
                         $scope.loadProjectList(data[0].portalId); 
-                        console.log($scope.application.portalList);
+                        // console.log($scope.application.portalList);
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -41,7 +56,7 @@ function ConfigController($scope, $route, $http, $localStorage) {
                 .get('http://' + location.hostname + ':8080/getEnvironmentList?portal_id=' + param)
                 .success(function (data, status, headers, config) {
                     $scope.application.environmentList = data.data.result;
-                    console.log($scope.application.environmentList, data);
+                    // console.log($scope.application.environmentList, data);
                 })
                 .error(function (data, status, headers, config) {
                     $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
@@ -54,12 +69,23 @@ function ConfigController($scope, $route, $http, $localStorage) {
                 .get('http://' + location.hostname + ':8080/getModuleList?portal_id=' + param)
                 .success(function (data, status, headers, config) {
                     $scope.application.projectList = data.data.result;
-                    console.log($scope.application.projectList);
+                    // console.log($scope.application.projectList);
                 })
                 .error(function (data, status, headers, config) {
                     $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
                 });
         }
+    };
+    $scope.handleSubmit = function(param){        
+        $http
+            .get('http://' + location.hostname + ':8080/searchScenario?query=' + $scope.data.searchEntry)
+            .success(function (data, status, headers, config) {
+                $scope.data.troubleList = data.data.result;
+                // console.log($scope.application.projectList);
+            })
+            .error(function (data, status, headers, config) {
+                $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
+            });
     };
     
     $scope.loadPortalList();
