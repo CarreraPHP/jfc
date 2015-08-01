@@ -18,7 +18,7 @@ function UISelectController($scope, $attrs, progressConfig) {
     }
     $scope.expandList = function(){
         $scope.expand = !$scope.expand; 
-//        console.log("$scope.valueField", $attrs, angular.isDefined($scope.valuefield), $scope.valuefield);
+        console.log("$scope.valueField", $attrs, angular.isDefined($scope.valuefield), $scope.valuefield);
     }
     $scope.isEnabled = function(){
         return angular.isDefined($scope.valuefield);
