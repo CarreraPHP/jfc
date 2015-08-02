@@ -70,7 +70,9 @@
   <div class="jfc-viewport animate-slide" ng-class="{'adjust-view': application.slider.animated}">
 
     <!-- side bar menu -->
-    <div id="slider" class="jfc-slider property-pane animate-slide" ng-class="{'reveal-slider': application.slider.animated}" ng-swipe-left="application.slider.makeSlide()">
+    <div id="slider" class="jfc-slider property-pane animate-slide" 
+        ng-controller="ConfigController"
+        ng-class="{'reveal-slider': application.slider.animated}" ng-swipe-left="application.slider.makeSlide()">
       <!-- FILTER -->
         <div class="jfc-container">            
             <div class="jfc-box">
@@ -82,7 +84,7 @@
                 </div>
             </div>
         </div> 
-      <div class="jfc-container" style="border-bottom:1px solid #ccc;" ng-controller="ConfigController">
+      <div class="jfc-container" style="border-bottom:1px solid #ccc;">
             <div class="cell align-middle align-right">
                 <div>
                     <button class="btn btn-medium" ng-click="application.navigation.goTo('Admin');application.slider.makeSlide();">
@@ -108,7 +110,7 @@
                 </span>
                 <span class="cell">
                     <span>
-                        <uisearch ng-model="searchEntry" ng-init="ph = ''" placeholder="Type here to search" list="environmentList"></uisearch>
+                        <uisearch ng-model="data.searchEntry" ng-init="ph = ''" placeholder="Type here to search" list="environmentList"></uisearch>
                     </span>
                 </span>
             </label>
@@ -155,7 +157,7 @@
             <div class="cell align-middle align-right">
                 <div>
                     <button class="btn btn-medium" ng-click="handleSubmit()">
-                        <i class="icon icon-database medium"></i>
+                        <i class="icon icon-filter medium"></i>
                         <span class="medium">Filter</span>
                     </button>
                 </div>
@@ -176,7 +178,7 @@
             </div>
           </div>
 
-          <div ng-show="data.troubleList.length == 0" class="jfc-box menu-item">
+          <div ng-show="filterList.length == 0" class="jfc-box menu-item">
             <div class="jfc-container " ng-click="">
               <div class="cell icon align-center"></div>
               <div class="cell align-justify align-middle">
@@ -185,6 +187,17 @@
               <div class="cell align-middle align-left icon "></div>
             </div>
           </div>
+            <div class="jfc-box jfc-width-100">
+                <div class="align-justify before-spacer jfc-width-90">
+                    Notes<br>
+                    <ul>
+                        <li>Fields are 2 way binded.</li>
+                        <li>Changing Scenario value will make a local search on the list below.</li>
+                        <li>Changing field values will make a local search on the list below.</li>
+                        <li>Click 'filter' button for making remote Filter.</li>
+                    </ul>
+                </div>
+            </div>                
         </div>
       </div>
     </div>
