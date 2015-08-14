@@ -8,7 +8,7 @@ function uianchoredmodal() {
         title: '=',
         anchor: '=',
         show: '=',
-        style: '=',
+        uistyle: '=',
         overlayclick: '=',
         notes: '='
     },
