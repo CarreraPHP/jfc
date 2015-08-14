@@ -95,10 +95,14 @@ function ApplicationController($scope, $http, $location,$timeOut, $rootScope,  $
             },
             showSubPageToolbarBtn: false,
 	    slider:{
+	    	button:{
+                    visible: true
+                },
 	    	animated:false,
 	    	makeSlide: function(){
-					console.log("slider triggered.....");
+			console.log("slider triggered.....");
 	    		$scope.application.slider.animated = !$scope.application.slider.animated;
+	    		$scope.application.slider.button.visible = !$scope.application.slider.button.visible;
 	    	}
 	    },
 	    navigation: {
