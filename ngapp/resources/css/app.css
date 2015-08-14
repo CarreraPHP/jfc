@@ -170,11 +170,13 @@ canvas { width: 100%; height: 100% }
     /* z-index:100; */
 }
 .icon-back:before{
+    content:"\f053";
+}
+.icon-list:before{
     content:"\f0c9";
-    /* width: 50px; */
 }
 
-.icon-back {
+.icon-back,.icon-list {
     width: 50px;
 }
 .jfc-toolbar .ring-alert {
@@ -1504,7 +1506,7 @@ div#chartTitle {
     position:absolute;
     left:0;
     top:8px;
-    -webkit-transform: rotateZ(45deg);-moz-transform: rotateZ(45deg);-ms-transform: rotateZ(45deg);transform: rotateZ(45deg);
+    -webkit-transform: rotateZ(45deg);-moz-transform: rotateZ(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);
 }
 
 .modal-anchored .modal-header {
@@ -1526,18 +1528,18 @@ div#chartTitle {
 }
 
 .anchor-bottom{
-    -webkit-transform: rotateZ(180deg);-moz-transform: rotateZ(180deg);-ms-transform: rotateZ(180deg);transform: rotateZ(180deg);
+    -webkit-transform: rotateZ(180deg);-moz-transform: rotateZ(180deg);-ms-transform: rotate(180deg);transform: rotate(180deg);
     bottom: -15px;
 }
 
 .anchor-right{
-    -webkit-transform: rotateZ(90deg);-moz-transform: rotateZ(90deg);-ms-transform: rotateZ(90deg);transform: rotateZ(90deg);
+    -webkit-transform: rotateZ(90deg);-moz-transform: rotateZ(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);
     top: 50%;
     right: calc(-50% - 18px);
 }
 
 .anchor-left{
-    -webkit-transform: rotateZ(270deg);-moz-transform: rotateZ(270deg);-ms-transform: rotateZ(270deg);transform: rotateZ(270deg);
+    -webkit-transform: rotateZ(270deg);-moz-transform: rotateZ(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);
     top: 50%;
     left: calc(-50% - 9px);
 }
