@@ -19,7 +19,7 @@
         </div>
     </div>
     <div ng-if="editor.internal.editconfig" class="jfc-container jfc-width-96 after-spacer" ng-controller="ConfigController">
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Name</span>
             </span>
@@ -29,7 +29,7 @@
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Prefix</span>
             </span>
@@ -39,7 +39,7 @@
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Portal</span>
             </span>
@@ -49,7 +49,7 @@
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Environment</span>
             </span>
@@ -59,7 +59,7 @@
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Module</span>
             </span>
@@ -69,7 +69,7 @@
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Owner</span>
             </span>
@@ -179,7 +179,7 @@
 </div>
 <div id="chartcanvas" style="right: 0;" ng-controller="SceneController">
     <div id="chartTitle" class="large mono bold">
-        {{editor.name}}
+        <span ng-bind="editor.name"></span>
         <i class="icon icon-edit medium" ng-click="editor.config.toggle()"></i>
     </div>
     <div id="chartscene">
@@ -206,12 +206,13 @@
                     <button class="edit-card" ng-click="selectCard($event, item, editor.parsedList, editor)">
                         <i class="icon icon-edit large"></i>
                     </button>
-                    <div class="card-info small">#{{item.id | stripparent}}</div>
+                    <div class="card-info small">#<span ng-bind="item.id | stripparent"></span></div>
                 </div>
             </div>
             <div class="card" ng-click="" ng-class="item.internal.class">
                 <div ng-if="item.type == 'Activity'" class="title">
-                    <span class="fa fa-task"></span>{{item.name}}
+                    <span class="fa fa-task"></span>
+                    <span ng-bind="item.name"></span>
                 </div>
                 <div ng-if="item.type == 'Begin' || item.type == 'End'" class="content card-special">
                     <div>
@@ -220,7 +221,7 @@
                             <i  ng-if="item.type == 'End'" class="icon icon-flag-end x-large"></i>
                         </div>
                         <div>
-                            <div class="medium special-title">{{item.name}}</div>
+                            <div class="medium special-title"><span ng-bind="item.name"></span></div>
                             <div class="small" ng-bind-html="item.description | formattext"></div>
                         </div>
                     </div>
@@ -266,7 +267,7 @@
 
 <!-- Edit Chart Item -->
 <uianchoredmodal id="chartItemModal" show="editor.item.edit" 
-    style="editor.item.style" 
+    uistyle="editor.item.style" 
     anchor="editor.item.anchor" 
     title="editor.item.title" 
     overlayclick="editor.item.toggle"
@@ -307,7 +308,7 @@
 
 <!-- Edit Chart Configuration -->
 <uianchoredmodal show="editor.config.edit" 
-    style="editor.config.style" 
+    uistyle="editor.config.style" 
     anchor="editor.config.anchor" 
     title="editor.config.title" 
     overlayclick="editor.config.toggle"
