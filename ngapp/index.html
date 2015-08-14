@@ -61,9 +61,9 @@
 
 <body ng-controller="ApplicationController">
   <!-- Title Bar -->
-  <div class="jfc-container jfc-toolbar jfc-docked dock-top" ng-hide="application.preventToolbar" style="">
+  <div class="jfc-container jfc-toolbar jfc-docked dock-top" ng-show="application.slider.button.visible" style="">
     <div class="cell pull-left">
-      <button class="btn icon icon-back" ng-click="data.loadTroubleList();application.slider.makeSlide();"></button>
+      <button class="btn icon icon-list" ng-click="data.loadTroubleList();application.slider.makeSlide();"></button>
     </div>
   </div>
   <!-- END - Title Bar -->
@@ -76,8 +76,8 @@
       <!-- FILTER -->
         <div class="jfc-container">            
             <div class="jfc-box">
-                <div style="display:none;" class="pull-left align-middle header-bar jfc-width-10">
-                    <button class="btn icon icon-back" ng-click=""></button>
+                <div class="pull-left align-middle header-bar jfc-width-10">
+                    <button class="btn icon icon-back" ng-click="application.slider.makeSlide()"></button>
                 </div>
                 <div class="align-middle align-center header-bar align-center menu-heading">
                     <div class="beta">Playbook</div>
@@ -148,7 +148,7 @@
         <div class="jfc-container">
             <div class="cell align-middle align-left">
                 <div>
-                    <button class="btn btn-medium" ng-click="selectedEnvironment='';selectedPortal='';selectedProject='';">
+                    <button class="btn btn-medium" ng-click="selectedEnvironment='';selectedPortal='';selectedProject='';data.searchEntry='';">
                         <i class="icon icon-stop medium"></i>
                         <span class="medium">Reset</span>
                     </button>
@@ -211,7 +211,7 @@
     </div>
     <!-- END - side bar menu -->
 
-  <div class="jfc-slider-overlay" ng-click="application.slider.animated = false;" ng-class="{'jfc-block': application.slider.animated}"></div>
+  <div class="jfc-slider-overlay" ng-click="application.slider.makeSlide();selectedEnvironment='';selectedPortal='';selectedProject='';data.searchEntry='';" ng-class="{'jfc-block': application.slider.animated}"></div>
   <div class="jfc-view-container" id="jfc-container" ng-class="{'no-toolbar':application.preventToolbar}">
     <!-- LEFT Tool Bar -->
     <div id="csHolder" class="jfc-container jfc-toolbar jfc-docked dock-left" ng-hide="application.preventToolbar">
@@ -239,9 +239,7 @@
             <div class="cell align-middle bold">JSON Flow Chart</div>
           </div>
         </div>
-        <div class="modal-body">
-          {{application.model.errMsg}}
-        </div>
+        <div class="modal-body" ng-bind="application.model.errMsg"></div>
         <div class="modal-footer">
 
           <div class="align-center modal-btn-left">
