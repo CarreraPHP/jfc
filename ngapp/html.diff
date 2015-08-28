@@ -1,0 +1,137 @@
+diff --git a/ngapp/app/view/Home.html b/ngapp/app/view/Home.html
+index d3f5a12..aa0b9a2 100644
+--- a/ngapp/app/view/Home.html
++++ b/ngapp/app/view/Home.html
+@@ -1,14 +1,17 @@
+ <div class="logo_container">
+ 	<img src="resources/images/logo.png" />
+ </div>
+-<div id="chartcanvas" style="right:0;" ng-controller="SceneController">
+-    <div id="chartTitle" class="large mono bold">{{chart.name}}</div>
++<div id="chartcanvas" style="right: 0;" ng-controller="SceneController">
++    <div id="chartTitle" class="large mono bold">
++        <span ng-bind="editor.name"></span>
++    </div>
+     <div id="chartscene">        
+         <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
+              ng-style="item.internal.style" ng-class="item.internal.class"
+              ng-click="selectCard($event, item, chart.chartList, editor)">
+             <div ng-if="item.type == 'Activity'" class="title">
+-                <span class="fa fa-task"></span>{{item.name}}
++                    <span class="fa fa-task"></span>
++                    <span ng-bind="item.name"></span>
+             </div>
+             <div ng-if="item.type == 'Begin' || item.type == 'End'" class="content card-special">
+                 <div>
+@@ -17,12 +20,14 @@
+                         <i  ng-if="item.type == 'End'" class="icon icon-flag-end x-large"></i>
+                     </div>
+                     <div>
+-                        <div class="medium special-title">{{item.name}}</div>
++                            <div class="medium special-title"><span ng-bind="item.name"></span></div>
+                         <div class="small" ng-bind-html="item.description | formattext"></div>
+                     </div>
+                 </div>
+             </div>
+-            <div ng-if="item.type == 'Activity'" class="content" ng-bind-html="item.description | formattext"></div>
++                <div ng-if="item.type == 'Activity'" class="content">
++                    {{item.description}}
++                </div>
+             <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
+                 <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
+                     <div></div>
+@@ -37,20 +42,28 @@
+                 <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
+                      ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
+                     <div>
+-                        <span>{{subitem.name}}</span>
+-                        <span class="fa fa-play"></span>
++                            <span class="jfc-width-80">{{subitem.name}}</span>
++                            <span class="jfc-width-20 fa fa-play"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div ng-repeat="subitem in item.options" id="{{subitem.id}}-arrow-{{subitem.charts}}"               
+-             ng-class="subitem.internal.class" ng-style="subitem.internal.style">
+-            <div></div>
++             ng-init="rearrangeOption(subitem, item, xIndex, yIndex, $index, yInit, editor.parsedList)" 
++             ng-class="subitem.internal.class" ng-style="subitem.internal.style" style="width: 78px; left: 0px; top: 92.1875px;">
++            <div>
++                <div class="arrow-tail"></div>
++            </div>
+             <div>
+                 <div></div>
+                 <div></div>
+             </div>
+-            <div></div>
++            <div>
++                <div class="arrow-straight-tail"></div>
++                <div class="arrow-head">
++                    <div></div>
++                </div>
++            </div>
+         </div>
+         <span style="display:hidden;" ng-repeat-end></span>        
+     </div>
+diff --git a/ngapp/app/view/directives/uichartitem.html b/ngapp/app/view/directives/uichartitem.html
+index 1857eec..80512c5 100644
+--- a/ngapp/app/view/directives/uichartitem.html
++++ b/ngapp/app/view/directives/uichartitem.html
+@@ -64,6 +64,7 @@
+                                         </div>
+                                     </div>
+                                 </div>
++                                <button class="btn icon icon-stop" ng-click="deleteActor(this)"></button>
+                             </div>                        
+                         </div>
+                     </div>
+@@ -87,7 +88,7 @@
+                 </div>-->
+                 <div class="jfc-box">
+                     <div class="cell no-border">
+-                        <button class="btn icon icon-stop" ng-click="deleteCard()"></button>                        
++                        <button class="btn icon icon-trash" ng-click="deleteCard()"></button>                        
+                     </div>
+                 </div>
+             </div>
+diff --git a/ngapp/app/view/directives/uichartoption.html b/ngapp/app/view/directives/uichartoption.html
+index 07c2c14..f6ab9d3 100644
+--- a/ngapp/app/view/directives/uichartoption.html
++++ b/ngapp/app/view/directives/uichartoption.html
+@@ -12,7 +12,7 @@
+                     <div class="cell jfc-width-49">
+                         <div class="no-padding no-margin" ng-show="mode != 'edit'">{{subitem.charts}}</div>
+                         <div ng-show="mode == 'edit'">
+-                            <uiselect ng-model="subitem.charts" change="chartChange" valuefield="chartValueField" list="editor.chartList"></uiselect>
++                            <uiselect ng-model="subitem.charts" change="chartChange" valuefield="chartValueField" list="optionList"></uiselect>
+                         </div>
+                     </div>
+                 </div>
+diff --git a/ngapp/app/view/directives/uitext.html b/ngapp/app/view/directives/uitext.html
+index 7156496..4be7bf7 100644
+--- a/ngapp/app/view/directives/uitext.html
++++ b/ngapp/app/view/directives/uitext.html
+@@ -1,7 +1,7 @@
+ <div class="jfc-component form-control">
+   <div class="jfc-component-thumb" ng-class="type" role="presentation">
+-    <input type="text" ng-show="readonly" value="{{value | stripparent}}" ng-enter="" readonly placeholder="{{placeholder}}" />
+-    <input type="text" ng-show="!readonly" ng-model="value" ng-enter="" placeholder="{{placeholder}}" />
++    <input type="text" style="height:100%" ng-show="readonly" value="{{value | stripparent}}" ng-enter="" readonly placeholder="{{placeholder}}" />
++    <input type="text" style="height:100%" ng-show="!readonly" ng-model="value" ng-enter="" placeholder="{{placeholder}}" />
+     <button class="btn icon icon-clear-thumb"
+             ng-click="clearValue()" ng-show="value.length > 0 && !readonly">
+     </button>
+diff --git a/ngapp/index.html b/ngapp/index.html
+index a277676..87ea21b 100644
+--- a/ngapp/index.html
++++ b/ngapp/index.html
+@@ -10,7 +10,7 @@
+   <link rel="stylesheet" href="resources/css/app.css" media="all">
+   <link rel="stylesheet" href="resources/css/demo.css" media="all">
+ 
+-  <script src="resources/js/libs/angular.min.js"></script>
++  <script src="resources/js/libs/angular.js"></script>
+   <script src="resources/js/libs/angular-resource.min.js"></script>
+   <script src="resources/js/libs/angular-route.min.js"></script>
+   <script src="resources/js/libs/angular-touch.min.js"></script>
