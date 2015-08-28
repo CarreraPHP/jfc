@@ -1,0 +1,66 @@
+diff --git a/ngapp/app/controller.js b/ngapp/app/controller.js
+index b39f9fc..e409701 100644
+--- a/ngapp/app/controller.js
++++ b/ngapp/app/controller.js
+@@ -1,12 +1,13 @@
+ angular.module('JFC.controller', [])
+     .constant('progressConfig', {
+-            animate: true,
+-            max: 100
++        urlPrefix : (function(){
++            return (location.port === '84') ? location.protocol + '//' + location.hostname + ':8080' : '';
++        })()
+     })
+-    .controller("ApplicationController", ["$scope", "$http", "$location", "$timeout", "$rootScope","$localStorage","$sessionStorage", ApplicationController])
+-    .controller("HomeController", ["$scope", "$route","$http","$routeParams", HomeController])
+-    .controller("ConfigController", ["$scope", "$route","$http","$localStorage", "$routeParams", ConfigController])    
+-    .controller("AdminController", ["$scope", "$route","$http","$timeout", "$location", "$routeParams", AdminController])
++    .controller("ApplicationController", ["$scope", "$http", "$location", "$timeout", "$rootScope","$localStorage","$sessionStorage", "progressConfig", ApplicationController])
++    .controller("HomeController", ["$scope", "$route","$http","$routeParams", "progressConfig", HomeController])
++    .controller("ConfigController", ["$scope", "$route","$http","$localStorage", "$routeParams", "progressConfig", ConfigController])    
++    .controller("AdminController", ["$scope", "$route","$http","$timeout", "$location", "$routeParams", "progressConfig", AdminController])
+     .controller("SceneController", ["$scope", "$route","$http","$localStorage", SceneController])
+     .controller("LoginController", ["$scope", "$route","$http","$localStorage", LoginController])
+     .controller("UISelectController", ["$scope", "$attrs", "progressConfig", UISelectController])
+@@ -14,5 +15,5 @@
+     .controller("UITextController", ["$scope", "$attrs", "progressConfig", UITextController])
+     .controller("UITextAreaController", ["$scope", "$attrs", "progressConfig", UITextAreaController])
+     .controller("UIChartItemController", ["$scope", "$attrs", "progressConfig", "$timeout", UIChartItemController])
+-    .controller("UIChartOptionController", ["$scope", "$attrs", "progressConfig", "$timeout", UIChartOptionController])
++    .controller("UIChartOptionController", ["$scope", "$attrs", "progressConfig", "$timeout", "$filter", UIChartOptionController])
+     .controller("UIAnchoredModalController", ["$scope", "$attrs", "progressConfig", "$timeout", UIAnchoredModalController]);
+diff --git a/ngapp/app/filters.js b/ngapp/app/filters.js
+index f19e611..1f2a2f9 100644
+--- a/ngapp/app/filters.js
++++ b/ngapp/app/filters.js
+@@ -32,4 +32,18 @@
+             }
+             return "";
+         };
++    }])
++    .filter('skipbeforenode', [function () {  
++        return function (list, current) {
++            var rList = [],
++                len = current.split('-').length;
++        
++            for(var _i in list){
++                var clen = list[_i].id.split('-').length;
++                if(clen >= len){
++                    rList.push(list[_i]);
++                }
++            }
++            return rList;
++        };
+     }]);
+diff --git a/ngapp/app/router.js b/ngapp/app/router.js
+index 3cbe29f..c573bd8 100644
+--- a/ngapp/app/router.js
++++ b/ngapp/app/router.js
+@@ -5,6 +5,7 @@
+     $routeProvider
+         .when('/Home', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
+         .when('/Home/:subpage', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
++        .when('/Chart', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
+         .when('/Chart/:id/:name', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
+         .when('/Login', {templateUrl: 'app/view/Login.html', controller: 'LoginController'})
+         .when('/Admin', {templateUrl: 'app/view/Admin.html', controller: 'AdminController'})
