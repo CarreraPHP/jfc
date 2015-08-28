@@ -1,0 +1,143 @@
+diff --git a/ngapp/resources/css/app.css b/ngapp/resources/css/app.css
+index ba416c9..b65e659 100644
+--- a/ngapp/resources/css/app.css
++++ b/ngapp/resources/css/app.css
+@@ -230,7 +230,7 @@
+     opacity:0;
+ }
+ .icon-question:before{
+-    content: "\f128";
++    content: "\f12e";
+     color:green
+ }
+ 
+@@ -369,7 +369,7 @@
+     min-height: 50px;
+ }
+ 
+-.jfc-select, .jfc-search, .jfc-component{width: 98%;height:98%;border:1px solid;position:relative;padding: 0; margin: 2% 2% 0 0;}
++.jfc-select, .jfc-search, .jfc-component{width: 98%;min-height:36px;height:98%;border:1px solid;position:relative;padding: 0; margin: 2% 2% 0 0;}
+ .jfc-select-thumb, .jfc-search-thumb, .jfc-component-thumb{width: 100%;}
+ .jfc-select-thumb .ui-input, .jfc-select-thumb input, .jfc-search-thumb input, .jfc-component-thumb input, .jfc-component-thumb .disbled-text{width: 100%;/* margin-right: 40px; */border: 0;height: 30px;left: 0;/* right: 40px; *//* position: absolute; */}
+ .jfc-select-thumb .btn, .jfc-search-thumb .btn, .jfc-component-thumb .btn{width: 35px;border:0 solid;text-align: center;position:absolute;/* height: 30px; */right: 5px;top: 2%;height: 86%;}
+@@ -1381,6 +1381,8 @@
+     position: absolute;
+     top: 50%;
+     left: 10px;
++    bottom:0;
++    right:0;
+ }
+ 
+ #chartcanvas > #chartscene > div {
+@@ -1413,6 +1415,7 @@
+     text-align: center;
+     width: 100%;
+     padding: 10px 0;
++    z-index: 99;
+ }
+ 
+ .icon-stop {
+@@ -1460,6 +1463,16 @@
+     content: '\f0b0';
+ }
+ 
++.icon-trash:before{
++    content: '\f1f8';
++    color:red;
++}
++
++.icon-minus:before{
++    content: '\f056';
++    color:red;
++}
++
+ .pane-collasped {
+     width: 50px;
+ }
+diff --git a/ngapp/resources/css/demo.css b/ngapp/resources/css/demo.css
+index 8a6ee7f..7b584cc 100644
+--- a/ngapp/resources/css/demo.css
++++ b/ngapp/resources/css/demo.css
+@@ -72,25 +72,80 @@
+                             opacity: 1 !important;
+                         }
+ 
++                        .arrow-tail, .arrow-straight-tail{
++                            background: blue !important;
++                            height: 13px;
++                            width: 5px;
++                            position: absolute;
++                            bottom: -8px;
++                        }
++                        
++                        .arrow-head{
++                            position: absolute;
++                            right: 2px;                            
++                            height: 34px;
++                            width: 10px;
++                            overflow: hidden;
++                        }
++                        
++                        .arrow-head div{
++                            height: 15px;
++                            width: 15px;
++                            position: absolute;
++                            border: 3px solid blue !important;
++                            right: 4px;
++                            transform: rotate(45deg);
++                            top: 0px;
++                        }
++                        
++                        .arrow-reverse .arrow-tail{
++                            bottom: none;
++                            top:-8px;
++                        }
++                        
++                        .arrow .arrow-head{
++                            top: -12px;
++                        }
++                        
++                        .arrow-reverse .arrow-head{
++                            bottom: -25px;
++                            right:1px;
++                        }
++                        
++                        .arrow-straight .arrow-head{
++                            bottom: -25px;
++                            right:-1px;
++                        }
++                        
++                        .arrow .arrow-straight-tail, .arrow-reverse .arrow-straight-tail{
++                            display: none;
++                        }
++
+ 			.arrow, .arrow-reverse, .arrow-straight {
+ 				cursor: default;
+ 				position: absolute;
+-/* 				display:block; */
++ 				display:block; 
+ 				line-height: 11px;
+ 				font-size: 9px;
+ 				background-color: transparent;
+ 				color: #222;
+-				overflow: hidden;
++                                opacity: 0.2;
++				/*overflow: hidden;*/
+ 			}
+ 
+ 			.arrow.highlight-node, .arrow-reverse.highlight-node, .arrow-straight.highlight-node{
+ 				z-index:5;
++                                display:block;
+ 			}
+ 
+ 			.arrow.highlight-node div, .arrow-reverse.highlight-node div, .arrow-straight.highlight-node div{
+ 				border-color: #ED1C24 !important;
+ 			}
+                         
++                        .arrow.highlight-node .arrow-tail, .arrow-reverse.highlight-node .arrow-tail, .arrow-straight.highlight-node .arrow-straight-tail{
++				background: #ED1C24 !important;
++			}
++                        
+                         .arrow > div, .arrow > div:nth-child(2) > div,
+                         .arrow-reverse > div, .arrow-reverse > div:nth-child(2) > div,
+                         .arrow-straight > div{
