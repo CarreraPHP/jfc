@@ -1,0 +1,119 @@
+diff --git a/ngapp/app/controller/ConfigController.js b/ngapp/app/controller/ConfigController.js
+index 8068019..79f5042 100644
+--- a/ngapp/app/controller/ConfigController.js
++++ b/ngapp/app/controller/ConfigController.js
+@@ -1,4 +1,4 @@
+-function ConfigController($scope, $route, $http, $localStorage, $routeParams) {
++function ConfigController($scope, $route, $http, $localStorage, $routeParams, progressConfig) {
+     $scope.portalValueField = 'portalNm';
+     $scope.environmentValueField = 'environmentNm';
+     $scope.projectValueField = 'moduleNm';
+@@ -36,7 +36,7 @@
+     $scope.loadPortalList = function(){
+         if($scope.application.portalList.length === 0){
+             $http
+-                .get('http://' + location.hostname + ':8080/getPortalList')
++                .get(progressConfig.urlPrefix + '/getPortalList')
+                 .success(function (data, status, headers, config) {
+                     $scope.application.portalList = data;
+                     if(data.length > 0){
+@@ -53,7 +53,7 @@
+     $scope.loadEnvironmentList = function(param){
+         if($scope.application.environmentList.length === 0){
+             $http
+-                .get('http://' + location.hostname + ':8080/getEnvironmentList?portal_id=' + param)
++                .get(progressConfig.urlPrefix + '/getEnvironmentList?portal_id=' + param)
+                 .success(function (data, status, headers, config) {
+                     $scope.application.environmentList = data.data.result;
+ //                    console.log($scope.application.environmentList, data);
+@@ -66,7 +66,7 @@
+     $scope.loadProjectList = function(param){
+         if($scope.application.projectList.length === 0){
+             $http
+-                .get('http://' + location.hostname + ':8080/getModuleList?portal_id=' + param)
++                .get(progressConfig.urlPrefix + '/getModuleList?portal_id=' + param)
+                 .success(function (data, status, headers, config) {
+                     $scope.application.projectList = data.data.result;
+ //                    console.log($scope.application.projectList);
+@@ -78,7 +78,7 @@
+     };
+     $scope.handleSubmit = function(param){        
+         $http
+-            .get('http://' + location.hostname + ':8080/searchScenario?query=' + $scope.data.searchEntry)
++            .get(progressConfig.urlPrefix + '/searchScenario?query=' + $scope.data.searchEntry)
+             .success(function (data, status, headers, config) {
+                 $scope.data.troubleList = data.data.result;
+ //                    console.log($scope.application.projectList);
+diff --git a/ngapp/app/controller/HomeController.js b/ngapp/app/controller/HomeController.js
+index 735c933..b40313b 100644
+--- a/ngapp/app/controller/HomeController.js
++++ b/ngapp/app/controller/HomeController.js
+@@ -1,12 +1,14 @@
+-function HomeController($scope, $route, $http, $routeParams){
++function HomeController($scope, $route, $http, $routeParams, progressConfig){
+     $scope.chart = {
+         chartList:[]
+     };
+     
++    $scope.application.setAdmin(false);
++    
+     $scope.loadScenarioList = function(param){
+         if($scope.chart.chartList.length === 0){
+             $http
+-                .get('http://' + location.hostname + ':8080/getScenarioList?scenarioId=' + param)
++                .get(progressConfig.urlPrefix + '/getScenarioList?scenarioId=' + param)
+                 .success(function (data, status, headers, config) {
+                     if(data.data.result.length > 0){                        
+                         var record = data.data.result[0];
+diff --git a/ngapp/app/controller/SceneController.js b/ngapp/app/controller/SceneController.js
+index dca5412..530a3ad 100644
+--- a/ngapp/app/controller/SceneController.js
++++ b/ngapp/app/controller/SceneController.js
+@@ -1,10 +1,10 @@
+ function SceneController($scope, $route, $http, $localStorage){
+     $scope.selectCard = function(event, item, pList, editor){
+-        console.log(event, arguments);
++        console.log("Mouse Event ", event, arguments);
+         angular.forEach(pList, function(yList, yKey){
+             if(angular.isArray(yList)){
+                 angular.forEach(yList, function(inst, key){
+-                    inst.internal.mode = 'display'; 
++                    inst.internal.mode = 'edit'; 
+                     inst.internal.class['highlight-node'] = false;                    
+                 });
+             }else if(yList.internal && yList.internal.class){
+diff --git a/ngapp/app/controller/UIChartItemController.js b/ngapp/app/controller/UIChartItemController.js
+index 05207c3..8e97c88 100644
+--- a/ngapp/app/controller/UIChartItemController.js
++++ b/ngapp/app/controller/UIChartItemController.js
+@@ -3,9 +3,10 @@
+     $scope.mode = 'edit'; // possible modes -> edit, display
+     $scope.typeList = ['Activity', 'Actor', 'End']; //There can be only one Begin Chart Item 'Begin', 
+     
+-    $scope.$watch($scope.item.internal.mode, function(){
+-        $scope.mode = $scope.item.internal.mode;
+-    });
++//    console.log("%c item", "color:red;font-size:20px;", $scope.item);
++//    $scope.$watch($scope.item.internal.mode, function(){
++//        $scope.mode = $scope.item.internal.mode;
++//    });
+     
+     $scope.$watch('item.name', function(){
+         $scope.handleChange();
+diff --git a/ngapp/app/controller/UIChartOptionController.js b/ngapp/app/controller/UIChartOptionController.js
+index 78a6957..3ca7b1d 100644
+--- a/ngapp/app/controller/UIChartOptionController.js
++++ b/ngapp/app/controller/UIChartOptionController.js
+@@ -1,8 +1,11 @@
+-function UIChartOptionController($scope, $attrs, progressConfig, $timeout) {
++function UIChartOptionController($scope, $attrs, progressConfig, $timeout, $filter) {
+     var self = this;    
+     $scope.chartValueField = "id";
+     
+     
++    
++    $scope.optionList = $filter('skipbeforenode')($scope.editor.chartList, $scope.subitem.charts) || [];
++    
+     $scope.chartChange = function(sItem, oItem){
+         $timeout(function(){
+             var a = angular.element(document.querySelector('#' + $scope.subitem.id + '-arrow-' + sItem)),
