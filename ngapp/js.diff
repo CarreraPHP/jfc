@@ -1,0 +1,17 @@
+diff --git a/ngapp/app/controller/SceneController.js b/ngapp/app/controller/SceneController.js
+index dca5412..530a3ad 100644
+--- a/ngapp/app/controller/SceneController.js
++++ b/ngapp/app/controller/SceneController.js
+@@ -1,10 +1,10 @@
+ function SceneController($scope, $route, $http, $localStorage){
+     $scope.selectCard = function(event, item, pList, editor){
+-        console.log(event, arguments);
++        console.log("Mouse Event ", event, arguments);
+         angular.forEach(pList, function(yList, yKey){
+             if(angular.isArray(yList)){
+                 angular.forEach(yList, function(inst, key){
+-                    inst.internal.mode = 'display';
++                    inst.internal.mode = 'edit';
+                     inst.internal.class['highlight-node'] = false;
+                 });
+             }else if(yList.internal && yList.internal.class){
