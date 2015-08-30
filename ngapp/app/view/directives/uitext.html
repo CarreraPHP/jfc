@@ -1,7 +1,7 @@
 <div class="jfc-component form-control">
   <div class="jfc-component-thumb" ng-class="type" role="presentation">
-    <input type="text" ng-show="readonly" value="{{value | stripparent}}" ng-enter="" readonly placeholder="{{placeholder}}" />
-    <input type="text" ng-show="!readonly" ng-model="value" ng-enter="" placeholder="{{placeholder}}" />
+    <input type="text" style="height:100%" ng-show="readonly" value="{{value | stripparent}}" ng-enter="" readonly placeholder="{{placeholder}}" />
+    <input type="text" style="height:100%" ng-show="!readonly" ng-model="value" ng-enter="" placeholder="{{placeholder}}" />
     <button class="btn icon icon-clear-thumb"
             ng-click="clearValue()" ng-show="value.length > 0 && !readonly">
     </button>
