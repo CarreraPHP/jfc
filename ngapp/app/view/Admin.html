@@ -195,7 +195,7 @@
                         <i class="icon icon-config large"></i>
                     </button>
                     <button ng-click="deleteCard()">
-                        <i class="icon icon-stop large"></i>
+                        <i class="icon icon-trash large"></i>
                     </button>
                     <button ng-if="item.type == 'Actor'" ng-click="addActor()">
                         <i class="icon icon-add-actor large"></i>
@@ -253,12 +253,19 @@
         <div ng-repeat="subitem in item.options" id="{{subitem.id}}-arrow-{{subitem.charts}}" 
              ng-init="rearrangeOption(subitem, item, xIndex, yIndex, $index, yInit, editor.parsedList)" 
              ng-class="subitem.internal.class" ng-style="subitem.internal.style" style="width: 78px; left: 0px; top: 92.1875px;">
-            <div></div>
+            <div>
+                <div class="arrow-tail"></div>
+            </div>
             <div>
                 <div></div>
                 <div></div>
             </div>
+            <div>
+                <div class="arrow-straight-tail"></div>
+                <div class="arrow-head">
             <div></div>
+        </div>
+            </div>
         </div>
         <span style="display:hidden;" ng-repeat-end></span>
         <span style="display:hidden;" ng-repeat-end></span>
@@ -281,7 +288,11 @@
                 <div>
                     <button class="btn btn-medium" ng-click="exportChartJson()">
                         <i class="icon icon-database medium"></i>
-                        <span class="medium">Export</span>
+                        <span class="medium">Save</span>
+                    </button>
+                    <button class="btn btn-medium" ng-click="exportChartJson(true)">
+                        <i class="icon icon-database medium"></i>
+                        <span class="medium">Save As</span>
                     </button>
                 </div>
             </div>
@@ -314,7 +325,7 @@
     overlayclick="editor.config.toggle"
     notes="editor.config.notes">
     <div class="jfc-container jfc-width-96 before-spacer after-spacer" ng-controller="ConfigController">
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Name</span>
             </span>
@@ -324,7 +335,7 @@
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Prefix</span>
             </span>
@@ -334,7 +345,7 @@
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Portal</span>
             </span>
@@ -344,33 +355,55 @@
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Environment</span>
             </span>
             <span class="cell">
                 <span>
-                    <uiselect ng-model="editor.environment" list="application.environmentList" valuefield="environmentValueField"></uiselect>
+                    <uiselect ng-model="editor.environment" list="application.environmentList" displayField="environmentNm" valuefield="environmentValueField"></uiselect>
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Module</span>
             </span>
             <span class="cell after-spacer">
                 <span>
-                    <uiselect ng-model="editor.project" list="application.projectList" valuefield="projectValueField"></uiselect>
+                    <uiselect ng-model="editor.project" list="application.projectList" displayField="moduleNm" valuefield="projectValueField"></uiselect>
                 </span>
             </span>
         </label>
-        <label class="jfc-box" class="align-left">
+        <label class="jfc-box align-left">
             <span class="cell medium after-spacer before-spacer align-middle">
                 <span>Owner</span>
             </span>
             <span class="cell">
                 <span>
                     <uitext ng-model="editor.owner"></uitext>
+                </span>
+            </span>
+        </label>
+        <label class="jfc-box align-left">
+            <span class="cell medium after-spacer before-spacer align-middle">
+                <span>Occurence</span>
+            </span>
+            <span class="cell">
+                <span>
+                    <span class="jfc-container">
+                        <span class="jfc-box align-left">
+                            <span class="cell medium align-middle align-right">
+                                <button class="btn icon icon-add no-padding" ng-click="editor.occurence = editor.occurence + 1"></button>
+                            </span>
+                            <span class="cell medium align-middle">
+                                <uitext class="inline_block" ng-model="editor.occurence"></uitext>
+                            </span>
+                            <span class="cell medium align-middle align-left">
+                                <button class="btn icon icon-minus no-padding" ng-click="if(editor.occurence > 0){editor.occurence--;}"></button>
+                            </span>
+                        </span>
+                    </span>
                 </span>
             </span>
         </label>
