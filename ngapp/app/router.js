@@ -5,6 +5,7 @@ function routerFn($routeProvider, $locationProvider) {
     $routeProvider
         .when('/Home', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
         .when('/Home/:subpage', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
+        .when('/Chart', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
         .when('/Chart/:id/:name', {templateUrl: 'app/view/Home.html', controller: 'HomeController'})
         .when('/Login', {templateUrl: 'app/view/Login.html', controller: 'LoginController'})
         .when('/Admin', {templateUrl: 'app/view/Admin.html', controller: 'AdminController'})
