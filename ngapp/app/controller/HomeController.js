@@ -1,18 +1,20 @@
-function HomeController($scope, $route, $http, $routeParams){
+function HomeController($scope, $route, $http, $routeParams, progressConfig){
     $scope.chart = {
         chartList:[]
     };
-    
+
+    $scope.application.setAdmin(false);
+
     $scope.loadScenarioList = function(param){
         if($scope.chart.chartList.length === 0){
             $http
-                .get('http://' + location.hostname + ':8080/getScenarioList?scenarioId=' + param)
+                .get(progressConfig.urlPrefix + '/getScenarioList?scenarioId=' + param)
                 .success(function (data, status, headers, config) {
-                    if(data.data.result.length > 0){                        
+                    if(data.data.result.length > 0){
                         var record = data.data.result[0];
                         $scope.chart.chartList = angular.fromJson(record.jsonData);
                         $scope.chart.name = record.scenarioNm;
-                        console.log(arguments);     
+                        console.log(arguments);
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -31,6 +33,6 @@ function HomeController($scope, $route, $http, $routeParams){
             }
         }
     };
-    
+
     $scope.loadScenarioList($routeParams.id);
 }
