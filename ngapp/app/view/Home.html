@@ -1,14 +1,17 @@
 <div class="logo_container">
 	<img src="resources/images/logo.png" />
 </div>
-<div id="chartcanvas" style="right:0;" ng-controller="SceneController">
-    <div id="chartTitle" class="large mono bold">{{chart.name}}</div>
-    <div id="chartscene">        
-        <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"              
+<div id="chartcanvas" style="right: 0;" ng-controller="SceneController">
+    <div id="chartTitle" class="large mono bold">
+        <span ng-bind="editor.name"></span>
+    </div>
+    <div id="chartscene">
+        <div ng-repeat-start="item in chart.chartList" id="{{item.id}}" class="card"
              ng-style="item.internal.style" ng-class="item.internal.class"
              ng-click="selectCard($event, item, chart.chartList, editor)">
             <div ng-if="item.type == 'Activity'" class="title">
-                <span class="fa fa-task"></span>{{item.name}}
+                    <span class="fa fa-task"></span>
+                    <span ng-bind="item.name"></span>
             </div>
             <div ng-if="item.type == 'Begin' || item.type == 'End'" class="content card-special">
                 <div>
@@ -17,42 +20,52 @@
                         <i  ng-if="item.type == 'End'" class="icon icon-flag-end x-large"></i>
                     </div>
                     <div>
-                        <div class="medium special-title">{{item.name}}</div>
+                        <div class="medium special-title"><span ng-bind="item.name"></span></div>
                         <div class="small" ng-bind-html="item.description | formattext"></div>
                     </div>
                 </div>
             </div>
-            <div ng-if="item.type == 'Activity'" class="content" ng-bind-html="item.description | formattext"></div>
+                <div ng-if="item.type == 'Activity'" class="content">
+                    <div class="small" ng-bind-html="item.description | formattext"></div>
+                </div>
             <div ng-if="item.type == 'Actor'" class="actors jfc-width-100">
                 <div class="actor" ng-repeat="actor in item.actors" id="{{actor.id}}">
                     <div></div>
                     <div>
                         <div class="medium">{{actor.name}}</div>
                         <div class="small">{{actor.email}}</div>
-                        <div class="small">{{actor.contact}}</div>                        
+                        <div class="small">{{actor.contact}}</div>
                     </div>
                 </div>
             </div>
             <div class="options">
-                <div ng-repeat="subitem in item.options" id="{{subitem.id}}" 
+                <div ng-repeat="subitem in item.options" id="{{subitem.id}}"
                      ng-mouseover="highlightRelation(this, true)" ng-mouseleave="highlightRelation(this, false)">
                     <div>
-                        <span>{{subitem.name}}</span>
-                        <span class="fa fa-play"></span>
+                            <span class="jfc-width-80">{{subitem.name}}</span>
+                            <span class="jfc-width-20 fa fa-play"></span>
                     </div>
                 </div>
             </div>
         </div>
-        <div ng-repeat="subitem in item.options" id="{{subitem.id}}-arrow-{{subitem.charts}}"               
-             ng-class="subitem.internal.class" ng-style="subitem.internal.style">
-            <div></div>
+        <div ng-repeat="subitem in item.options" id="{{subitem.id}}-arrow-{{subitem.charts}}"
+             ng-init="rearrangeOption(subitem, item, xIndex, yIndex, $index, yInit, editor.parsedList)"
+             ng-class="subitem.internal.class" ng-style="subitem.internal.style" style="width: 78px; left: 0px; top: 92.1875px;">
+            <div>
+                <div class="arrow-tail"></div>
+            </div>
             <div>
                 <div></div>
                 <div></div>
             </div>
-            <div></div>
+            <div>
+                <div class="arrow-straight-tail"></div>
+                <div class="arrow-head">
+                    <div></div>
+                </div>
+            </div>
         </div>
-        <span style="display:hidden;" ng-repeat-end></span>        
+        <span style="display:hidden;" ng-repeat-end></span>
     </div>
     <div id="chartDetail" ng-show="false">
         <div class="mono x-large">{{control.detail.title}}</div>
