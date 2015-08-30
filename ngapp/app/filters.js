@@ -32,4 +32,18 @@ angular.module('JFC.filters', [])
             }
             return "";
         };
+    }])
+    .filter('skipbeforenode', [function () {  
+        return function (list, current) {
+            var rList = [],
+                len = current.split('-').length;
+        
+            for(var _i in list){
+                var clen = list[_i].id.split('-').length;
+                if(clen >= len){
+                    rList.push(list[_i]);
+                }
+            }
+            return rList;
+        };
     }]);
