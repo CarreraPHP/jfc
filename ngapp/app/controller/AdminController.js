@@ -1,6 +1,6 @@
 /**
  * @todo Implement Search, Copy Option, Edit functionality for existing flow, Filter options, Fix cosmetic issues.
- * 
+ *
  * @param {type} $scope
  * @param {type} $route
  * @param {type} $http
@@ -8,7 +8,7 @@
  * @param {type} $location
  * @returns {undefined}
  */
-function AdminController($scope, $route, $http, $timeout, $location, $routeParams){
+function AdminController($scope, $route, $http, $timeout, $location, $routeParams, progressConfig){
 	$scope.editor = {
             chartList: [],
             parsedList: [],
@@ -18,15 +18,17 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
             portal: "",
             name: "Chart Title",
             owner: "Build Team",
+						occurence: 0,
+						id: false,
             config:{
                 edit: false,
                 title: "Chart Configuration",
                 style: {top:0,left:0},
                 anchor: 'top',
                 notes: [
-                    'Notes<br/>', 
+                    'Notes<br/>',
                     '<ul>',
-                        '<li>Fields are 2 way binded, no need for buttons.</li>', 
+                        '<li>Fields are 2 way binded, no need for buttons.</li>',
                         '<li>Click on the gray area to clock the window.</li>',
                     '</ul>'
                 ].join(''),
@@ -46,18 +48,18 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
                 style: {top:0,left:0},
                 anchor: 'left',
                 notes: [
-                    'Notes<br/>', 
+                    'Notes<br/>',
                     '<ul>',
-                        '<li>Fields are 2 way binded, no need for buttons.</li>', 
-                        '<li>Click on the gray area to close the window.</li>', 
-                        '<li>Add #lb# in description for inserting line break.</li>',                         
+                        '<li>Fields are 2 way binded, no need for buttons.</li>',
+                        '<li>Click on the gray area to close the window.</li>',
+                        '<li>Add #lb# in description for inserting line break.</li>',
                     '</ul>'
                 ].join(''),
                 toggle: function(el, noToggle){
                     console.log(el, "el");
                     if(typeof el !== "undefined"){
                         var rect = el.getBoundingClientRect(),
-                            iHolder = el.parentNode.parentNode.parentNode.parentNode,
+                            iHolder = el.tagName == 'I' ? el.parentNode.parentNode.parentNode.parentNode : el.parentNode.parentNode.parentNode,
                             card = iHolder.querySelector('.card'),
                             cardRect = card.getBoundingClientRect();
 
@@ -72,6 +74,24 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
                                 leftValue = (cardRect.left - modalRect.width - 30);
                                 $scope.editor.item.anchor = 'right';
                             }
+
+                            /*
+                             * Try to align the model on top of the card.
+                             */
+                            if((topValue + modalRect.height) > window.innerHeight && modalRect.height < (cardRect.top)){
+                                leftValue = (cardRect.left + (cardRect.width/2) - (modalRect.width/2));
+                                topValue = (cardRect.top - modalRect.height - 30),
+                                $scope.editor.item.anchor = 'bottom';
+                            }
+
+                            /*
+                             * Try to align the model on top of the card.
+                             */
+                            if(topValue < 100 && modalRect.height < (window.innerHeight - (cardRect.top + cardRect.height))){
+                                leftValue = (cardRect.left + (cardRect.width/2) - (modalRect.width/2));
+                                topValue = (cardRect.top + cardRect.height),
+                                $scope.editor.item.anchor = 'top';
+														}
 
                             $scope.editor.item.style = {
                                 left: leftValue + "px",
@@ -109,7 +129,7 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
             }
         };
 
-
+				$scope.application.setAdmin(true);
 
         function generateID(){
             var idString = $scope.editor.idPrefix + (++$scope.editor.internal.incrementor);
@@ -181,7 +201,7 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
                 chartItem.name = "Chart Name";
                 chartItem.description = "Chart Description";
                 actor.id = generateActorID();
-                actor.name = "Actor Name";
+                actor.name = "Support Name";
                 actor.contact = "Contact No";
                 actor.email = "Email";
                 chartItem.actors.push(actor);
@@ -200,9 +220,12 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
             }else{
                 var actor = $scope.getActorTemplate();
                 actor.id = generateActorID();
-                actor.name = "Actor Name";
+                actor.name = "Support Name";
                 actor.contact = "Contact No";
                 actor.email = "Email";
+                if(!("actors" in $scope.editor.internal.selected)){
+                    $scope.editor.internal.selected.actors = [];
+                }
                 $scope.editor.internal.selected.actors.push(actor);
             }
         };
@@ -211,28 +234,28 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
 					var selected = $scope.editor.internal.selected;
     	    if(selected.id == ''){
                     $scope.application.model.toggle("Please select an existing chartitem to add options to it.");
-                }else{
-									if($scope.editor.internal.selected.options.length < 5){
-                    var option = $scope.getOptionTemplate(),
-                    mappedChartItem = $scope.getChartTemplate(),
-                    actor = $scope.getActorTemplate();
+          }else{
+										if($scope.editor.internal.selected.options.length < 5){
+	                    var option = $scope.getOptionTemplate(),
+	                    mappedChartItem = $scope.getChartTemplate(),
+	                    actor = $scope.getActorTemplate();
 
-                    mappedChartItem.id = generateID(selected);
-                    mappedChartItem.type = "Activity";
-                    mappedChartItem.name = "Chart Name";
-                    mappedChartItem.description = "Chart Description";
-                option.id = generateOptionID();
-                    option.name = "Option Name";
-                    option.charts = mappedChartItem.id;
-                    $scope.editor.internal.selected.options.push(option);
-                actor.id = generateActorID();
-                actor.name = "Actor Name";
-                actor.contact = "Contact No";
-                actor.email = "Email";
-                mappedChartItem.actors.push(actor);
-                    mappedChartItem.internal.mode = 'display';
-                    mappedChartItem.internal.style.left = 300 * (mappedChartItem.id.split('-').length-1) + "px";
-                    $scope.editor.chartList.push(mappedChartItem);
+	                    mappedChartItem.id = generateID(selected);
+	                    mappedChartItem.type = "Activity";
+	                    mappedChartItem.name = "Chart Name";
+	                    mappedChartItem.description = "Chart Description";
+	                		option.id = generateOptionID();
+	                    option.name = "Option Name";
+	                    option.charts = mappedChartItem.id;
+	                    $scope.editor.internal.selected.options.push(option);
+			                actor.id = generateActorID();
+			                actor.name = "Support Name";
+			                actor.contact = "Contact No";
+			                actor.email = "Email";
+			                mappedChartItem.actors.push(actor);
+	                    mappedChartItem.internal.mode = 'display';
+	                    mappedChartItem.internal.style.left = 300 * (mappedChartItem.id.split('-').length-1) + "px";
+	                    $scope.editor.chartList.push(mappedChartItem);
 										} else {
                     	$scope.application.model.toggle("Only 5 number of Options are allowed.");
                 		}
@@ -267,9 +290,12 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
             return res;
         };
 
-        $scope.saveChartJson = function(){
+        $scope.saveChartJson = function(notupdate){
             var res = $scope.getEditorObject(),
                 param = {};
+						if(res.id !== false){
+                param.scenarioId = res.id;
+            }
             param.jsonData = res.chartList;
             param.moduleNm = res.project;
             param.environmentNm = res.environment;
@@ -296,7 +322,7 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
 
             console.log(angular.toJson(param));
             $http({
-                url: 'http://' + location.hostname + ':8080/saveScenario',
+                url: progressConfig.urlPrefix + (notupdate ? '/saveScenario' : '/updateScenario'),
                 method: 'POST',
                 transformRequest: function(obj) {
                     var str = [];
@@ -314,12 +340,14 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
             }).success(function (data, status, headers, config) {
 //                Chart
                 console.log(data, data.data.result);
-                var record = data.data.result;
-                if(record === -1){
+                var records = data.data.result;
+                if(records === -1){
                     $scope.application.model.toggle("Chart Name '" + $scope.editor.name + "' has been already taken. Please choose another title.");
-                }else {
+                }else if(records === "Scenario Id should not be null"){
+                    $scope.application.model.toggle("Unable to Save Chart Name '" + $scope.editor.name + "'. Please try after some time.");
+								}else {
 //                    window.open("#!/Chart/" + record.scenarioId + "/" + record.urlNm, "_blank");
-                    $scope.data.loadTroubleChart(record);
+                    $scope.data.loadTroubleChart(records[0]);
                 }
 //                 $location.path("/Chart/" + record.scenarioId + "/" + record.urlNm);
             }).error(function (data, status, headers, config) {
@@ -327,7 +355,7 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
             });
         };
 
-        $scope.exportChartJson = function(){
+        $scope.exportChartJson = function(notupdate){
             var list = $scope.editor.chartList;
             for(var i=0; i < list.length; i++){
                 if(list[i].options.length === 0 && list[i].type !== 'End'){
@@ -335,7 +363,7 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
                     return;
                 }
             }
-            $scope.saveChartJson();
+            $scope.saveChartJson(notupdate);
         };
 
         $scope.$watch('editor.chartList.length', function(newLength, oldLength){
@@ -513,10 +541,95 @@ function AdminController($scope, $route, $http, $timeout, $location, $routeParam
 				 $scope.editor.item.edit = false;
     };
 
-    // if the list is empty at the initial moment, load the Begin cart item to it.
-    if($scope.editor.chartList.length == 0){
-        $scope.addChartItem();
-        $scope.editor.editList.push($scope.editor.chartList[0]);
-        $scope.editor.internal.selected = $scope.editor.chartList[0];
+    $scope.deleteActor = function(scope){
+        console.log("scope", scope, arguments, scope.actor, scope.item.actors);
+
+        for(var _i in scope.item.actors){
+            if(scope.actor.id === scope.item.actors[_i].id){
+                scope.item.actors.splice(_i, 1);
+            }
+        }
+        debugger;
+    };
+
+    console.log("route", $routeParams);
+
+    /*
+     * This also exists in Home Controller.
+     * **/
+
+    $scope.loadScenarioList = function(param){
+        if($scope.editor.chartList.length === 0){
+            $http
+                .get(progressConfig.urlPrefix + '/getScenarioList?scenarioId=' + param)
+                .success(function (data, status, headers, config) {
+                    if(data.data.result.length > 0){
+                        var record = data.data.result[0];
+                        $scope.editor.chartList = angular.fromJson(record.jsonData);
+                        $scope.editor.name = record.scenarioNm;
+                        $scope.editor.portal = $scope.application.getPortalValue(record.portalId);
+                        // timeout is need to handle ajax call delay.
+                        $timeout(function(){
+                            $scope.editor.environment = $scope.application.getEnvironmentValue(record.environmentId);
+                            $scope.editor.project = $scope.application.getProjectValue(record.moduleId);
+                        }, 1000);
+                        $scope.editor.owner = record.primaryOwner;
+                        $scope.editor.id = record.scenarioId;
+
+
+
+                        var _chInc = 0,
+                            _actInc = 0,
+                            _optInc = 0;
+
+                        for(var _i in $scope.editor.chartList){
+                            var _chart = $scope.editor.chartList[_i],
+                                _idArr = _chart.id.split('-'),
+                                _lastId = parseInt((_idArr[_idArr.length - 1].replace("c", "")));
+
+                            _chInc = (_lastId > _chInc) ? _lastId + 1 : _chInc;
+
+                            if("options" in _chart){
+                                for(var _j in _chart.options){
+                                    var _option = _chart.options[_j],
+                                        _lastOptId = parseInt(_option.id.replace("opt", ""));
+
+                                    _optInc = (_lastOptId > _optInc) ? _lastOptId + 1 : _optInc;
+                                }
+                            }
+
+                            if("actors" in _chart){
+                                for(var _k in _chart.actors){
+                                    var _actor = _chart.actors[_k],
+                                        _lastActId = parseInt(_actor.id.replace("act", ""));
+
+                                    _actInc = (_lastActId > _actInc) ? _lastActId + 1 : _actInc;
+                                }
+                            }
+                        }
+
+                        $scope.editor.internal.incrementor = _chInc;
+                        $scope.editor.internal.option.incrementor = _optInc;
+                        $scope.editor.internal.actor.incrementor = _actInc;
+                        $scope.editor.editList.push($scope.editor.chartList[0]);
+                        $scope.editor.internal.selected = $scope.editor.chartList[0];
+                        console.log("%c editor value", "color:red;font-size:24px;", $scope.editor);
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    $scope.application.model.toggle("We are unable to connect to the playbook webservice. Please try after some time.");
+                });
+        }
+    }
+
+    if("id" in $routeParams){
+        $scope.loadScenarioList($routeParams.id);
+    }else{
+        // if the list is empty at the initial moment, load the Begin cart item to it.
+        if($scope.editor.chartList.length == 0){
+            $scope.addChartItem();
+            $scope.editor.editList.push($scope.editor.chartList[0]);
+            $scope.editor.internal.selected = $scope.editor.chartList[0];
+        }
     }
 }
