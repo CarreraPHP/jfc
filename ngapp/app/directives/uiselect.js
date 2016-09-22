@@ -10,7 +10,7 @@ function uiselect() {
       valuefield: '=?valuefield',
       change: '=?change'    
     },
-    templateUrl: './ngapp/app/view/directives/uiselect.html',
+    templateUrl: './jfc/ngapp/app/view/directives/uiselect.html',
     link: function(scope, element, attrs, UISelectCtrl) {
 //       UISelectCtrl.addBar(scope, angular.element(element.children()[0]));
     }
